@@ -1,0 +1,16 @@
+* text=auto eol=lf
+*.a     binary
+*.bat   text eol=crlf
+*.cj    text
+*.dll   binary
+*.gif   binary
+*.ico   binary
+*.jpeg  binary
+*.jpg   binary
+*.json  text
+*.md    text
+*.png   binary
+*.toml  text
+*.ttf   binary
+*.txt   text
+*.yml   text

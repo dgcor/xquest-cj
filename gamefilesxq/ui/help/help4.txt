@@ -1,0 +1,9 @@
+When all the gems have been
+collected the gate will open and you
+can go on to the next level. If you
+complete the level in less than the
+par time you will be awarded a time
+bonus. If your score gets high enough
+you may also get extra lives.
+
+Hit a button or key to continue.

@@ -1,0 +1,29 @@
+{
+  "sound": [
+    { "file": "sfx/allright.wav" },
+    { "file": "sfx/applause.wav" },
+    { "file": "sfx/bark.wav" },
+    { "file": "sfx/boing.wav" },
+    { "file": "sfx/countdown.wav" },
+    { "file": "sfx/doh.wav" },
+    { "file": "sfx/enemyent.wav" },
+    { "file": "sfx/explosn.wav" },
+    { "file": "sfx/explosn2.wav" },
+    { "file": "sfx/explosn3.wav" },
+    { "file": "sfx/fire.wav" },
+    { "file": "sfx/fire4.wav" },
+    { "file": "sfx/fire5.wav" },
+    { "file": "sfx/fire6.wav" },
+    { "file": "sfx/gatesound.wav" },
+    { "file": "sfx/getcrystal.wav" },
+    { "file": "sfx/menuclick.wav" },
+    { "file": "sfx/ohyeah.wav" },
+    { "file": "sfx/ow.wav" },
+    { "file": "sfx/phew.wav" },
+    { "file": "sfx/repulse.wav" },
+    { "file": "sfx/retaliate.wav" },
+    { "file": "sfx/squelch.wav" },
+    { "file": "sfx/sxtsmash.wav" },
+    { "file": "sfx/woohoo.wav" }
+  ]
+}

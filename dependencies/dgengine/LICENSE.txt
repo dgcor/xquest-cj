@@ -1,0 +1,30 @@
+DGEngine uses the zLib license.
+
+A part of the BitmapFont class is based on a bitmap font implementation for SDL
+by Lazy Foo' Productions. The license is incompatible with GPL like licenses.
+
+http://lazyfoo.net
+
+cjsfml uses the zlib/png license.
+
+https://github.com/causerp/cjsfml
+
+cenum, ctemplate, customiterators and endian use the MIT no attribution license.
+
+https://github.com/causerp/cenum
+https://github.com/causerp/ctemplate
+https://github.com/causerp/customiterators
+https://github.com/causerp/endian
+
+PhysFS uses the zlib license.
+
+https://github.com/icculus/physfs
+
+SFML uses the zlib/png license.
+
+https://github.com/SFML/SFML
+
+Other SFML code snippets were taken from the wiki
+and should have a permissive license.
+
+If you feel there is a problem with licensing, contact me.

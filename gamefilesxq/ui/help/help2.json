@@ -1,0 +1,35 @@
+{
+  "load": "ui/help/helpPanel.json",
+  "button": {
+    "id": "default",
+    "texture": "empty",
+    "textureRect": [320, 240],
+    "anchor": "all",
+    "onClick": [
+      { "name": "resource.pop", "id": "popup" },
+      { "name": "load", "file": "ui/help/help3.json" }
+    ]
+  },
+  "text": {
+    "id": "txtHelp",
+    "font": "font",
+    "position": [160, 96],
+    "anchor": "none",
+    "horizontalAlign": "center",
+    "verticalSpaceOffset": 3,
+    "file": "ui/help/help2.txt"
+  },
+  "image": {
+    "id": "smartBomb",
+    "texturePack": "smartBomb",
+    "position": [207, 96],
+    "anchor": "none"
+  },
+  "animation": {
+    "id": "powerCharge",
+    "texturePack": "superCrystal",
+    "position": [187, 110],
+    "anchor": "none",
+    "refresh": 50
+  }
+}

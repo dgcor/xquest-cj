@@ -1,0 +1,59 @@
+{
+  "action": [
+    {
+      "name": "action.set",
+      "id": "focus.click",
+      "action": { "name": "focus.click" }
+    },
+    {
+      "name": "action.set",
+      "id": "focus.moveDown",
+      "action": { "name": "focus.moveDown" }
+    },
+    {
+      "name": "action.set",
+      "id": "focus.moveUp",
+      "action": { "name": "focus.moveUp" }
+    },
+    {
+      "name": "action.set",
+      "id": "loadMainMenu",
+      "action": [
+        { "name": "resource.popAll" },
+        { "name": "load", "file": "ui/mainMenu.json" }
+      ]
+    },
+    {
+      "name": "action.set",
+      "id": "saveSettings",
+      "action": {
+        "name": "file.copy",
+        "file": "ui/settingsFile.json",
+        "writeFile": "settings.json",
+        "replace": "value"
+      }
+    },
+    {
+      "name": "action.set",
+      "id": "saveSettingsAndClose",
+      "action": [
+        "saveSettings",
+        { "name": "game.close" }
+      ]
+    },
+    {
+      "name": "action.set",
+      "id": "fullScreen",
+      "action": [
+        {
+          "name": "if.equal",
+          "param1": "%game.fullScreen%",
+          "param2": false,
+          "then": { "name": "game.setProperty", "property": "fullScreen", "value": true },
+          "else": { "name": "game.setProperty", "property": "fullScreen", "value": false }
+        },
+        "saveSettings"
+      ]
+    }
+  ]
+}

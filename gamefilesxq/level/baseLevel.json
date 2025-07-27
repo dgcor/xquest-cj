@@ -1,0 +1,21 @@
+{
+  "replaceVars": "value",
+  "level": {
+    "id": "level",
+    "init": true,
+    "bordersTexturePack": "borders",
+    "explodeCursorTexturePack": "explodeCursor",
+    "explodePatternTexturePack": "explodePattern",
+    "explosionTexturePack": "explosion",
+    "size": [320, 217],
+    "mapSize": [392, 320],
+    "padding": [10, 10],
+    "anchor": "all",
+    "onLeftClick": "makeMove",
+    "onRightClick": "rotateSelectedUnit",
+    "onNewRound": "playSoundRegen",
+    "onGameOver": "gameOver",
+    "scoreFormula": "points * ($chain :max 1)",
+    "visible": false
+  }
+}

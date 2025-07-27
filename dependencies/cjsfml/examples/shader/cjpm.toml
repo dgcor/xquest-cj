@@ -1,0 +1,15 @@
+[package]
+  cjc-version = "1.0.0"
+  name = "shader"
+  description = "nothing here"
+  version = "1.0.0"
+  target-dir = ""
+  src-dir = ""
+  output-type = "executable"
+  compile-option = "-O2"
+  override-compile-option = ""
+  link-option = "-s"
+  package-configuration = {}
+
+[dependencies]
+  cjsfml = { path = "./../../" }

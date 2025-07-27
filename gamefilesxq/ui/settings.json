@@ -1,0 +1,133 @@
+{
+  "action": {
+    "name": "resource.add",
+    "id": "settings",
+    "ignorePrevious": true
+  },
+  "menu": {
+    "id": "settings",
+    "font": "font",
+    "focus": true,
+    "position": ["center", 80],
+    "anchor": "none",
+    "horizontalAlign": "center",
+    "verticalPad": 10,
+    "items": [
+      {
+        "text": "Graphics Setup",
+        "onClick": { "name": "load", "file": "ui/settingsGFX.json" }
+      },
+      {
+        "executeAction": {
+          "name": "if.equal",
+          "param1": "%sound%",
+          "param2": true,
+          "then": { "name": "menu.setText", "id": "settings", "index": "!menuIdx!", "text": "Sound: On" },
+          "else": { "name": "menu.setText", "id": "settings", "index": "!menuIdx!", "text": "Sound: Off" }
+        },
+        "onClick": {
+          "name": "if.equal",
+          "param1": "%sound%",
+          "param2": false,
+          "then": [
+            { "name": "variable.set", "key": "sound", "value": true },
+            { "name": "menu.setText", "id": "settings", "index": "!menuIdx!", "text": "Sound: On" }
+          ],
+          "else": [
+            { "name": "variable.set", "key": "sound", "value": false },
+            { "name": "menu.setText", "id": "settings", "index": "!menuIdx!","text": "Sound: Off" }
+          ]
+        }
+      },
+      {
+        "text": "Horizontal Sensitivity"
+      },
+      {
+        "text": "Vertical Sensitivity"
+      },
+      {
+        "executeAction": {
+          "name": "switch",
+          "param": "%gameDifficulty%",
+          "case": [
+            {
+              "value": 0,
+              "action": { "name": "menu.setText", "id": "settings", "index": "!menuIdx!", "text": "Difficulty: Wimp" }
+            },
+            {
+              "value": 1,
+              "action": { "name": "menu.setText", "id": "settings", "index": "!menuIdx!", "text": "Difficulty: Timid" }
+            },
+            {
+              "value": 2,
+              "action": { "name": "menu.setText", "id": "settings", "index": "!menuIdx!", "text": "Difficulty: Average" }
+            },
+            {
+              "value": 3,
+              "action": { "name": "menu.setText", "id": "settings", "index": "!menuIdx!", "text": "Difficulty: Tricky" }
+            },
+            {
+              "value": 4,
+              "action": { "name": "menu.setText", "id": "settings", "index": "!menuIdx!", "text": "Difficulty: Inhuman" }
+            }
+          ],
+          "default": 2
+        },
+        "onClick": {
+          "name": "switch",
+          "param": "%gameDifficulty%",
+          "case": [
+            {
+              "value": 0,
+              "action": [
+                { "name": "menu.setText", "id": "settings", "index": "!menuIdx!", "text": "Difficulty: Timid" },
+                { "name": "variable.set", "key": "gameDifficulty", "value": 1 }
+              ]
+            },
+            {
+              "value": 1,
+              "action": [
+                { "name": "menu.setText", "id": "settings", "index": "!menuIdx!", "text": "Difficulty: Average" },
+                { "name": "variable.set", "key": "gameDifficulty", "value": 2 }
+              ]
+            },
+            {
+              "value": 2,
+              "action": [
+                { "name": "menu.setText", "id": "settings", "index": "!menuIdx!", "text": "Difficulty: Tricky" },
+                { "name": "variable.set", "key": "gameDifficulty", "value": 3 }
+              ]
+            },
+            {
+              "value": 3,
+              "action": [
+                { "name": "menu.setText", "id": "settings", "index": "!menuIdx!", "text": "Difficulty: Inhuman" },
+                { "name": "variable.set", "key": "gameDifficulty", "value": 4 }
+              ]
+            },
+            {
+              "value": 4,
+              "action": [
+                { "name": "menu.setText", "id": "settings", "index": "!menuIdx!", "text": "Difficulty: Wimp" },
+                { "name": "variable.set", "key": "gameDifficulty", "value": 0 }
+              ]
+            }
+          ],
+          "default": 1
+        }
+      },
+      {
+        "text": "OK",
+        "onClick": [
+          "saveSettings",
+          { "name": "resource.pop" }
+        ]
+      }
+    ]
+  },
+  "replaceVars": "value",
+  "inputEvent": {
+    "gameInputEvent": ["enter", "esc", "space", "settings"],
+    "action": { "name": "menu.click", "id": "settings", "index": "|$.settings.itemCount - 1|" }
+  }
+}

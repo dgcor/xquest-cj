@@ -1,0 +1,10 @@
+*.a
+*.dll
+*.exe
+*.macrocall
+.cache
+.svn
+.vs
+.vscode
+csfml
+target

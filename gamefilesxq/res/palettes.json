@@ -1,0 +1,19 @@
+{
+  "palette": [
+    { "file": "palettes/font.txt" },
+    { "file": "palettes/fontHighlight.txt" },
+    { "file": "palettes/fontWhite.txt" },
+    { "file": "palettes/main.txt" },
+    { "file": "palettes/title.txt" }
+  ],
+  "event": {
+    "id": "colorCycleFont",
+    "action": {
+      "name": "palette.shiftLeft",
+      "id": "fontHighlight",
+      "shift": 2,
+      "range": [1, 25]
+    },
+    "time": 60
+  }
+}

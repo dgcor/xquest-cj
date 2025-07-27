@@ -1,0 +1,14 @@
+{
+  "gameInputEvent": [
+    { "name": "enter", "key": "enter" },
+    { "name": "space", "key": " "},
+    { "name": "esc", "key": "esc" },
+    { "name": "settings", "key": "f1" },
+    { "name": "fullScreen", "key": "enter", "alt": true },
+    { "name": "fullScreen", "key": "f11" },
+    { "name": "up", "key": "up" },
+    { "name": "down", "key": "down" },
+    { "name": "left", "key": "left" },
+    { "name": "right", "key": "right" }
+  ]
+}

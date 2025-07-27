@@ -1,0 +1,26 @@
+* text=auto eol=lf
+*.bin           binary
+*.bmp           binary
+*.c             text
+*.c++           text
+*.cc            text
+*.cj            text
+*.cmake         text
+*.cpp           text
+*.cxx           text
+*.gif           binary
+*.h             text
+*.h++           text
+*.hh            text
+*.hpp           text
+*.ico           binary
+*.jpeg          binary
+*.jpg           binary
+*.json          text
+*.md            text
+*.mk            text
+*.png           binary
+*.ttf           binary
+*.txt           text
+*.xml           text
+LICENSE         text

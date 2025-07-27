@@ -1,0 +1,52 @@
+{
+  "level": {
+    "id": "level",
+    "levels": [
+      {
+        "level": 1,
+        "insert": [
+          { "id": "mine", "count": 0 },
+          { "id": "crystal", "count": 15 }
+        ],
+        "spawn": [
+          "grunger"
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 20 },
+          { "key": "enemyRelease", "value": 0.005 },
+          { "key": "gateWidth", "value": 27 },
+          { "key": "gateMove", "value": 0 },
+          { "key": "gateChangeDirProb", "value": 0 },
+          { "key": "time", "value": 20 }
+        ],
+        "maxObjectsById": [
+          { "id": "smartBomb", "count": 1 }
+        ],
+        "maxObjectsByType": [
+          { "type": "enemy", "count": 20 }
+        ],
+        "lives": 3,
+        "smartBombs": 2
+      },
+      {
+        "insert": [
+          { "id": "mine", "count": 3 },
+          { "id": "crystal", "count": 16 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 4 }
+        ]
+      },
+      {
+        "insert": [
+          { "id": "mine", "count": 4 },
+          { "id": "crystal", "count": 17 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 5 },
+          { "key": "gateWidth", "value": 26 }
+        ]
+      }
+    ]
+  }
+}

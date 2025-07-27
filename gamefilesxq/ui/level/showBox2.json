@@ -1,0 +1,51 @@
+{
+  "panel": {
+    "id": "{1}",
+    "position": [{2}, {3}],
+    "relativeCoords": false,
+    "relativePositions": true
+  },
+  "replaceVars": "value",
+  "rectangle": [
+    {
+      "id": "{1}Left",
+      "panel": "{1}",
+      "position": [0, 0],
+      "size": [1, "|$.{5}|"],
+      "color": "0x515151",
+      "anchor": "{6}"
+    },
+    {
+      "id": "{1}Right",
+      "panel": "{1}",
+      "position": ["|$.{4} - 1|", 1],
+      "size": [1, "|$.{5} - 1|"],
+      "color": "0xBABABA",
+      "anchor": "{6}"
+    },
+    {
+      "id": "{1}Up",
+      "panel": "{1}",
+      "position": [1, 0],
+      "size": ["|$.{4} - 1|", 1],
+      "color": "0x515151",
+      "anchor": "{6}"
+    },
+    {
+      "id": "{1}Down",
+      "panel": "{1}",
+      "position": [1, "|$.{5} - 1|"],
+      "size": ["|$.{4} - 1|", 1],
+      "color": "0xBABABA",
+      "anchor": "{6}"
+    },
+    {
+      "id": "{1}Middle",
+      "panel": "{1}",
+      "position": [1, 1],
+      "size": ["|$.{4} - 2|", "|$.{5} - 2|"],
+      "color": "0x717171",
+      "anchor": "{6}"
+    }
+  ]
+}

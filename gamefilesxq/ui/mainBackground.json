@@ -1,0 +1,23 @@
+{
+  "action": {
+    "name": "resource.add",
+    "id": "mainBackground"
+  },
+  "starfield": {
+    "id": "starfield",
+    "size": [320, 240],
+    "stars": 800,
+    "speed": 10,
+    "anchor": "all"
+  },
+  "texture": {
+    "file": "gfx/startpic.pbm",
+    "palette": "main"
+  },
+  "image": {
+    "id": "logo",
+    "texture": "startpic",
+    "position": ["center", 20],
+    "anchor": "none"
+  }
+}

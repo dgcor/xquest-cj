@@ -1,0 +1,42 @@
+{
+  "action": [
+    {
+      "name": "resource.add",
+      "id": "splashScreen2"
+    },
+    { "name": "sound.play", "id": "gatesound" }
+  ],
+  "inputEvent": {
+    "gameInputEvent": ["enter", "esc"],
+    "action": { "name": "button.click", "id": "skip" }
+  },
+  "texture": {
+    "id": "title",
+    "file": "gfx/title.pbm",
+    "palette": "title"
+  },
+  "image": {
+    "id": "title",
+    "texture": "title",
+    "position": ["center", "center"],
+    "anchor": "none"
+  },
+  "button": {
+    "id": "skip",
+    "texture": "empty",
+    "textureRect": [320, 240],
+    "resizable": true,
+    "anchor": "all",
+    "onClick": { "name": "event.timeout", "id": "load" }
+  },
+  "event": {
+    "id": "load",
+    "action": {
+      "name": "game.fadeOut",
+      "fade": 1,
+      "refresh": 4,
+      "action": "loadMainMenu"
+    },
+    "time": 3.0
+  }
+}

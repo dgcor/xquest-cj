@@ -1,0 +1,86 @@
+{
+  "action": [
+    { "name": "resource.popAll", "id": "mainBackground" },
+    { "name": "resource.add", "id": "play" }
+  ],
+  "panel": {
+    "id": "statusBar"
+  },
+  "load.playUIInputEvents": "ui/playUIInputEvents.json",
+  "load.statusBox": ["ui/level/showBox.json", "statusBox", 0, 217, 319, 24, "bottom"],
+  "load.scoreBox": ["ui/level/showBox2.json", "scoreBox", 8, 221, 69, 16, "bottomLeft"],
+  "load.livesBox": ["ui/level/showBox2.json", "livesBox", 183, 221, 37, 16, "bottomRight"],
+  "load.bombsBox": ["ui/level/showBox2.json", "bombsBox", 228, 221, 37, 16, "bottomRight"],
+  "load.crystalsBox": ["ui/level/showBox2.json", "crystalsBox", 273, 221, 37, 16, "bottomRight"],
+  "action.update": [
+    { "name": "panel.addDrawable", "id": "statusBar", "drawable": "statusBox" },
+    { "name": "panel.addDrawable", "id": "statusBar", "drawable": "scoreBox" },
+    { "name": "panel.addDrawable", "id": "statusBar", "drawable": "livesBox" },
+    { "name": "panel.addDrawable", "id": "statusBar", "drawable": "bombsBox" },
+    { "name": "panel.addDrawable", "id": "statusBar", "drawable": "crystalsBox" }
+  ],
+  "image": [
+    {
+      "id": "imgLives",
+      "panel": "statusBar",
+      "texturePack": "panelIcons",
+      "textureIndex": 0,
+      "position": [185, 223],
+      "anchor": ["bottom", "right"]
+    },
+    {
+      "id": "imgBombs",
+      "panel": "statusBar",
+      "texturePack": "panelIcons",
+      "textureIndex": 1,
+      "position": [230, 223],
+      "anchor": ["bottom", "right"]
+    },
+    {
+      "id": "imgCrystals",
+      "panel": "statusBar",
+      "texturePack": "panelIcons",
+      "textureIndex": 2,
+      "position": [275, 223],
+      "anchor": ["bottom", "right"]
+    }
+  ],
+  "text": [
+    {
+      "id": "txtScore",
+      "panel": "statusBar",
+      "font": "font2",
+      "position": [74, 222],
+      "anchor": ["bottom", "left"],
+      "horizontalAlign": "right",
+      "text": "10000"
+    },
+    {
+      "id": "txtLives",
+      "panel": "statusBar",
+      "font": "font2",
+      "position": [217, 222],
+      "anchor": ["bottom", "right"],
+      "horizontalAlign": "right",
+      "text": "2"
+    },
+    {
+      "id": "txtBombs",
+      "panel": "statusBar",
+      "font": "font2",
+      "position": [262, 222],
+      "anchor": ["bottom", "right"],
+      "horizontalAlign": "right",
+      "text": "3"
+    },
+    {
+      "id": "txtCrystals",
+      "panel": "statusBar",
+      "font": "font2",
+      "position": [307, 222],
+      "anchor": ["bottom", "right"],
+      "horizontalAlign": "right",
+      "text": "15"
+    }
+  ]
+}

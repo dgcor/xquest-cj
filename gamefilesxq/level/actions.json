@@ -1,0 +1,19 @@
+{
+  "action": [
+    {
+      "name": "action.set",
+      "id": "newGame",
+      "action": [
+        { "name": "drawable.visible", "id": "level" },
+        { "name": "level.newGame" },
+        "updateUnitQueues"
+      ]
+    },
+    {
+      "name": "action.set",
+      "id": "gameOver",
+      "action": { "name": "load", "file": "ui/gameOver.json" }
+    }
+  ],
+  "load": "level/actions2.json"
+}

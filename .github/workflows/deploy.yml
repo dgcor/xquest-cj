@@ -1,0 +1,161 @@
+name: Deploy
+
+on: [workflow_dispatch]
+
+jobs:
+  deploy:
+    name: ${{ matrix.name }} deploy
+    runs-on: ${{ matrix.os }}
+    env:
+      APP_NAME: XQuest
+      APP_NAME_LOWERCASE: xquest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux
+            os: ubuntu-latest
+            triplet: x64-linux
+            zip-name-suffix: linux-x86_64.AppImage
+          - name: Windows x64
+            os: windows-latest
+            zip-name-suffix: windows-x64
+
+    steps:
+      - name: Checkout ${{ env.APP_NAME }}
+        uses: actions/checkout@v4
+
+      - name: Install Ubuntu dependencies (Linux)
+        if: runner.os == 'Linux'
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: fuse libx11-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libgl1-mesa-dev
+          version: 1.0
+          execute_install_scripts: true
+
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        uses: johnwason/vcpkg-action@v7
+        id: vcpkg
+        with:
+          pkgs: sfml
+          triplet: ${{ matrix.triplet }}
+          extra-args: --overlay-ports=../dependencies/vcpkg
+          cache-key: vcpkg-${{ matrix.triplet }}-deploy
+          token: ${{ secrets.GITHUB_TOKEN }}
+          revision: 'ce613c41372b23b1f51333815feb3edd87ef8a8b'  # 2025.04.09
+
+      - name: Setup Ninja Build (Linux)
+        if: runner.os == 'Linux'
+        uses: turtlesec-no/get-ninja@main
+
+      - name: Build and install CSFML (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          git clone --branch feature/right-align-text https://github.com/dgcor/CSFML.git dependencies/csfml
+          cp -f dependencies/CMakePresets.json dependencies/csfml/CMakePresets.json
+          cd dependencies/csfml
+          cmake --preset linux-release -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+          cmake --build --preset linux-release --target install
+
+      - name: Build and install physfs (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          git clone --branch release-3.2.0 https://github.com/icculus/physfs.git dependencies/physfs
+          cp -f dependencies/CMakePresets.json dependencies/physfs/CMakePresets.json
+          cd dependencies/physfs
+          cmake --preset linux-release
+          cmake --build --preset linux-release --target install
+
+      - name: Download Cangjie stdx (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          cd dependencies
+          wget https://gitcode.com/Cangjie/cangjie-stdx/releases/download/v1.0.0.1/cangjie-stdx-linux-x64-1.0.0.1.zip -O stdx.zip
+          mkdir stdx
+          unzip stdx.zip -d stdx
+
+      - name: Download CSFML (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/dgcor/CSFML/releases/download/2.6.1.1/CSFML-2.6.1-windows-64-bit.zip" -OutFile "CSFML-2.6.1-windows-64-bit.zip"
+          Invoke-WebRequest -Uri "https://github.com/dgcor/CSFML/releases/download/2.6.1.1/OpenAL32.zip" -OutFile "OpenAL32.zip"
+          New-Item -ItemType Directory -Path "dependencies\csfml" -Force
+          Expand-Archive -Path "CSFML-2.6.1-windows-64-bit.zip" -DestinationPath "dependencies\csfml"
+          Move-Item -Path "dependencies\csfml\CSFML\bin\*.*" -Destination "dependencies\csfml"
+          Move-Item -Path "dependencies\csfml\CSFML\lib\gcc\*.*" -Destination "dependencies\csfml"
+          Expand-Archive -Path "OpenAL32.zip" -DestinationPath .
+
+      - name: Download physfs (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/dgcor/physfs-mirror/releases/download/bin-3.2.0/physfs-windows-64-bit.zip" -OutFile "physfs-windows-64-bit.zip"
+          New-Item -ItemType Directory -Path "dependencies\physfs" -Force
+          Expand-Archive -Path "physfs-windows-64-bit.zip" -DestinationPath "dependencies\physfs"
+
+      - name: Download Cangjie stdx (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          Invoke-WebRequest -Uri "https://gitcode.com/Cangjie/cangjie-stdx/releases/download/v1.0.0.1/cangjie-stdx-windows-x64-1.0.0.1.zip" -OutFile "stdx.zip"
+          New-Item -ItemType Directory -Path "dependencies\stdx" -Force
+          Expand-Archive -Path "stdx.zip" -DestinationPath "dependencies\stdx"
+
+      - name: Setup Cangjie
+        uses: Zxilly/setup-cangjie@v1.8.0
+        with:
+          channel: lts
+          version: 1.0.0
+          tool-cache: true
+          archive-path: ./cangjie-archive
+
+      - name: Build ${{ env.APP_NAME }}
+        shell: bash
+        run: |
+          mv -f cjpm-release.toml cjpm.toml
+          cjpm build -o ${{ env.APP_NAME }}
+
+      - name: Install UPX (Windows)
+        if: runner.os == 'Windows'
+        uses: crazy-max/ghaction-upx@v3
+        with:
+          install-only: true
+
+      - name: Install LinuxDeploy (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage -N
+          chmod +x linuxdeploy-x86_64.AppImage
+
+      - name: Create AppImage (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          export LD_LIBRARY_PATH=dependencies/csfml:dependencies/physfs:$LD_LIBRARY_PATH
+          ./linuxdeploy-x86_64.AppImage \
+            --executable=target/release/bin/${{ env.APP_NAME }} \
+            --appdir out/appdir \
+            --desktop-file=pkg/linux/${{ env.APP_NAME_LOWERCASE }}.desktop \
+            --icon-file=pkg/linux/icon.png \
+            --output=appimage
+
+      - name: Create ${{ env.APP_NAME }} zip (Linux)
+        if: runner.os == 'Linux'
+        run: 7z a ${{ env.APP_NAME }}-${{ matrix.zip-name-suffix }}.zip ${{ env.APP_NAME }}*.AppImage LICENSE.* README.* main.json gamefiles*
+
+      - name: Create ${{ env.APP_NAME }} zip (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          mv target/release/bin/${{ env.APP_NAME }}.exe ${{ env.APP_NAME }}.exe
+          mv dependencies/csfml/*.dll .
+          mv dependencies/physfs/*.dll .
+          rm csfml-network-2.dll
+          cp C:/hostedtoolcache/windows/cangjie/1.0.0/x64/cangjie/runtime/lib/windows_x86_64_llvm/libcangjie-runtime.dll
+          cp C:/hostedtoolcache/windows/cangjie/1.0.0/x64/cangjie/runtime/lib/windows_x86_64_llvm/libsecurec.dll
+          upx -9 *.exe
+          upx -9 *.dll
+          7z a ${{ env.APP_NAME }}-${{ matrix.zip-name-suffix }}.zip *.exe *.dll LICENSE.* README.* main.json gamefiles*
+
+      - name: Create ${{ env.APP_NAME }} zip artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: artifact-${{ env.APP_NAME }}-${{ matrix.zip-name-suffix }}
+          path: ${{ env.APP_NAME }}-${{ matrix.zip-name-suffix }}.zip

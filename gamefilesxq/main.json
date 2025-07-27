@@ -1,0 +1,19 @@
+{
+  "game": {
+    "title" : "XQuest",
+    "version": "1.0",
+    "saveDir": ".xquest",
+    "refSize": [320, 240],
+    "minSize": [320, 240],
+    "size": [640, 480],
+    "maxHeight": 480,
+    "frameRate": 60,
+    "keepAR": true,
+    "stretchToFit": true,
+    "smoothScreen": false,
+    "load": "settings.json",
+    "load": "res/updateSettings.json",
+    "init": true
+  },
+  "action": { "name": "load", "file": "ui/loadMain.json" }
+}

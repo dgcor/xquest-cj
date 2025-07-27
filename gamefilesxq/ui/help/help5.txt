@@ -1,0 +1,9 @@
+The status bar at the bottom of the
+screen shows your score, the number
+of lives and smartbombs you have left,
+the number of gems left, and what
+powerups you currently possess.
+
+Now go and get those gems!
+
+Hit a button or key to return to the menu.

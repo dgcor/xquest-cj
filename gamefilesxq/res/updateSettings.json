@@ -1,0 +1,9 @@
+{
+  "action": [
+    { "name": "variable.setIfNull", "key": "gameDifficulty", "value": 2 },
+    { "name": "variable.setIfNull", "key": "shader", "value": "default" },
+    { "name": "variable.setIfNull", "key": "sound", "value": true }
+  ],
+  "replaceVars": "value",
+  "load": "res/shaders/|shader|.json"
+}

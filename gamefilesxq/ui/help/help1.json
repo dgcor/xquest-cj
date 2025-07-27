@@ -1,0 +1,43 @@
+{
+  "load": "ui/help/helpPanel.json",
+  "button": {
+    "id": "default",
+    "texture": "empty",
+    "textureRect": [320, 240],
+    "anchor": "all",
+    "onClick": [
+      { "name": "resource.pop", "id": "popup" },
+      { "name": "load", "file": "ui/help/help2.json" }
+    ]
+  },
+  "text": {
+    "id": "txtHelp",
+    "font": "font",
+    "position": [160, 96],
+    "anchor": "none",
+    "horizontalAlign": "center",
+    "verticalSpaceOffset": 3,
+    "file": "ui/help/help1.txt"
+  },
+  "image": [
+    {
+      "id": "ship",
+      "texturePack": "ship",
+      "textureIndex": 23,
+      "position": [118, 111],
+      "anchor": "none"
+    },
+    {
+      "id": "crystal",
+      "texturePack": "crystal",
+      "position": [95, 126],
+      "anchor": "none"
+    },
+    {
+      "id": "mine",
+      "texturePack": "mine",
+      "position": [240, 126],
+      "anchor": "none"
+    }
+  ]
+}

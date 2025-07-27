@@ -1,0 +1,9 @@
+Collect extra SmartBombs     and look
+out for PowerCharges     which will
+give you special powerups! Watch out,
+though, PowerCharges are fragile and
+will shatter if you shoot them.
+If the going gets too tough hit 'p'
+to pause the game.
+
+Hit a button or key to continue.

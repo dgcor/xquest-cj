@@ -1,0 +1,9 @@
+Use the mouse or joystick to move
+the ship     around. Collect the
+gems    and avoid the mines    .
+Button 1 fires your bullets, while
+button 2 or the spacebar activates
+a SmartBomb if you have any.
+
+
+Hit a button or key to continue.

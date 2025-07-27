@@ -1,0 +1,28 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Cangjie
+        uses: Zxilly/setup-cangjie@v1.8.0
+        with:
+          channel: lts
+          version: 1.0.0
+          tool-cache: true
+          archive-path: ./cangjie-archive
+
+      - name: Build
+        run: cjpm build
+
+      - name: Test
+        run: cjpm test

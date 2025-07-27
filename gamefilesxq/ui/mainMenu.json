@@ -1,0 +1,148 @@
+{
+  "action": [
+    { "name": "resource.add",  "id": "baseLevel" },
+    { "name": "load", "file": "level/load.json" },
+    { "name": "load", "file": "ui/mainBackground.json" },
+    { "name": "resource.add", "id": "mainMenu" },
+    {
+      "name": "action.set",
+      "id": "clearMenuHighlight",
+      "action": { "name": "menu.setFont", "id": "menu", "font": "font" }
+    },
+    {
+      "name": "action.set",
+      "id": "highlightStartGame",
+      "action": [
+        "clearMenuHighlight",
+        { "name": "menu.setFont", "id": "menu", "index": 0, "font": "fontHighlight" }
+      ]
+    },
+    {
+      "name": "action.set",
+      "id": "highlightHelp",
+      "action": [
+        "clearMenuHighlight",
+        { "name": "menu.setFont", "id": "menu", "index": 1, "font": "fontHighlight" }
+      ]
+    },
+    {
+      "name": "action.set",
+      "id": "highlightHallOfFame",
+      "action": [
+        "clearMenuHighlight",
+        { "name": "menu.setFont", "id": "menu", "index": 2, "font": "fontHighlight" }
+      ]
+    },
+    {
+      "name": "action.set",
+      "id": "highlightOptions",
+      "action": [
+        "clearMenuHighlight",
+        { "name": "menu.setFont", "id": "menu", "index": 3, "font": "fontHighlight" }
+      ]
+    },
+    {
+      "name": "action.set",
+      "id": "highlightDemo",
+      "action": [
+        "clearMenuHighlight",
+        { "name": "menu.setFont", "id": "menu", "index": 4, "font": "fontHighlight" }
+      ]
+    },
+    {
+      "name": "action.set",
+      "id": "highlightQuit",
+      "action": [
+        "clearMenuHighlight",
+        { "name": "menu.setFont", "id": "menu", "index": 5, "font": "fontHighlight" }
+      ]
+    }
+  ],
+  "inputEvent": [
+    {
+      "gameInputEvent": "settings",
+      "action": { "name": "load", "file": "ui/settings.json" }
+    },
+    {
+      "gameInputEvent": "enter",
+      "action": "focus.click"
+    },
+    {
+      "gameInputEvent": "up",
+      "action": "focus.moveUp"
+    },
+    {
+      "gameInputEvent": "tabUp",
+      "action": "focus.moveUp"
+    },
+    {
+      "gameInputEvent": "down",
+      "action": "focus.moveDown"
+    },
+    {
+      "gameInputEvent": "tabDown",
+      "action": "focus.moveDown"
+    },
+    {
+      "gameInputEvent": "esc",
+      "action": "saveSettingsAndClose"
+    }
+  ],
+  "button": {
+    "id": "btnBackground",
+    "texture": "empty",
+    "textureRect": [320, 240],
+    "anchor": "all",
+    "captureInputEvents": true,
+    "onClick": { "name": "button.click", "id": "default" }
+  },
+  "menu": {
+    "id": "menu",
+    "font": "font",
+    "position": ["center", 91],
+    "sound": "menuclick",
+    "focus": true,
+    "focusSound": "menuclick",
+    "horizontalAlign": "center",
+    "verticalPad": 8,
+    "anchor": "none",
+    "items": [
+      {
+        "text": "Start Game",
+        "onClick": { "name": "load", "file": "ui/play.json" },
+        "onFocus": "highlightStartGame",
+        "onHoverEnter": "highlightStartGame"
+      },
+      {
+        "text": "Help",
+        "onClick": { "name": "load", "file": "ui/help/help1.json" },
+        "onFocus": "highlightHelp",
+        "onHoverEnter": "highlightHelp"
+      },
+      {
+        "text": "Hall of Fame",
+        "onClick": { "name": "load", "file": "ui/scores.json" },
+        "onFocus": "highlightHallOfFame",
+        "onHoverEnter": "highlightHallOfFame"
+      },
+      {
+        "text": "Options",
+        "onClick": { "name": "load", "file": "ui/settings.json" },
+        "onFocus": "highlightOptions",
+        "onHoverEnter": "highlightOptions"
+      },
+      {
+        "text": "Demo",
+        "enable": false,
+        "onFocus": "highlightDemo",
+        "onHoverEnter": "highlightDemo"
+      },
+      {
+        "text": "Quit",
+        "onClick": "saveSettingsAndClose",
+        "onFocus": "highlightQuit",
+        "onHoverEnter": "highlightQuit"
+      }
+    ]
+  }
+}

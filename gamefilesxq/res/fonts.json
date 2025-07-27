@@ -1,0 +1,108 @@
+{
+  "file": {
+    "id": "fontTime",
+    "file": "gfx/xquest.gfx",
+    "startPosition": 31592
+  },
+  "imageContainer": [
+    {
+      "id": "font",
+      "file": "gfx/xquest2.fnt"
+    },
+    {
+      "id": "font2",
+      "file": "gfx/xquest.fnt",
+      "type": "gfx"
+    },
+    {
+      "id": "fontTime",
+      "fileBytes": "fontTime",
+      "type": "gfx"
+    }
+  ],
+  "texturePack": [
+    {
+      "id": "font",
+      "type": "font",
+      "imageContainer": "font",
+      "palette": "font",
+      "utf8Indexes": "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,/()!? :\"';$<>-=^_"
+    },
+    {
+      "id": "font2",
+      "type": "font",
+      "imageContainer": "font2",
+      "palette": "main",
+      "utf8Indexes": "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ+: ?",
+      "textureIndexes": [
+        [97, 10],
+        [98, 11],
+        [99, 12],
+        [100, 13],
+        [101, 14],
+        [102, 15],
+        [103, 16],
+        [104, 17],
+        [105, 18],
+        [106, 19],
+        [107, 20],
+        [108, 21],
+        [109, 22],
+        [110, 23],
+        [111, 24],
+        [112, 25],
+        [113, 26],
+        [114, 27],
+        [115, 28],
+        [116, 29],
+        [117, 30],
+        [118, 31],
+        [119, 32],
+        [120, 33],
+        [121, 34],
+        [122, 35]
+      ]
+    },
+    {
+      "id": "fontTime",
+      "type": "font",
+      "imageContainer": "fontTime",
+      "palette": "main",
+      "utf8Indexes": "0123456789"
+    }
+  ],
+  "font": [
+    {
+      "id": "font",
+      "texturePack": "font",
+      "space": 6,
+      "newLine": 12,
+      "tab": 16
+    },
+    {
+      "id": "fontHighlight",
+      "clone": "font",
+      "fontPalette": "fontHighlight"
+    },
+    {
+      "id": "fontWhite",
+      "clone": "font",
+      "fontPalette": "fontWhite"
+    },
+    {
+      "id": "font2",
+      "texturePack": "font2",
+      "drawWhitespace": true,
+      "space": 8,
+      "newLine": 14,
+      "tab": 16
+    },
+    {
+      "id": "fontTime",
+      "texturePack": "fontTime",
+      "space": 8,
+      "newLine": 12,
+      "tab": 16
+    }
+  ]
+}

@@ -1,0 +1,321 @@
+{
+  "load": "ui/help/helpPanel.json",
+  "button": {
+    "id": "default",
+    "texture": "empty",
+    "textureRect": [320, 240],
+    "anchor": "all",
+    "onClick": [
+      { "name": "resource.pop", "id": "popup" },
+      { "name": "load", "file": "ui/help/help4.json" }
+    ]
+  },
+  "text": [
+    {
+      "id": "txtHelp",
+      "font": "font",
+      "position": [160, 96],
+      "anchor": "none",
+      "horizontalAlign": "center",
+      "verticalSpaceOffset": 3,
+      "file": "ui/help/help3.txt"
+    },
+    {
+      "id": "txtEnemyName",
+      "font": "font",
+      "position": [161, 171],
+      "anchor": "none",
+      "horizontalAlign": "center"
+    },
+    {
+      "id": "txtEnemyPoints",
+      "font": "font",
+      "position": [161, 196],
+      "anchor": "none",
+      "horizontalAlign": "center"
+    }
+  ],
+  "panel": {
+    "id": "enemiesPanel"
+  },
+  "animation": [
+    {
+      "id": "repulsor",
+      "panel": "enemiesPanel",
+      "texturePack": "repulsor",
+      "position": [0, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    },
+    {
+      "id": "sticktight",
+      "panel": "enemiesPanel",
+      "texturePack": "sticktight",
+      "position": [320, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    },
+    {
+      "id": "cluster",
+      "panel": "enemiesPanel",
+      "texturePack": "cluster",
+      "position": [640, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    },
+    {
+      "id": "buckshot",
+      "panel": "enemiesPanel",
+      "texturePack": "buckshot",
+      "position": [960, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    },
+    {
+      "id": "tribbler",
+      "panel": "enemiesPanel",
+      "texturePack": "tribbler",
+      "position": [1280, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    },
+    {
+      "id": "snipe",
+      "panel": "enemiesPanel",
+      "texturePack": "snipe",
+      "position": [1600, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    },
+    {
+      "id": "doinger",
+      "panel": "enemiesPanel",
+      "texturePack": "doinger",
+      "position": [1920, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    },
+    {
+      "id": "terrier",
+      "panel": "enemiesPanel",
+      "texturePack": "terrier",
+      "position": [2240, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    },
+    {
+      "id": "retaliator",
+      "panel": "enemiesPanel",
+      "texturePack": "retaliator",
+      "position": [2560, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    },
+    {
+      "id": "meeby",
+      "panel": "enemiesPanel",
+      "texturePack": "meeby",
+      "position": [2880, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    },
+    {
+      "id": "miner",
+      "panel": "enemiesPanel",
+      "texturePack": "miner",
+      "position": [3200, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    },
+    {
+      "id": "vince",
+      "panel": "enemiesPanel",
+      "texturePack": "vince",
+      "position": [3520, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    },
+    {
+      "id": "zinger",
+      "panel": "enemiesPanel",
+      "texturePack": "zinger",
+      "position": [3840, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    },
+    {
+      "id": "zippo",
+      "panel": "enemiesPanel",
+      "texturePack": "zippo",
+      "position": [4160, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    },
+    {
+      "id": "grunger",
+      "panel": "enemiesPanel",
+      "texturePack": "grunger",
+      "position": [4480, 0],
+      "relativeCoords": false,
+      "anchor": "none",
+      "refresh": 100
+    }
+  ],
+  "scrollable": {
+    "id": "enemiesScroll",
+    "drawable": "enemiesPanel",
+    "direction": "left",
+    "refresh": 10,
+    "loop": true,
+    "anchor": "none",
+    "position": [0, 140],
+    "size": [320, 40]
+  },
+  "event": {
+    "id": "scrollTextUpdate",
+    "action": {
+      "name": "if.equal",
+      "param1": "%game.hasDrawable.enemiesScroll%",
+      "param2": false,
+      "else": [
+        { "name": "text.setText", "id": "txtEnemyName" },
+        { "name": "text.setText", "id": "txtEnemyPoints" },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", 4400, "and", "%enemiesScroll.scrollPosition%", "<", 4580],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Grunger" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "200" }
+          ]
+        },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", 4080, "and", "%enemiesScroll.scrollPosition%", "<", 4260],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Zippo" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "300" }
+          ]
+        },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", 3760, "and", "%enemiesScroll.scrollPosition%", "<", 3940],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Zinger" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "300" }
+          ]
+        },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", 3440, "and", "%enemiesScroll.scrollPosition%", "<", 3620],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Vince" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "500" }
+          ]
+        },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", 3120, "and", "%enemiesScroll.scrollPosition%", "<", 3300],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Miner" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "600" }
+          ]
+        },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", 2800, "and", "%enemiesScroll.scrollPosition%", "<", 2980],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Meeby" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "2000" }
+          ]
+        },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", 2480, "and", "%enemiesScroll.scrollPosition%", "<", 2660],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Retaliator" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "1000" }
+          ]
+        },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", 2160, "and", "%enemiesScroll.scrollPosition%", "<", 2340],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Terrier" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "1000" }
+          ]
+        },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", 1840, "and", "%enemiesScroll.scrollPosition%", "<", 2020],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Doinger" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "1000" }
+          ]
+        },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", 1520, "and", "%enemiesScroll.scrollPosition%", "<", 1700],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Snipe" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "1250" }
+          ]
+        },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", 1200, "and", "%enemiesScroll.scrollPosition%", "<", 1380],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Tribbler" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "1500" }
+          ]
+        },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", 880, "and", "%enemiesScroll.scrollPosition%", "<", 1060],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Buckshot" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "1500" }
+          ]
+        },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", 560, "and", "%enemiesScroll.scrollPosition%", "<", 740],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Cluster" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "5000" }
+          ]
+        },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", 240, "and", "%enemiesScroll.scrollPosition%", "<", 420],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Sticktight" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "2000" }
+          ]
+        },
+        {
+          "name": "if",
+          "params": ["%enemiesScroll.scrollPosition%", ">", -80, "and", "%enemiesScroll.scrollPosition%", "<", 100],
+          "then": [
+            { "name": "text.setText", "id": "txtEnemyName", "text": "Repulsor" },
+            { "name": "text.setText", "id": "txtEnemyPoints", "text": "7500" }
+          ]
+        }
+      ]
+    },
+    "time": 60
+  }
+}

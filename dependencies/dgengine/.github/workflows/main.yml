@@ -1,0 +1,74 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    env:
+      APP_NAME: DGEngine
+    steps:
+      - name: Checkout ${{ env.APP_NAME }}
+        uses: actions/checkout@v4
+
+      - name: Install Ubuntu dependencies
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libx11-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libgl1-mesa-dev
+          version: 1.0
+          execute_install_scripts: true
+
+      - name: Setup Ninja Build
+        uses: turtlesec-no/get-ninja@main
+
+      - name: Build and install SFML
+        uses: johnwason/vcpkg-action@v7
+        id: vcpkg
+        with:
+          pkgs: sfml
+          triplet: x64-linux
+          extra-args: --overlay-ports=../dependencies/vcpkg
+          cache-key: vcpkg-ubuntu-latest
+          token: ${{ secrets.GITHUB_TOKEN }}
+          revision: 'ce613c41372b23b1f51333815feb3edd87ef8a8b'  # 2025.04.09
+
+      - name: Build and install CSFML
+        run: |
+          git clone --branch feature/right-align-text https://github.com/dgcor/CSFML.git dependencies/csfml
+          cp -f dependencies/CMakePresets.json dependencies/csfml/CMakePresets.json
+          cd dependencies/csfml
+          cmake --preset linux-release -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+          cmake --build --preset linux-release --target install
+
+      - name: Build and install physfs
+        run: |
+          git clone --branch release-3.2.0 https://github.com/icculus/physfs.git dependencies/physfs
+          cp -f dependencies/CMakePresets.json dependencies/physfs/CMakePresets.json
+          cd dependencies/physfs
+          cmake --preset linux-release
+          cmake --build --preset linux-release --target install
+
+      - name: Download Cangjie stdx
+        run: |
+          cd dependencies
+          wget https://gitcode.com/Cangjie/cangjie-stdx/releases/download/v1.0.0.1/cangjie-stdx-linux-x64-1.0.0.1.zip -O stdx.zip
+          mkdir stdx
+          unzip stdx.zip -d stdx
+
+      - name: Setup Cangjie
+        uses: Zxilly/setup-cangjie@v1.8.0
+        with:
+          channel: lts
+          version: 1.0.0
+          tool-cache: true
+          archive-path: ./cangjie-archive
+
+      - name: Build ${{ env.APP_NAME }}
+        run: cjpm build
+
+      - name: Test ${{ env.APP_NAME }}
+        run: |
+          Xvfb :99 -screen 0 1920x1080x24 &
+          export DISPLAY=:99
+          cjpm test

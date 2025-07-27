@@ -1,0 +1,8 @@
+* text=auto eol=lf
+*.a     binary
+*.cj    text
+*.dll   binary
+*.md    text
+*.toml  text
+*.txt   text
+*.yml   text

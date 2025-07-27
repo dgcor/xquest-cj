@@ -1,0 +1,7 @@
+{
+  "load.actions": "level/actions.json",
+  "load.baseLevel": "level/baseLevel.json",
+  "load.defaultLevelOptions": "level/defaultLevelOptions.json",
+  "load.highScores": "level/highScores.json",
+  "load.levelObjectClasses": "level/levelObjectClasses.json"
+}

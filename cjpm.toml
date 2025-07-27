@@ -1,0 +1,24 @@
+[package]
+  cjc-version = "1.0.0"
+  name = "XQuest"
+  description = "XQuest game"
+  version = "0.1.0"
+  target-dir = ""
+  src-dir = ""
+  output-type = "executable"
+  compile-option = "--dy-std --dy-libs"
+  override-compile-option = "--dy-std --dy-libs"
+  link-option = ""
+  package-configuration = {}
+
+[dependencies]
+  cjsfml = { path = "dependencies/cjsfml", output-type = "dynamic" }
+  customiterators = { path = "dependencies/customiterators", output-type = "dynamic" }
+  dgengine = { path = "dependencies/dgengine", output-type = "dynamic" }
+  endian = { path = "dependencies/endian", output-type = "dynamic" }
+
+[target.x86_64-unknown-linux-gnu.bin-dependencies]
+  path-option = ["dependencies/stdx/linux_x86_64_llvm/dynamic/stdx"]
+
+[target.x86_64-w64-mingw32.bin-dependencies]
+  path-option = ["dependencies/stdx/windows_x86_64_llvm/dynamic/stdx"]

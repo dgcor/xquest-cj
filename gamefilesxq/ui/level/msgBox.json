@@ -1,0 +1,14 @@
+{
+  "load": ["ui/level/showBox.json", "{1}", "{2}", "{3}", "{4}", "{5}", "none"],
+  "replaceVars": "value",
+  "text": {
+    "id": "{1}Text",
+    "panel": "{1}",
+    "font": "font2",
+    "position": ["|$.{4} / 2|", "|$.{5} / 2|"],
+    "anchor": "none",
+    "horizontalAlign": "center",
+    "verticalAlign": "center",
+    "text": "{6}"
+  }
+}

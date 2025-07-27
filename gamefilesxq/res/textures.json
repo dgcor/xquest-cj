@@ -1,0 +1,302 @@
+{
+  "texture": [
+    {
+      "id": "background",
+      "color": "0x000000",
+      "size": [1, 1]
+    },
+    {
+      "id": "empty",
+      "color": "0x00000000",
+      "size": [1, 1]
+    }
+  ],
+  "imageContainer": {
+    "id": "xquest",
+    "file": "gfx/xquest.gfx"
+  },
+  "texturePack": [
+    {
+      "id": "ship",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [23, 0]
+    },
+    {
+      "id": "shipMissile",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexes": [24]
+    },
+    {
+      "id": "crystal",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexes": [25]
+    },
+    {
+      "id": "mine",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexes": [26]
+    },
+    {
+      "id": "smartBomb",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexes": [27]
+    },
+    {
+      "id": "mine2",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexes": [28]
+    },
+    {
+      "id": "superCrystal",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [29, 34]
+    },
+    {
+      "id": "explosion",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [35, 40]
+    },
+    {
+      "id": "grunger",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [41, 44]
+    },
+    {
+      "id": "zippo",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [45, 48]
+    },
+    {
+      "id": "zinger",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [49, 52]
+    },
+    {
+      "id": "vince",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [53, 56]
+    },
+    {
+      "id": "vinceHibernating",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexes": [57]
+    },
+    {
+      "id": "miner",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [58, 61]
+    },
+    {
+      "id": "meeby",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [62, 67]
+    },
+    {
+      "id": "retaliator",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [68, 71]
+    },
+    {
+      "id": "terrier",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [72, 75]
+    },
+    {
+      "id": "doinger",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [76, 79]
+    },
+    {
+      "id": "snipe",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [80, 83]
+    },
+    {
+      "id": "tribbler",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [84, 87]
+    },
+    {
+      "id": "tribbles",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [88, 91]
+    },
+    {
+      "id": "buckshot",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [92, 95]
+    },
+    {
+      "id": "cluster",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [96, 99]
+    },
+    {
+      "id": "sticktight",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [100, 103]
+    },
+    {
+      "id": "repulsor",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [104, 109]
+    },
+    {
+      "id": "zingerMissile",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexes": [110]
+    },
+    {
+      "id": "buckshotMissile",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexes": [111]
+    },
+    {
+      "id": "retaliatorMissile",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexes": [112]
+    },
+    {
+      "id": "doingerMissile",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexes": [113]
+    },
+    {
+      "id": "sniperMissile",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexes": [114]
+    },
+    {
+      "id": "clusterMissile",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexes": [115]
+    },
+    {
+      "id": "panelIcons",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [116, 125]
+    },
+    {
+      "id": "borders",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexRange": [126, 143],
+      "groups": [
+        { "range": [2, 2] },
+        { "range": [3, 3] },
+        { "range": [4, 4] },
+        { "range": [5, 5] },
+        { "range": [6, 6] },
+        { "range": [7, 11], "refresh": 200 },
+        { "range": [12, 12] },
+        { "range": [13, 17], "refresh": 200 }
+      ]
+    },
+    {
+      "id": "blackHole",
+      "imageContainer": "xquest",
+      "palette": "main",
+      "onlyUseIndexed": true,
+      "reverseMapIndex": true,
+      "textureIndexes": [144]
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "level": {
+    "id": "level",
+    "highScores": [
+      {
+        "name": "Anonymous",
+        "level": 12,
+        "score": 133500
+      },
+      {
+        "name": "Anonymous",
+        "level": 11,
+        "score": 128800
+      },
+      {
+        "name": "Anonymous",
+        "level": 11,
+        "score": 123300
+      },
+      {
+        "name": "HaddaYadda",
+        "level": 3,
+        "score": 20700
+      },
+      {
+        "name": "Yeehah!",
+        "level": 3,
+        "score": 20200
+      },
+      {
+        "name": "Argh!\"_))()(^_",
+        "level": 4,
+        "score": 14900
+      },
+      {
+        "name": "Anonymous",
+        "level": 2,
+        "score": 13100
+      },
+      {
+        "name": "Anonymous",
+        "level": 2,
+        "score": 12100
+      },
+      {
+        "name": "Anonymous",
+        "level": 4,
+        "score": 11400
+      },
+      {
+        "name": "Anonymous",
+        "level": 2,
+        "score": 10500
+      }
+    ]
+  }
+}

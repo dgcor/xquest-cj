@@ -1,0 +1,29 @@
+{
+  "levelObjectClass": [
+    {
+      "id": "ship",
+      "type": "ship",
+      "texturePack": "ship",
+      "texturePackDestroy": "explosion"
+    },
+    {
+      "id": "crystal",
+      "type": "crystal",
+      "texturePack": "crystal",
+      "points": 50
+    },
+    {
+      "id": "mine",
+      "type": "mine",
+      "texturePack": "mine",
+      "texturePackDestroy": "explosion"
+    },
+    {
+      "id": "grunger",
+      "type": "enemy",
+      "texturePack": "grunger",
+      "texturePackDestroy": "explosion",
+      "points": 20
+    }
+  ]
+}

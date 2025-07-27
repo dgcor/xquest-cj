@@ -1,0 +1,12 @@
+{
+  "inputEvent": [
+    {
+      "gameInputEvent": "fullScreen",
+      "action": "fullScreen"
+    },
+    {
+      "gameInputEvent": "esc",
+      "action": { "name": "button.click", "id": "quit" }
+    }
+  ]
+}

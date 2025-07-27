@@ -1,0 +1,102 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: ${{ matrix.preset }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      # Set fail-fast to false to ensure that feedback is delivered for all matrix combinations.
+      # Consider changing this to true when your workflow is stable.
+      fail-fast: false
+
+      # Set up a matrix to run the following configurations:
+      matrix:
+        preset:
+          - linux-release
+          - windows-release
+        os:
+          - ubuntu-latest
+          - windows-latest
+        include:
+          - preset: linux-release
+            os: ubuntu-latest
+            triplet: x64-linux
+          - preset: windows-release
+            os: windows-latest
+            triplet: x64-mingw-dynamic
+        exclude:
+          - os: ubuntu-latest
+            preset: windows-release
+          - os: windows-latest
+            preset: linux-release
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install CMake
+        uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: "3.31.5"
+
+      - name: Install CSFML dependencies (Linux)
+        if: runner.os == 'Linux'
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libx11-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libgl1-mesa-dev nasm
+          version: 1.0
+          execute_install_scripts: true
+
+      - name: Setup w64devkit (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/skeeto/w64devkit/releases/download/v2.1.0/w64devkit-x64-2.1.0.exe" -OutFile "w64devkit-x64-2.1.0.exe"
+          Start-Process -FilePath "w64devkit-x64-2.1.0.exe" -ArgumentList "-oC:\", "-y" -Wait
+          echo "C:\w64devkit\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Verify w64devkit installation (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          gcc --version
+          g++ --version
+
+      - name: Setup Ninja
+        uses: turtlesec-no/get-ninja@main
+
+      - name: Setup Cangjie
+        uses: Zxilly/setup-cangjie@v1.8.0
+        with:
+          channel: lts
+          version: 1.0.0
+          tool-cache: true
+          archive-path: ./cangjie-archive
+
+      - name: Download CSFML
+        shell: bash
+        run: ./download_csfml.sh
+
+      - name: Build and Install SFML
+        uses: johnwason/vcpkg-action@v7
+        id: vcpkg
+        with:
+          pkgs: sfml
+          triplet: ${{ matrix.triplet }}
+          extra-args: --overlay-ports=${{ github.workspace }}/vcpkg
+          cache-key: vcpkg-${{ matrix.preset }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          vcpkg-subdir: 'vcpkg-repo'
+          revision: 'ce613c41372b23b1f51333815feb3edd87ef8a8b'  # 2025.04.09
+
+      - name: Build CSFML
+        run: |
+          cd csfml
+          cmake --preset ${{ matrix.preset }} -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg-repo/scripts/buildsystems/vcpkg.cmake
+          cmake --build --preset ${{ matrix.preset }} --target install
+
+      - name: Build cjsfml
+        run: cjpm build
+
+      - name: Test cjsfml
+        run: cjpm test

@@ -1,0 +1,17 @@
+{
+  "action": {
+    "name": "resource.add",
+    "id": "popup",
+    "ignorePrevious": true
+  },
+  "inputEvent": [
+    {
+      "gameInputEvent": ["esc"],
+      "action": { "name": "resource.pop" }
+    },
+    {
+      "gameInputEvent": ["enter", "help", "space"],
+      "action": "#btnBackground.click"
+    }
+  ]
+}
