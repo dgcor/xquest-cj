@@ -1,7 +1,6 @@
 package dgengine
 
 import stdx.encoding.json.*
-import std.math.*
 
 public func parseFileBytes(game: Game, elem: JsonValue): Unit {
     if (parseResourceFromId<Array<Byte>>(game.resources, elem) == true) {

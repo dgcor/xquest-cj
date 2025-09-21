@@ -67,10 +67,10 @@ public func parseImage(game: Game, elem: JsonValue): Unit {
         elem,
         {
             game, elem =>
-            if (let Some(img) <- getImageObj(game, elem)) {
-                return img
-            }
-            return None
+                if (let Some(img) <- getImageObj(game, elem)) {
+                    return img
+                }
+                return None
         }
     )
 }

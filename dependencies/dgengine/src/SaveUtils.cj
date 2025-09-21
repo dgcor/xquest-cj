@@ -2,10 +2,8 @@ package dgengine
 
 import cjsfml.system.*
 import ctemplate.*
-import stdx.encoding.json.*
 import stdx.encoding.json.stream.*
 import std.collection.*
-import std.io.*
 
 public class SaveUtils {
     public static func hasProperty(properties: Map<String, Variable>, key: String): Bool {

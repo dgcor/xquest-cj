@@ -1,7 +1,6 @@
 package dgengine
 
 import cjsfml.graphics.Image as SFMLImage
-import cjsfml.system.*
 import std.collection.*
 
 // Lazy loading image container for common formats

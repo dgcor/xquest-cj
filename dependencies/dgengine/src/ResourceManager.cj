@@ -803,11 +803,11 @@ public class ResourceManager <: Iterable<ResourceBundle> & Resource {
         m_playingSounds.removeIf(
             {
                 snd =>
-                if (snd.status != SoundStatus.Playing) {
-                    snd.close()
-                    return true
-                }
-                return false
+                    if (snd.status != SoundStatus.Playing) {
+                        snd.close()
+                        return true
+                    }
+                    return false
             }
         )
     }

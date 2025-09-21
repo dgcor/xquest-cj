@@ -4,7 +4,6 @@ import cjsfml.graphics.*
 import cjsfml.system.*
 import std.collection.*
 import std.convert.*
-import std.math.*
 
 public class Panel <: UIObject {
     private let m_drawables: ArrayList<UIObject> = ArrayList<UIObject>()

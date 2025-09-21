@@ -146,11 +146,11 @@ public class BaseAnimation {
             elapsedTime,
             {
                 =>
-                updateFrameIndex()
-                if (hasPlayOnceAnimationFinished == true) {
-                    return false
-                }
-                return true
+                    updateFrameIndex()
+                    if (hasPlayOnceAnimationFinished == true) {
+                        return false
+                    }
+                    return true
             }
         )
         return true

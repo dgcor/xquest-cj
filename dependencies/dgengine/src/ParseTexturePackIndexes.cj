@@ -2,7 +2,6 @@ package dgengine
 
 import cjsfml.system.*
 import stdx.encoding.json.*
-import std.math.*
 
 public func parseTexturePackIndexes(texturePack: Box<?TexturePack>, elem: JsonValue): Unit {
     if (let Some(elem) <- getValidObject(elem)) {

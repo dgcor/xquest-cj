@@ -38,10 +38,10 @@ public func parseScrollable(game: Game, elem: JsonValue): Unit {
             elem,
             {
                 game, elem =>
-                if (let Some(obj) <- getScrollableObj(game, elem)) {
-                    return obj
-                }
-                return None
+                    if (let Some(obj) <- getScrollableObj(game, elem)) {
+                        return obj
+                    }
+                    return None
             }
         )
     }

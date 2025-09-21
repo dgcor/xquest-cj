@@ -1,6 +1,5 @@
 package cjsfml.window
 
-import cenum.*
 import cjsfml.system.*
 
 foreign {

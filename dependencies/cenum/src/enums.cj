@@ -1,7 +1,6 @@
 macro package cenum
 
 import std.ast.*
-import std.convert.*
 
 public macro Enum(attrTokens: Tokens, inputTokens: Tokens) {
     makeEnum(attrTokens, inputTokens)

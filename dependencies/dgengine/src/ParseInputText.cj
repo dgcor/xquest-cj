@@ -1,6 +1,5 @@
 package dgengine
 
-import cjsfml.system.*
 import stdx.encoding.json.*
 
 public func getInputTextObj(game: Game, elem: JsonValue): ?InputText {
@@ -47,10 +46,10 @@ public func parseInputText(game: Game, elem: JsonValue): Unit {
         elem,
         {
             game, elem =>
-            if (let Some(text) <- getInputTextObj(game, elem)) {
-                return text
-            }
-            return None
+                if (let Some(text) <- getInputTextObj(game, elem)) {
+                    return text
+                }
+                return None
         }
     )
 }

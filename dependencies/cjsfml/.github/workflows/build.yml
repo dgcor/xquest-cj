@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    name: ${{ matrix.preset }}
+    name: Build on ${{ matrix.os }} with Cangjie ${{ matrix.cangjie_version }}
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -14,24 +14,19 @@ jobs:
 
       # Set up a matrix to run the following configurations:
       matrix:
-        preset:
-          - linux-release
-          - windows-release
-        os:
-          - ubuntu-latest
-          - windows-latest
         include:
           - preset: linux-release
+            cangjie_version: 1.0.0
+            os: ubuntu-latest
+            triplet: x64-linux
+          - preset: linux-release
+            cangjie_version: 1.0.1
             os: ubuntu-latest
             triplet: x64-linux
           - preset: windows-release
+            cangjie_version: 1.0.1
             os: windows-latest
             triplet: x64-mingw-dynamic
-        exclude:
-          - os: ubuntu-latest
-            preset: windows-release
-          - os: windows-latest
-            preset: linux-release
 
     steps:
       - uses: actions/checkout@v4
@@ -66,11 +61,10 @@ jobs:
         uses: turtlesec-no/get-ninja@main
 
       - name: Setup Cangjie
-        uses: Zxilly/setup-cangjie@v1.8.0
+        uses: Zxilly/setup-cangjie@v2.0.0
         with:
           channel: lts
-          version: 1.0.0
-          tool-cache: true
+          version: ${{ matrix.cangjie_version }}
           archive-path: ./cangjie-archive
 
       - name: Download CSFML

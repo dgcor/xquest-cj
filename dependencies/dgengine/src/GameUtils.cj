@@ -595,12 +595,12 @@ public class GameUtils {
             token,
             {
                 strProp, str2 =>
-                if (strProp.size > 2) {
-                    if (let Some(value) <- obj.getProperty(strProp[1..strProp.size - 1])) {
-                        return str2.replace(strProp, value.toString())
+                    if (strProp.size > 2) {
+                        if (let Some(value) <- obj.getProperty(strProp[1..strProp.size - 1])) {
+                            return str2.replace(strProp, value.toString())
+                        }
                     }
-                }
-                return str2
+                    return str2
             }
         )
     }
@@ -611,12 +611,12 @@ public class GameUtils {
             token,
             {
                 strProp, str2 =>
-                if (strProp.size > 2) {
-                    if (let Some(value) <- obj.getVarOrPropNoToken(strProp[1..strProp.size - 1])) {
-                        return str2.replace(strProp, value.toString())
+                    if (strProp.size > 2) {
+                        if (let Some(value) <- obj.getVarOrPropNoToken(strProp[1..strProp.size - 1])) {
+                            return str2.replace(strProp, value.toString())
+                        }
                     }
-                }
-                return str2
+                    return str2
             }
         )
     }

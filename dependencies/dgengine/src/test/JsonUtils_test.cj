@@ -300,17 +300,17 @@ class TestJsonUtils {
                 elem,
                 {
                     val =>
-                    if (let Some(str) <- getValidString(val)) {
-                        if (str.endsWith("1")) {
-                            return JsonString("game")
+                        if (let Some(str) <- getValidString(val)) {
+                            if (str.endsWith("1")) {
+                                return JsonString("game")
+                            }
+                        } else {
+                            match (val.kind()) {
+                                case JsInt => return JsonFloat(2.5)
+                                case _ => ()
+                            }
                         }
-                    } else {
-                        match (val.kind()) {
-                            case JsInt => return JsonFloat(2.5)
-                            case _ => ()
-                        }
-                    }
-                    return val
+                        return val
                 }
             )
 

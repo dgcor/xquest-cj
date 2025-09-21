@@ -1,6 +1,6 @@
 package dgengine
 
-import std.math.{abs, round}
+import std.math.{abs}
 import std.random.Random as RandomImpl
 
 public abstract class RandomGenerator {
@@ -112,7 +112,7 @@ public class RandomNormal <: RandomGenerator {
 
     // returns a normal distributed number between 0 and num
     // num must be > 0
-    // example: 5000 x std::round(getRange(4.0))
+    // example: 5000 x round(getRange(4.0))
     // 0 - 50
     // 1 - 1094
     // 2 - 2757

@@ -1,6 +1,5 @@
 package dgengine
 
-import cjsfml.graphics.*
 import cjsfml.system.*
 import std.collection.*
 

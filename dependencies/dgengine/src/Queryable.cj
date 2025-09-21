@@ -1,7 +1,5 @@
 package dgengine
 
-import std.math.*
-
 public interface Queryable {
     func getNumber(propName: String): ?Number32 {
         if (let Some(value) <- getProperty(propName)) {

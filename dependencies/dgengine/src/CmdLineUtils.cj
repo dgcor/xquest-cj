@@ -1,7 +1,5 @@
 package dgengine
 
-import cjsfml.system.*
-
 public class CmdLineUtils {
     // returns true if any export command was found (reagrdless of success)
     public static func processCmdLine(args: Array<String>): Bool {

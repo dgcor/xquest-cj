@@ -63,10 +63,10 @@ public func parseMenu(game: Game, elem: JsonValue): Unit {
         elem,
         {
             game, elem =>
-            if (let Some(menu) <- getMenuObj(game, elem)) {
-                return menu
-            }
-            return None
+                if (let Some(menu) <- getMenuObj(game, elem)) {
+                    return menu
+                }
+                return None
         }
     )
 }

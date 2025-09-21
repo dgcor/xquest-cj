@@ -6,7 +6,6 @@ import std.binary.*
 import std.convert.*
 import std.collection.*
 import std.io.{ByteBuffer, StringReader}
-import std.math.*
 
 // loads list of numbers from file.
 public class NumberVector<T> <: Collection<T> where T <: CType & LittleEndianOrder<T> & Parsable<T> {

@@ -30,10 +30,10 @@ public func parseShape(game: Game, elem: JsonValue): Unit {
             elem,
             {
                 game, elem =>
-                if (let Some(shape) <- getShapeObj(game, elem)) {
-                    return shape
-                }
-                return None
+                    if (let Some(shape) <- getShapeObj(game, elem)) {
+                        return shape
+                    }
+                    return None
             }
         )
     }

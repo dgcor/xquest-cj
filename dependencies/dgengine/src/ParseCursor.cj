@@ -42,10 +42,10 @@ public func parseCursor(game: Game, elem: JsonValue): Unit {
         elem,
         {
             game, elem =>
-            if (let Some(anim) <- getAnimationObj(game, elem)) {
-                return anim
-            }
-            return None
+                if (let Some(anim) <- getAnimationObj(game, elem)) {
+                    return anim
+                }
+                return None
         }
     )
 }

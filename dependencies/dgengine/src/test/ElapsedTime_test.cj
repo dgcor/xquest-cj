@@ -368,8 +368,8 @@ class TestElapsedTime {
             Time(seconds: 3.5),
             {
                 =>
-                count.value++
-                return true
+                    count.value++
+                    return true
             }
         )
 
@@ -381,8 +381,8 @@ class TestElapsedTime {
             Time(seconds: 0.25),
             {
                 =>
-                count.value++
-                return true
+                    count.value++
+                    return true
             }
         )
 
@@ -394,8 +394,8 @@ class TestElapsedTime {
             Time(seconds: 3.5),
             {
                 =>
-                count.value++
-                return false
+                    count.value++
+                    return false
             }
         )
 
@@ -407,8 +407,8 @@ class TestElapsedTime {
             Time.zero,
             {
                 =>
-                count.value++
-                return true
+                    count.value++
+                    return true
             }
         )
 
@@ -427,8 +427,8 @@ class TestElapsedTime {
             3.5,
             {
                 =>
-                count.value++
-                return true
+                    count.value++
+                    return true
             }
         )
 
@@ -440,8 +440,8 @@ class TestElapsedTime {
             0.25,
             {
                 =>
-                count.value++
-                return true
+                    count.value++
+                    return true
             }
         )
 
@@ -453,8 +453,8 @@ class TestElapsedTime {
             3.5,
             {
                 =>
-                count.value++
-                return false
+                    count.value++
+                    return false
             }
         )
 
@@ -466,8 +466,8 @@ class TestElapsedTime {
             0.0,
             {
                 =>
-                count.value++
-                return true
+                    count.value++
+                    return true
             }
         )
 

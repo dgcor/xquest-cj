@@ -122,10 +122,10 @@ public func parseButton(game: Game, elem: JsonValue): Unit {
         elem,
         {
             game, elem =>
-            if (let Some(btn) <- getButtonObj(game, elem)) {
-                return btn
-            }
-            return None
+                if (let Some(btn) <- getButtonObj(game, elem)) {
+                    return btn
+                }
+                return None
         }
     )
 }

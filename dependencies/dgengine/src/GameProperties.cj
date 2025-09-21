@@ -2,7 +2,6 @@ package dgengine
 
 import cjsfml.system.*
 import cjsfml.window.*
-import std.math.*
 
 extend Game {
     public prop hasFocus: Bool {

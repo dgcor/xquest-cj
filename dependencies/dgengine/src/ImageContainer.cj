@@ -3,7 +3,6 @@ package dgengine
 import cjsfml.graphics.*
 import cjsfml.graphics.Image as SFMLImage
 import cjsfml.system.*
-import std.collection.*
 
 public struct ImageInfo {
     public ImageInfo(

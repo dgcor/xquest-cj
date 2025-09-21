@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       APP_NAME: DGEngine
+      CANGJIE_STD_VERSION: 1.0.1.1
+      CANGJIE_VERSION: 1.0.1
     steps:
       - name: Checkout ${{ env.APP_NAME }}
         uses: actions/checkout@v4
@@ -52,16 +54,15 @@ jobs:
       - name: Download Cangjie stdx
         run: |
           cd dependencies
-          wget https://gitcode.com/Cangjie/cangjie-stdx/releases/download/v1.0.0.1/cangjie-stdx-linux-x64-1.0.0.1.zip -O stdx.zip
+          wget https://gitcode.com/Cangjie/cangjie-stdx-bin/releases/download/v${{ env.CANGJIE_STD_VERSION }}/cangjie-stdx-linux-x64-${{ env.CANGJIE_STD_VERSION }}.zip -O stdx.zip
           mkdir stdx
           unzip stdx.zip -d stdx
 
       - name: Setup Cangjie
-        uses: Zxilly/setup-cangjie@v1.8.0
+        uses: Zxilly/setup-cangjie@v2.0.0
         with:
           channel: lts
-          version: 1.0.0
-          tool-cache: true
+          version: ${{ env.CANGJIE_VERSION }}
           archive-path: ./cangjie-archive
 
       - name: Build ${{ env.APP_NAME }}

@@ -142,12 +142,12 @@ public class JsonUtils {
             elem,
             {
                 value =>
-                let str1 = value.asString().getValue()
-                let str2 = str1.replace(oldStr, newStr)
-                if (str1 != str2) {
-                    return JsonString(str2)
-                }
-                return value
+                    let str1 = value.asString().getValue()
+                    let str2 = str1.replace(oldStr, newStr)
+                    if (str1 != str2) {
+                        return JsonString(str2)
+                    }
+                    return value
             }
         )
     }
@@ -159,20 +159,20 @@ public class JsonUtils {
             elem,
             {
                 value =>
-                let str = value.asString().getValue()
-                if (str.size <= 2) {
-                    return value
-                }
-                if (changeValueType == true && str.startsWith(token) && str.endsWith(token)) {
-                    if (let Some(variable) <- game.getVarOrPropNoToken(str[1..str.size - 1])) {
-                        return replaceValueWithVariable(variable)
+                    let str = value.asString().getValue()
+                    if (str.size <= 2) {
+                        return value
                     }
-                }
-                var str2 = GameUtils.replaceStringWithVarOrProp(str, game, token: token)
-                if (str != str2) {
-                    return JsonString(str2)
-                }
-                return value
+                    if (changeValueType == true && str.startsWith(token) && str.endsWith(token)) {
+                        if (let Some(variable) <- game.getVarOrPropNoToken(str[1..str.size - 1])) {
+                            return replaceValueWithVariable(variable)
+                        }
+                    }
+                    var str2 = GameUtils.replaceStringWithVarOrProp(str, game, token: token)
+                    if (str != str2) {
+                        return JsonString(str2)
+                    }
+                    return value
             }
         )
     }

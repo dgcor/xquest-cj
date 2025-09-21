@@ -1,9 +1,7 @@
 package dgengine
 
-import cjsfml.graphics.*
 import cjsfml.system.*
 import std.collection.*
-import std.math.*
 
 public struct CompositeTextureGroup {
     public CompositeTextureGroup(
@@ -197,10 +195,10 @@ public class CompositeTexturePack <: StackedTexturePack {
             index,
             {
                 index, texturePack =>
-                if (let Some(ti) <- texturePack.get(index)) {
-                    tiVec.add(ti)
-                }
-                return true
+                    if (let Some(ti) <- texturePack.get(index)) {
+                        tiVec.add(ti)
+                    }
+                    return true
             }
         )
 
@@ -217,8 +215,8 @@ public class CompositeTexturePack <: StackedTexturePack {
             index,
             {
                 index, texturePack =>
-                textureSize.value = texturePack.getTextureSize(index)
-                return textureSize.value.x == 0 || textureSize.value.y == 0
+                    textureSize.value = texturePack.getTextureSize(index)
+                    return textureSize.value.x == 0 || textureSize.value.y == 0
             }
         )
         return textureSize.value

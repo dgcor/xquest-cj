@@ -1,7 +1,6 @@
 package dgengine
 
 import std.collection.*
-import std.math.*
 import std.sort.*
 
 public struct RectPackItem {
@@ -29,14 +28,14 @@ public func packRectangles(rectangles: ArrayList<(Int64, Int64)>, maxSize: (Int6
         stable: true,
         by: {
             a, b =>
-            let areaA = a[1] * a[2]
-            let areaB = b[1] * b[2]
-            if (areaA > areaB) {
-                return Ordering.GT
-            } else if (areaA == areaB) {
-                return Ordering.EQ
-            }
-            return Ordering.LT
+                let areaA = a[1] * a[2]
+                let areaB = b[1] * b[2]
+                if (areaA > areaB) {
+                    return Ordering.GT
+                } else if (areaA == areaB) {
+                    return Ordering.EQ
+                }
+                return Ordering.LT
         }
     )
 
@@ -69,12 +68,12 @@ public func packRectangles(rectangles: ArrayList<(Int64, Int64)>, maxSize: (Int6
         packedRectangles,
         by: {
             a, b =>
-            if (a.index > b.index) {
-                return Ordering.GT
-            } else if (a.index == b.index) {
-                return Ordering.EQ
-            }
-            return Ordering.LT
+                if (a.index > b.index) {
+                    return Ordering.GT
+                } else if (a.index == b.index) {
+                    return Ordering.EQ
+                }
+                return Ordering.LT
         }
     )
 

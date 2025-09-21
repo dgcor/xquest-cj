@@ -5,7 +5,6 @@ import std.collection.*
 import std.env.*
 import std.fs.*
 import std.io.*
-import std.math.*
 
 public class FileUtils {
     public static func initPhysFS(argv0!: ?String = None): Unit {

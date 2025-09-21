@@ -58,10 +58,10 @@ public func parseAnimation(game: Game, elem: JsonValue): Unit {
         elem,
         {
             game, elem =>
-            if (let Some(img) <- getAnimationObj(game, elem)) {
-                return img
-            }
-            return None
+                if (let Some(img) <- getAnimationObj(game, elem)) {
+                    return img
+                }
+                return None
         }
     )
 }

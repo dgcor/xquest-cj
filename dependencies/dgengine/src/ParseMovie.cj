@@ -1,7 +1,5 @@
 package dgengine
 
-import cjsfml.graphics.*
-import cjsfml.system.*
 import stdx.encoding.json.*
 
 public func getMovieObj(game: Game, elem: JsonValue): ?Movie {
@@ -30,11 +28,11 @@ public func parseMovie(game: Game, elem: JsonValue): Unit {
         elem,
         {
             game, elem =>
-            if (let Some(movie) <- getMovieObj(game, elem)) {
-                movie.play()
-                return movie
-            }
-            return None
+                if (let Some(movie) <- getMovieObj(game, elem)) {
+                    movie.play()
+                    return movie
+                }
+                return None
         }
     )
 }

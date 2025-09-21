@@ -29,12 +29,12 @@ class LevelOptionsManager {
             m_options,
             by: {
                 a, b =>
-                if (a.level < b.level) {
-                    return Ordering.LT
-                } else if (a.level > b.level) {
-                    return Ordering.GT
-                }
-                return Ordering.EQ
+                    if (a.level < b.level) {
+                        return Ordering.LT
+                    } else if (a.level > b.level) {
+                        return Ordering.GT
+                    }
+                    return Ordering.EQ
             }
         )
     }

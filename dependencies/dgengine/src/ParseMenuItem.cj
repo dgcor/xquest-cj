@@ -1,6 +1,5 @@
 package dgengine
 
-import cjsfml.graphics.*
 import cjsfml.system.*
 import stdx.encoding.json.*
 import std.collection.*
@@ -129,24 +128,24 @@ public func parseMenuItem(game: Game, elem: JsonValue, menu: Menu, menuIdx: Int6
                         elem.clone(),
                         {
                             value =>
-                            var val = JsonUtils.replaceStringValueWithQueryable(
-                                value,
-                                queryable,
-                                changeValueType: true
-                            )
-                            val = JsonUtils.replaceStringValueWithVariable(
-                                val,
-                                "!listIdx!",
-                                VaInteger(listIdx),
-                                changeValueType: true
-                            )
-                            val = JsonUtils.replaceStringValueWithVariable(
-                                val,
-                                "!menuIdx!",
-                                VaInteger(menuIdx),
-                                changeValueType: true
-                            )
-                            return val
+                                var val = JsonUtils.replaceStringValueWithQueryable(
+                                    value,
+                                    queryable,
+                                    changeValueType: true
+                                )
+                                val = JsonUtils.replaceStringValueWithVariable(
+                                    val,
+                                    "!listIdx!",
+                                    VaInteger(listIdx),
+                                    changeValueType: true
+                                )
+                                val = JsonUtils.replaceStringValueWithVariable(
+                                    val,
+                                    "!menuIdx!",
+                                    VaInteger(menuIdx),
+                                    changeValueType: true
+                                )
+                                return val
                         }
                     )
                 case VarOrQueryVariable(variable) =>
@@ -158,18 +157,18 @@ public func parseMenuItem(game: Game, elem: JsonValue, menu: Menu, menuIdx: Int6
                         elem.clone(),
                         {
                             value =>
-                            var val = JsonUtils.replaceStringValueWithVariable(
-                                value,
-                                "!listItem!",
-                                VaString(variable.toString())
-                            )
-                            val = JsonUtils.replaceStringValueWithVariable(
-                                val,
-                                "!menuIdx!",
-                                VaInteger(menuIdx),
-                                changeValueType: true
-                            )
-                            return val
+                                var val = JsonUtils.replaceStringValueWithVariable(
+                                    value,
+                                    "!listItem!",
+                                    VaString(variable.toString())
+                                )
+                                val = JsonUtils.replaceStringValueWithVariable(
+                                    val,
+                                    "!menuIdx!",
+                                    VaInteger(menuIdx),
+                                    changeValueType: true
+                                )
+                                return val
                         }
                     )
             }

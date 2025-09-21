@@ -39,8 +39,8 @@ public class Palette <: Iterable<Color> & Resource {
             256,
             {
                 index =>
-                let c = UInt8(index)
-                Color(c, c, c, 255)
+                    let c = UInt8(index)
+                    Color(c, c, c, 255)
             }
         )
         let width = UInt32(palette.size)

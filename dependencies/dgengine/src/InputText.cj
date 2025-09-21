@@ -1,6 +1,5 @@
 package dgengine
 
-import std.collection.*
 import std.convert.*
 
 public class InputText <: Text {

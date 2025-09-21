@@ -6,8 +6,8 @@
   target-dir = ""
   src-dir = ""
   output-type = "dynamic"
-  compile-option = "--dy-std --dy-libs"
-  override-compile-option = "--dy-std --dy-libs"
+  compile-option = "--dy-std"
+  override-compile-option = "--dy-std"
   link-option = ""
   package-configuration = {}
 

@@ -1,7 +1,5 @@
 package cjsfml.system
 
-import std.math.*
-
 protected func toCStringUtf32(str: String): CPointer<UInt32> {
     unsafe {
         let str32 = LibC.malloc<UInt32>(count: str.size + 1)

@@ -1,6 +1,5 @@
 package dgengine
 
-import cjsfml.system.*
 import stdx.encoding.json.*
 
 public func parseLoadingScreen(game: Game, elem: JsonValue): Unit {

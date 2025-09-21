@@ -1,7 +1,6 @@
 package dgengine
 
 import stdx.encoding.json.*
-import std.math.*
 
 public func parsePalette(game: Game, elem: JsonValue): Unit {
     if (parseResourceFromId<Palette>(game.resources, elem) == true) {

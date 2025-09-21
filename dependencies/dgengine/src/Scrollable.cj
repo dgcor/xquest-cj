@@ -119,60 +119,60 @@ public class Scrollable <: ActionQueryable & UIObject {
             game.elapsedTime,
             {
                 =>
-                var center = m_view.center
-                var finished = false
+                    var center = m_view.center
+                    var finished = false
 
-                match (m_direction.value) {
-                    case v where v == Direction.Up.value =>
-                        let sizeY = m_uiObj.size.y
-                        if (center.y + (m_scrollSize / 2.0) > 0.0) {
-                            center.y -= 1.0
-                        } else {
-                            if (m_loop == true) {
-                                center.y += sizeY + m_scrollSize
+                    match (m_direction.value) {
+                        case v where v == Direction.Up.value =>
+                            let sizeY = m_uiObj.size.y
+                            if (center.y + (m_scrollSize / 2.0) > 0.0) {
+                                center.y -= 1.0
+                            } else {
+                                if (m_loop == true) {
+                                    center.y += sizeY + m_scrollSize
+                                }
+                                finished = true
                             }
-                            finished = true
-                        }
-                    case v where v == Direction.Down.value =>
-                        let sizeY = m_uiObj.size.y
-                        if (center.y - (m_scrollSize / 2.0) < sizeY) {
-                            center.y += 1.0
-                        } else {
-                            if (m_loop == true) {
-                                center.y -= sizeY + m_scrollSize
+                        case v where v == Direction.Down.value =>
+                            let sizeY = m_uiObj.size.y
+                            if (center.y - (m_scrollSize / 2.0) < sizeY) {
+                                center.y += 1.0
+                            } else {
+                                if (m_loop == true) {
+                                    center.y -= sizeY + m_scrollSize
+                                }
+                                finished = true
                             }
-                            finished = true
-                        }
-                    case v where v == Direction.Left.value =>
-                        let sizeX = m_uiObj.size.x
-                        if (center.x + (m_scrollSize / 2.0) > 0.0) {
-                            center.x -= 1.0
-                        } else {
-                            if (m_loop == true) {
-                                center.x += sizeX + m_scrollSize
+                        case v where v == Direction.Left.value =>
+                            let sizeX = m_uiObj.size.x
+                            if (center.x + (m_scrollSize / 2.0) > 0.0) {
+                                center.x -= 1.0
+                            } else {
+                                if (m_loop == true) {
+                                    center.x += sizeX + m_scrollSize
+                                }
+                                finished = true
                             }
-                            finished = true
-                        }
-                    case v where v == Direction.Right.value =>
-                        let sizeX = m_uiObj.size.x
-                        if (center.x - (m_scrollSize / 2.0) < sizeX) {
-                            center.x += 1.0
-                        } else {
-                            if (m_loop == true) {
-                                center.x -= sizeX + m_scrollSize
+                        case v where v == Direction.Right.value =>
+                            let sizeX = m_uiObj.size.x
+                            if (center.x - (m_scrollSize / 2.0) < sizeX) {
+                                center.x += 1.0
+                            } else {
+                                if (m_loop == true) {
+                                    center.x -= sizeX + m_scrollSize
+                                }
+                                finished = true
                             }
-                            finished = true
-                        }
-                    case _ => ()
-                }
-
-                if (finished == true) {
-                    if (m_loop == false) {
-                        m_pause = true
+                        case _ => ()
                     }
-                    game.events.addBack(m_completeAction)
-                }
-                m_view.center = center
+
+                    if (finished == true) {
+                        if (m_loop == false) {
+                            m_pause = true
+                        }
+                        game.events.addBack(m_completeAction)
+                    }
+                    m_view.center = center
             }
         )
     }

@@ -6,8 +6,8 @@
   target-dir = ""
   src-dir = ""
   output-type = "executable"
-  compile-option = "--disable-reflection --static-std --static-libs -O2"
-  override-compile-option = "--disable-reflection --static-std --static-libs -O2"
+  compile-option = "--disable-reflection --static-std -O2"
+  override-compile-option = "--disable-reflection --static-std -O2"
   link-option = "-s"
   package-configuration = {}
 

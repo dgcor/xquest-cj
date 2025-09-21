@@ -24,12 +24,12 @@ class LevelScoreManager {
             m_levelScores,
             by: {
                 a, b =>
-                if (b.score > a.score) {
-                    return Ordering.GT
-                } else if (b.score < a.score) {
-                    return Ordering.LT
-                }
-                return Ordering.EQ
+                    if (b.score > a.score) {
+                        return Ordering.GT
+                    } else if (b.score < a.score) {
+                        return Ordering.LT
+                    }
+                    return Ordering.EQ
             }
         )
         if (m_levelScores.size > MaxSize) {

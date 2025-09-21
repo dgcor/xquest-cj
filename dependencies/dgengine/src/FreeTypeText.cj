@@ -3,7 +3,6 @@ package dgengine
 import cjsfml.graphics.*
 import cjsfml.graphics.Text as SFMLText
 import cjsfml.system.*
-import std.collection.*
 
 public class FreeTypeText <: DrawableText {
     private let m_text: SFMLText

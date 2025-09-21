@@ -3,7 +3,6 @@ package dgengine
 import cjsfml.graphics.*
 import cjsfml.system.*
 import std.collection.*
-import std.math.*
 
 public class MultiTexturePack <: TexturePack {
     private let m_textureGroups: ArrayList<TextureGroup>

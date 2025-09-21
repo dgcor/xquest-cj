@@ -1,7 +1,6 @@
 package dgengine
 
 import cjsfml.graphics.*
-import cjsfml.system.*
 import stdx.encoding.json.*
 
 public func parseTextObj(game: Game, elem: JsonValue, text: Text): Unit {
@@ -90,10 +89,10 @@ public func parseText(game: Game, elem: JsonValue): Unit {
         elem,
         {
             game, elem =>
-            if (let Some(text) <- getBindableTextObj(game, elem)) {
-                return text
-            }
-            return None
+                if (let Some(text) <- getBindableTextObj(game, elem)) {
+                    return text
+                }
+                return None
         }
     )
 }

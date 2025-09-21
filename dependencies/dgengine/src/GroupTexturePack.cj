@@ -1,6 +1,5 @@
 package dgengine
 
-import cjsfml.system.*
 import std.collection.*
 
 public class GroupTexturePack <: TexturePackWrapper {

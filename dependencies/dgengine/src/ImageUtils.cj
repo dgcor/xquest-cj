@@ -4,7 +4,6 @@ import cjsfml.graphics.*
 import cjsfml.graphics.Image as SFMLImage
 import cjsfml.system.*
 import std.collection.*
-import std.convert.*
 
 public class ImageUtils {
     public static func applyMask(image: SFMLImage, mask!: Color = Color.transparent): Unit {

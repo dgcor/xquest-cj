@@ -1,7 +1,6 @@
 package dgengine
 
 import cjsfml.graphics.Image as SFMLImage
-import std.collection.*
 
 public class CachedImagePackIterator <: Iterator<SFMLImage> {
     private let m_imgCache: CachedImagePack
