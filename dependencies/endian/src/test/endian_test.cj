@@ -1,18 +1,19 @@
 package endian.test
 
-import endian.*
-import endian.utils.*
-import std.binary.*
-import std.io.*
-import std.unittest.*
+import endian.{BigEndianReader, EndianReader, LittleEndianReader}
+import endian.utils.ReadEndian
+import std.binary.LittleEndianOrder
+import std.io.ByteBuffer
 
-let data: Array<Byte> = [2, 0, 0, 0, 0, 0, 0, 2, 1, 2, 3]
+// cjlint-ignore -start !G.NAM.04 function names should be lower camel case
+
+let DATA: Array<Byte> = [2, 0, 0, 0, 0, 0, 0, 2, 1, 2, 3]
 
 @Test
 class TestBigEndianReader {
     @TestCase
     func test_BigEndianReader() {
-        let reader = BigEndianReader(ByteBuffer(data))
+        let reader = BigEndianReader(ByteBuffer(DATA))
 
         var value = reader.read<Int32>()
         @Expect(value.isSome(), true)
@@ -31,7 +32,7 @@ class TestBigEndianReader {
 class TestLittleEndianReader {
     @TestCase
     func test_LittleEndianReader() {
-        let reader = LittleEndianReader(ByteBuffer(data))
+        let reader = LittleEndianReader(ByteBuffer(DATA))
 
         var value = reader.read<Int32>()
         @Expect(value.isSome(), true)
@@ -50,7 +51,7 @@ class TestLittleEndianReader {
 class TestEndianReader {
     @TestCase
     func test_EndianReader() {
-        let reader = EndianReader(ByteBuffer(data))
+        let reader = EndianReader(ByteBuffer(DATA))
 
         var value = reader.read<Int32>()
         @Expect(value.isSome(), true)
@@ -84,3 +85,5 @@ class TestReadEndian {
         }
     }
 }
+
+// cjlint-ignore -end function names should be lower camel case

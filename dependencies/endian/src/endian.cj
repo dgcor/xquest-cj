@@ -1,8 +1,8 @@
 package endian
 
-import endian.utils.*
-import std.binary.*
-import std.io.*
+import endian.utils.ReadEndian
+import std.binary.{BigEndianOrder, LittleEndianOrder}
+import std.io.{InputStream, Seekable, SeekPosition}
 
 private func readEndian<U>(inputStream: InputStream): ?U where U <: CType & BigEndianOrder<U> & LittleEndianOrder<U> {
     let buffer = Array<Byte>(Int64(sizeOf<U>()), repeat: 0)

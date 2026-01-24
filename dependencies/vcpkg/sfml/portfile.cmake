@@ -1,17 +1,24 @@
 vcpkg_from_github(OUT_SOURCE_PATH SOURCE_PATH
     REPO dgcor/SFML
-    REF feature/right-align-text
-    SHA512 4704f9e3435834e830f322806aeaf877547b591eb656adf87c39643b547a78b82e8cd4c33a92b6ff50e7d9ac3b6e16b60f05728eae2d262d3147b0987e547528
+    REF feature/right-align-text-3
+    SHA512 0724d47106412b09c27681eefd641ce07065571157c2141695fd3ea8e7416be25548e2b6b9f9db575a8759f93366e19e30628664d77b1408e012a372186bda5c
     PATCHES
-        fix-dependencies.patch
+        01-fix-dependency-resolve.patch
+        03-fix-android-install-path.patch
 )
 
-# The embedded FindFreetype doesn't properly handle debug libraries
-file(REMOVE_RECURSE "${SOURCE_PATH}/cmake/Modules/FindFreetype.cmake")
-
 if(VCPKG_TARGET_IS_LINUX)
-    message(STATUS "SFML currently requires the following libraries from the system package manager:\n    libudev\n    libx11\n    libxrandr\n    libxcursor\n    opengl\n\nThese can be installed on Ubuntu systems via apt-get install libx11-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libgl1-mesa-dev")
+    message(STATUS "SFML currently requires the following libraries from the system package manager:\n    libudev\n    libx11\n    libxi\n    libxrandr\n    libxcursor\n    opengl\n\nThese can be installed on Ubuntu systems via apt-get install libx11-dev libxi-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libgl1-mesa-dev")
 endif()
+
+vcpkg_check_features(
+    OUT_FEATURE_OPTIONS FEATURE_OPTIONS
+    FEATURES
+        "network"  SFML_BUILD_NETWORK
+        "graphics" SFML_BUILD_GRAPHICS
+        "window"   SFML_BUILD_WINDOW
+        "audio"    SFML_BUILD_AUDIO
+)
 
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
@@ -20,7 +27,9 @@ vcpkg_cmake_configure(
         -DSFML_USE_SYSTEM_DEPS=ON
         -DSFML_MISC_INSTALL_PREFIX=share/sfml
         -DSFML_GENERATE_PDB=OFF
-        -DSFML_WARNINGS_AS_ERRORS=OFF #Remove in the next version
+        ${FEATURE_OPTIONS}
+    MAYBE_UNUSED_VARIABLES
+        SFML_MISC_INSTALL_PREFIX
 )
 
 vcpkg_cmake_install()
@@ -31,7 +40,7 @@ vcpkg_copy_pdbs()
 if(EXISTS "${CURRENT_PACKAGES_DIR}/lib/sfml-main.lib")
     file(COPY "${CURRENT_PACKAGES_DIR}/lib/sfml-main.lib" DESTINATION "${CURRENT_PACKAGES_DIR}/lib/manual-link")
     file(REMOVE "${CURRENT_PACKAGES_DIR}/lib/sfml-main.lib")
-    file(GLOB FILES "${CURRENT_PACKAGES_DIR}/share/sfml/SFML*Targets-*.cmake")
+    file(GLOB FILES "${CURRENT_PACKAGES_DIR}/share/sfml/SFMLMain*Targets-*.cmake")
     foreach(FILE ${FILES})
         vcpkg_replace_string("${FILE}" "/lib/sfml-main" "/lib/manual-link/sfml-main")
     endforeach()

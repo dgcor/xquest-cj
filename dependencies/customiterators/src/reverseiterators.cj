@@ -1,6 +1,6 @@
 package customiterators
 
-import std.collection.*
+import std.collection.ArrayList
 
 public class ReverseArrayIterator<T> <: Iterator<T> {
     private let m_array: Array<T>

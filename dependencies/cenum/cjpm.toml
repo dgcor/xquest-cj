@@ -2,7 +2,7 @@
   cjc-version = "1.0.0"
   name = "cenum"
   description = "C enum macro"
-  version = "1.1.0"
+  version = "1.1.1"
   target-dir = ""
   src-dir = ""
   output-type = "dynamic"

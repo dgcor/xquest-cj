@@ -2,7 +2,7 @@
   cjc-version = "1.0.0"
   name = "cjsfml"
   description = "SFML library bindings"
-  version = "1.1.0"
+  version = "2.0.0"
   target-dir = ""
   src-dir = ""
   output-type = "dynamic"
@@ -19,6 +19,5 @@
 [ffi.c]
   csfml-audio = { path = "../csfml" }
   csfml-graphics = { path = "../csfml" }
-  csfml-network = { path = "../csfml" }
   csfml-system = { path = "../csfml" }
   csfml-window = { path = "../csfml" }

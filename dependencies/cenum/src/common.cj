@@ -1,8 +1,10 @@
 macro package cenum
 
-import std.ast.*
-import std.convert.*
-import std.math.*
+import std.ast.{diagReport, DiagReportLevel, Token, TokenKind, Tokens, ToTokens}
+import std.convert.Parsable
+import std.math.abs
+
+// cjlint-ignore -start !G.FUN.01 function should be less than 50 lines of code
 
 private func enumBlockBegin(visibility: Token, name: Token, valueType: Token, addFlagOps!: Bool, ffi_c!: Bool): Tokens {
     let block = quote()
@@ -93,10 +95,6 @@ private func enumBlockBegin(visibility: Token, name: Token, valueType: Token, ad
     return block
 }
 
-private let enumBlockEnd: Tokens = quote(
-    }
-)
-
 private func parseEnumValue(currentEnumIndex: Int32, tokenIt: Iterator<Token>): (Tokens, Int32) {
     let valueTokens = quote()
     var hasAssign = false
@@ -128,8 +126,8 @@ private func parseEnumValue(currentEnumIndex: Int32, tokenIt: Iterator<Token>): 
     return (quote(), currentEnumIndex)
 }
 
-const errorMsg = "Invalid CEnum syntax"
-const errorHint = "Syntax: CEnum[<Private|public|..> <Identifier> <type>]()\n" +
+private const ERROR_MSG = "Invalid CEnum syntax"
+private const ERROR_HINT = "Syntax: CEnum[<Private|public|..> <Identifier> <type>]()\n" +
     "Example: CEnum[Seek](...),  CEnum[public Seek](...), CEnum[public Seek UInt32](...)"
 
 func makeEnum(attrTokens: Tokens, inputTokens: Tokens, flagEnum!: Bool = false, startValue!: Int32 = 0,
@@ -152,20 +150,20 @@ func makeEnum(attrTokens: Tokens, inputTokens: Tokens, flagEnum!: Bool = false, 
             visibility = attrTokens[0]
             name = attrTokens[1]
             valueType = attrTokens[2]
-        case _ => diagReport(DiagReportLevel.ERROR, attrTokens, errorMsg, errorHint)
+        case _ => diagReport(DiagReportLevel.ERROR, attrTokens, ERROR_MSG, ERROR_HINT)
     }
 
     if (visibility.kind != PRIVATE && visibility.kind != PROTECTED && visibility.kind != INTERNAL && visibility.kind !=
         PUBLIC) {
-        diagReport(DiagReportLevel.ERROR, attrTokens, errorMsg, errorHint)
+        diagReport(DiagReportLevel.ERROR, attrTokens, ERROR_MSG, ERROR_HINT)
     }
     if (name.kind != IDENTIFIER) {
-        diagReport(DiagReportLevel.ERROR, attrTokens, errorMsg, errorHint)
+        diagReport(DiagReportLevel.ERROR, attrTokens, ERROR_MSG, ERROR_HINT)
     }
     if (valueType.kind != INT8 && valueType.kind != INT16 && valueType.kind != INT32 && valueType.kind != INT64 &&
         valueType.kind != UINT8 && valueType.kind != UINT16 && valueType.kind != UINT32 && valueType.kind != UINT64 &&
         valueType.kind != INTNATIVE && valueType.kind != UINTNATIVE) {
-        diagReport(DiagReportLevel.ERROR, attrTokens, errorMsg, errorHint)
+        diagReport(DiagReportLevel.ERROR, attrTokens, ERROR_MSG, ERROR_HINT)
     }
 
     var enumQuote = enumBlockBegin(visibility, name, valueType, addFlagOps: flagEnum, ffi_c: ffi_c)
@@ -196,6 +194,10 @@ func makeEnum(attrTokens: Tokens, inputTokens: Tokens, flagEnum!: Bool = false, 
             index *= 2
         }
     }
-    enumQuote.append(enumBlockEnd)
+    enumQuote.append(quote(
+        }
+    ))
     return enumQuote
 }
+
+// cjlint-ignore -end function should be less than 50 lines of code

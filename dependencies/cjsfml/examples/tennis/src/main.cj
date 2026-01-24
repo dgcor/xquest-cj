@@ -1,17 +1,20 @@
 package tennis
 
-import cjsfml.audio.*
-import cjsfml.graphics.*
-import cjsfml.system.*
-import cjsfml.window.*
-import std.math.*
-import std.random.*
+import cjsfml.audio.{Sound, SoundBuffer}
+import cjsfml.graphics.{CircleShape, Color, Font, RectangleShape, RenderWindow, Sprite, Text, Texture, View}
+import cjsfml.system.{Clock, Time, Vector2f, Vector2u}
+import cjsfml.window.{Event, Keyboard, KeyCode, Touch, VideoMode, WindowStyle}
+import std.math.{abs, cos, sin}
+import std.random.Random
+
+// cjlint-ignore -start !G.VAR.02 minimize scope
+// cjlint-ignore -start !G.EXP.02 float precision
 
 func resourcesDir(): String {
     return "resources/"
 }
 
-main(): Int64 {
+main(): Int64 { // cjlint-ignore !G.FUN.01 function too long
     let rand = Random()
 
     // Define some constants
@@ -21,7 +24,7 @@ main(): Int64 {
     const paddleSize = Vector2f(25.0, 100.0)
     const ballRadius = 10.0f32
 
-    let videoMode = VideoMode(UInt32(gameWidth), UInt32(gameHeight))
+    let videoMode = VideoMode(Vector2u(UInt32(gameWidth), UInt32(gameHeight)))
     let window = RenderWindow(videoMode, "SFML Tennis", style: WindowStyle.Titlebar | WindowStyle.Close)
     window.setVerticalSyncEnabled(true)
 
@@ -37,32 +40,32 @@ main(): Int64 {
     // Create the left paddle
     let leftPaddle = RectangleShape(paddleSize - (3.0, 3.0))
     leftPaddle.outlineThickness = 3.0
-    leftPaddle.outlineColor = Color.black
+    leftPaddle.outlineColor = Color.BLACK
     leftPaddle.fillColor = Color(100, 100, 200)
     leftPaddle.origin = paddleSize / 2.0
 
     // Create the right paddle
     let rightPaddle = RectangleShape(paddleSize - (3.0, 3.0))
     rightPaddle.outlineThickness = 3.0
-    rightPaddle.outlineColor = Color.black
+    rightPaddle.outlineColor = Color.BLACK
     rightPaddle.fillColor = Color(200, 100, 100)
     rightPaddle.origin = paddleSize / 2.0
 
     // Create the ball
     let ball = CircleShape(ballRadius - 3.0)
     ball.outlineThickness = 2.0
-    ball.outlineColor = Color.black
-    ball.fillColor = Color.white
+    ball.outlineColor = Color.BLACK
+    ball.fillColor = Color.WHITE
     ball.origin = Vector2f(ballRadius / 2.0, ballRadius / 2.0)
 
     // Load the text font
     let font = Font(resourcesDir() + "tuffy.ttf")
 
     // Initialize the pause message
-    let pauseMessage = Text(font, characterSize: 40)
+    const pauseMsg = "Welcome to SFML Tennis!\n\nPress space to start the game."
+    let pauseMessage = Text(font, pauseMsg, characterSize: 40)
     pauseMessage.position = Vector2f(170.0, 200.0)
-    pauseMessage.fillColor = Color.white
-    pauseMessage.string = "Welcome to SFML Tennis!\n\nPress space to start the game."
+    pauseMessage.fillColor = Color.WHITE
 
     // Define the paddles properties
     var AITimer = Clock()
@@ -251,3 +254,6 @@ main(): Int64 {
 
     return 0
 }
+
+// cjlint-ignore -end float precision
+// cjlint-ignore -end minimize scope

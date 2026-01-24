@@ -1,8 +1,9 @@
 package customiterators.test
 
-import customiterators.*
-import std.collection.*
-import std.unittest.*
+import customiterators.{peek, PeekIterator, reverse, ReverseArrayIterator, ReverseArrayListIterator}
+import std.collection.{ArrayList, enumerate}
+
+// cjlint-ignore -start !G.NAM.04 function names should be lower camel case
 
 @Test
 func test_PeekIterator() {
@@ -82,3 +83,5 @@ func test_ReverseArrayListIterator() {
         }
     }
 }
+
+// cjlint-ignore -end function names should be lower camel case

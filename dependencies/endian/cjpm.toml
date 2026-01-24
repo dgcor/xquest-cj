@@ -2,7 +2,7 @@
   cjc-version = "1.0.0"
   name = "endian"
   description = "endian stream"
-  version = "1.1.0"
+  version = "1.1.1"
   target-dir = ""
   src-dir = ""
   output-type = "dynamic"

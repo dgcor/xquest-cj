@@ -1,14 +1,14 @@
 macro package ctemplate
 
-import std.ast.*
-import std.collection.*
+import std.ast.{diagReport, DiagReportLevel, Token, Tokens, TokenKind}
+import std.collection.{ArrayList, enumerate, filter, first, last, zip}
 
 private func getParams(attrTokens: Tokens): ArrayList<ArrayList<(Token, Token)>> {
     let allParams = ArrayList<ArrayList<(Token, Token)>>()
     let genericParams = ArrayList<Token>()
     var replaceParams = ArrayList<Token>()
     var hasColon = false
-    for (token in attrTokens) {
+    for (token in attrTokens) { // cjlint-ignore !G.FUN.01 too many nested code blocks
         if (hasColon == false) {
             match (token.kind) {
                 case IDENTIFIER => genericParams.add(token)

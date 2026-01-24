@@ -1,6 +1,6 @@
 [package]
   cjc-version = "1.0.0"
-  name = "XQuest"
+  name = "xquest"
   description = "XQuest game"
   version = "0.1.0"
   target-dir = ""

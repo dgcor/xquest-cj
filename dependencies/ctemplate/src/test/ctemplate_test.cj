@@ -1,8 +1,9 @@
 package ctemplate.test
 
-import ctemplate.*
-import std.math.*
-import std.unittest.*
+import ctemplate.Template
+import std.math.{pow, round}
+
+// cjlint-ignore -start !G.NAM.04 function names should be lower camel case
 
 @Template[T: Int32, Int64, Float32](
 func getNum(n: T): T {
@@ -41,3 +42,5 @@ func test_template_no_commas() {
     @Expect(round2(1234.5234f32, 2), 1234.52f32)
     @Expect(round2(9842.124534f64, 4), 9842.1245f64)
 }
+
+// cjlint-ignore -end function names should be lower camel case

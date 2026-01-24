@@ -47,12 +47,7 @@
         "CMAKE_LIBRARY_OUTPUT_DIRECTORY": "${sourceDir}/",
         "CMAKE_RUNTIME_OUTPUT_DIRECTORY": "${sourceDir}/",
         "CMAKE_C_COMPILER": "gcc",
-        "CMAKE_CXX_COMPILER": "g++",
-        "CMAKE_TOOLCHAIN_FILE": {
-          "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-          "type": "FILEPATH"
-        },
-        "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic"
+        "CMAKE_CXX_COMPILER": "g++"
       },
       "condition": {
         "type": "equals",

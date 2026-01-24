@@ -18,24 +18,25 @@ Example:
 dependencies/stdx/linux_x86_64_llvm
 dependencies/stdx/windows_x86_64_llvm
 
-Download: https://gitcode.com/Cangjie/cangjie-stdx
+Download: https://gitcode.com/Cangjie/cangjie_stdx
 
 On Windows, these files need to be present to successfully compile and run:
 
 dependencies
 │
 ├───csfml
-│       csfml-audio-2.dll
-│       csfml-graphics-2.dll
-│       csfml-network-2.dll
-│       csfml-system-2.dll
-│       csfml-window-2.dll
+│       csfml-audio-3.dll
+│       csfml-graphics-3.dll
+│       csfml-system-3.dll
+│       csfml-window-3.dll
 │       libcsfml-audio.a
 │       libcsfml-graphics.a
-│       libcsfml-network.a
 │       libcsfml-system.a
 │       libcsfml-window.a
-│       OpenAL32.dll
+│       sfml-audio-3.dll
+│       sfml-graphics-3.dll
+│       sfml-system-3.dll
+│       sfml-window-3.dll
 │
 ├───physfs
 │       libphysfs.a
@@ -46,8 +47,7 @@ dependencies
 
 Download these files for Windows:
 
-https://github.com/dgcor/CSFML/releases/download/2.6.1.1/CSFML-2.6.1-windows-64-bit.zip
-https://github.com/dgcor/CSFML/releases/download/2.6.1.1/OpenAL32.zip
+https://github.com/dgcor/CSFML/releases/download/3.0.0.1/CSFML-3.0.0-windows-64-bit.zip
 https://github.com/dgcor/physfs-mirror/releases/download/bin-3.2.0/physfs-windows-64-bit.zip
 
 On Linux, check the github Actions file main.yml to see how to compile the dependencies.

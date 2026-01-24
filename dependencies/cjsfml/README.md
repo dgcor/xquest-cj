@@ -1,6 +1,6 @@
 # cjsfml
 
-cjsfml - SFML library bindings for cangjie.
+cjsfml - SFML 3 library bindings for cangjie.
 
 https://www.sfml-dev.org/
 

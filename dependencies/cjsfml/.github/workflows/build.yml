@@ -20,11 +20,11 @@ jobs:
             os: ubuntu-latest
             triplet: x64-linux
           - preset: linux-release
-            cangjie_version: 1.0.1
+            cangjie_version: 1.0.4
             os: ubuntu-latest
             triplet: x64-linux
           - preset: windows-release
-            cangjie_version: 1.0.1
+            cangjie_version: 1.0.4
             os: windows-latest
             triplet: x64-mingw-dynamic
 
@@ -61,7 +61,7 @@ jobs:
         uses: turtlesec-no/get-ninja@main
 
       - name: Setup Cangjie
-        uses: Zxilly/setup-cangjie@v2.0.0
+        uses: Zxilly/setup-cangjie@v2.1.0
         with:
           channel: lts
           version: ${{ matrix.cangjie_version }}
@@ -77,11 +77,10 @@ jobs:
         with:
           pkgs: sfml
           triplet: ${{ matrix.triplet }}
-          extra-args: --overlay-ports=${{ github.workspace }}/vcpkg
           cache-key: vcpkg-${{ matrix.preset }}
           token: ${{ secrets.GITHUB_TOKEN }}
           vcpkg-subdir: 'vcpkg-repo'
-          revision: 'ce613c41372b23b1f51333815feb3edd87ef8a8b'  # 2025.04.09
+          revision: '84bab45d415d22042bd0b9081aea57f362da3f35'  # 2025.12.12
 
       - name: Build CSFML
         run: |

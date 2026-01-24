@@ -1,6 +1,6 @@
 macro package endian.utils
 
-import std.ast.*
+import std.ast.{Token, Tokens}
 
 public macro ReadEndian(attrTokens: Tokens, inputTokens: Tokens) {
     match (Endian.Platform) {
