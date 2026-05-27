@@ -1,7 +1,7 @@
 package dgengine
 
 import cjsfml.graphics.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseImageEnableOutline(elem: JsonValue): ?Action {
     ActImageEnableOutline(

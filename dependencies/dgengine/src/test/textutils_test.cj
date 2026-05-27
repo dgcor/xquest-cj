@@ -337,14 +337,28 @@ class TestTextUtils {
 
                 @Expect(TextUtils.getText(game, textOp, " \r\n\t%game.gamma% \r\n\t", bindings.iterator()), "0")
 
+                // lower
+                textOp = TextOp.Lowercase
+                bindings = []
+
+                @Expect(TextUtils.getText(game, textOp, "", bindings.iterator()), "")
+                @Expect(TextUtils.getText(game, textOp, "\n TesT String\t", bindings.iterator()), "\n test string\t")
+
+                // upper
+                textOp = TextOp.Uppercase
+                bindings = []
+
+                @Expect(TextUtils.getText(game, textOp, "", bindings.iterator()), "")
+                @Expect(TextUtils.getText(game, textOp, "\n TesT String\t", bindings.iterator()), "\n TEST STRING\t")
+
                 // all
                 // uses FormatString
                 textOp = TextOp.Set | TextOp.Replace | TextOp.Query | TextOp.FormatString | TextOp.ReplaceAll | TextOp
-                    .Trim | TextOp.RemoveEmptyLines
+                    .Trim | TextOp.RemoveEmptyLines | TextOp.Lowercase
 
                 bindings = []
 
-                @Expect(TextUtils.getText(game, textOp, " \r\n\tthis\nis\n\na\nstring \r\n\t", bindings.iterator()), "this\nis\na\nstring")
+                @Expect(TextUtils.getText(game, textOp, " \r\n\tTHIS\nis\n\na\nstring \r\n\t", bindings.iterator()), "this\nis\na\nstring")
                 @Expect(TextUtils.getText(game, textOp, " \r\n\t%game.keepAR% \r\n\t", bindings.iterator()), "true")
 
                 bindings = ["obj"]
@@ -353,7 +367,7 @@ class TestTextUtils {
 
                 bindings = ["%game.keepAR%"]
 
-                @Expect(TextUtils.getText(game, textOp, " \r\n\tValues: \n\n[1] \r\n\t", bindings.iterator()), "Values: \n[1]")
+                @Expect(TextUtils.getText(game, textOp, " \r\n\tValues: \n\n[1] \r\n\t", bindings.iterator()), "values: \n[1]")
 
                 bindings = []
 

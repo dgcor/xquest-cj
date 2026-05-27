@@ -1,31 +1,31 @@
 package dgengine
 
-import stdx.encoding.json.*
 import std.collection.*
+import stdjson2.*
 
 public func parseFile(game: Game, fileName: String): Unit {
     let fileName2 = GameUtils.replaceStringWithVarOrProp(fileName, game)
     if (fileName2 == "null") {
-        logger.warn("parseFile name null")
+        LOGGER.warn("parseFile name null")
         return
     }
 
     if (parseJson(game, FileUtils.readText(fileName2)) == true) {
-        logger.info("parseFile: ${fileName2}")
+        LOGGER.info("parseFile: ${fileName2}")
     } else {
-        logger.warn("parseFile failed: ${fileName2}")
+        LOGGER.warn("parseFile failed: ${fileName2}")
     }
 }
 
 public func parseFile(game: Game, params: Array<String>): Unit {
     if (params.isEmpty() == true) {
-        logger.warn("parseFile invalid params")
+        LOGGER.warn("parseFile invalid params")
         return
     }
 
     let fileName = GameUtils.replaceStringWithVarOrProp(params[0], game)
     if (fileName == "null") {
-        logger.warn("parseFile name null")
+        LOGGER.warn("parseFile name null")
         return
     }
 
@@ -35,34 +35,34 @@ public func parseFile(game: Game, params: Array<String>): Unit {
         json = json.replace("{${index}}", param2)
     }
     if (parseJson(game, json) == true) {
-        logger.info("parseFile: ${fileName}")
+        LOGGER.info("parseFile: ${fileName}")
     } else {
-        logger.warn("parseFile failed: ${fileName}")
+        LOGGER.warn("parseFile failed: ${fileName}")
     }
 }
 
 public func parseFile(game: Game, params: JsonValue): Unit {
     if (isValidArray(params) == false) {
-        logger.warn("parseFile invalid params")
+        LOGGER.warn("parseFile invalid params")
         return
     }
-    let paramsArr = params.asArray()
 
-    let fileName = GameUtils.replaceStringWithVarOrProp(getStringVal(paramsArr[0]), game)
+    let firstElem = params.get(0) ?? return
+    let fileName = GameUtils.replaceStringWithVarOrProp(getStringVal(firstElem), game)
     if (fileName == "null") {
-        logger.warn("parseFile name null")
+        LOGGER.warn("parseFile name null")
         return
     }
 
     var json = FileUtils.readText(fileName)
-    for ((index, param) in paramsArr.getItems() |> enumerate |> skip(1)) {
+    for ((index, param) in params |> enumerate |> skip(1)) {
         let param2 = GameUtils.replaceStringWithVarOrProp(getStringVal(param), game)
         json = json.replace("{${index}}", param2)
     }
     if (parseJson(game, json) == true) {
-        logger.info("parseFile: ${fileName}")
+        LOGGER.info("parseFile: ${fileName}")
     } else {
-        logger.warn("parseFile failed: ${fileName}")
+        LOGGER.warn("parseFile failed: ${fileName}")
     }
 }
 
@@ -84,18 +84,17 @@ public func parseJson(game: Game, json: String): Bool {
         parseDocument(game, doc)
         return true
     } catch (ex: Exception) {
-        logger.warn("parseJson failed: ${ex}")
-        return false
+        LOGGER.warn("parseJson failed: ${ex}")
     }
+    return false
 }
 
 public func parseDocument(game: Game, doc: JsonValue, replaceVars!: ReplaceVars = ReplaceNone): Unit {
-    match (doc.kind()) {
-        case JsObject => ()
-        case _ => return
+    if (doc.isObject() == false) {
+        return
     }
     let replaceVarsBox = Box(replaceVars)
-    for ((name, elem) in doc.asObject().getFields()) {
+    for ((name, elem) in doc.memberIterator()) {
         let (name2, _) = splitStringIn2(name, ".")
         parseDocumentElemHelper(game, name2, elem, replaceVarsBox)
     }
@@ -112,11 +111,9 @@ public func parseLoad(game: Game, elem: JsonValue): Unit {
 public func parseDocumentElemHelper(game: Game, name: String, elem: JsonValue, replaceVars: Box<ReplaceVars>): Unit {
     var replaceVarsInElem = replaceVars.value
     var changeValueType = replaceVars.value == ReplaceValue
-    match (elem.kind()) {
-        case JsObject =>
-            replaceVarsInElem = getReplaceVarsKey(elem, "replaceVars", default: replaceVarsInElem)
-            changeValueType = replaceVarsInElem == ReplaceValue
-        case _ => ()
+    if (elem.isObject()) {
+        replaceVarsInElem = getReplaceVarsKey(elem, "replaceVars", default: replaceVarsInElem)
+        changeValueType = replaceVarsInElem == ReplaceValue
     }
     if (replaceVarsInElem != ReplaceNone) {
         // if replaceVars is enabled, replace strings between | instead of %
@@ -129,8 +126,8 @@ public func parseDocumentElemHelper(game: Game, name: String, elem: JsonValue, r
 
 public func parseDocumentElemArray(parseFunc: (game: Game, elem: JsonValue) -> Unit, game: Game, name: String,
     elem: JsonValue, replaceVars: Box<ReplaceVars>): Unit {
-    match (elem.kind()) {
-        case JsArray => for (val in elem.asArray().getItems()) {
+    match (elem) {
+        case JsArray(items) => for (val in items) {
             parseDocumentElemHelper(game, name, val, replaceVars)
         }
         case _ => parseFunc(game, elem)
@@ -176,6 +173,6 @@ private func parseDocumentElem(game: Game, name: String, elem: JsonValue, replac
         case "texture" => parseDocumentElemArray(parseTexture, game, name, elem, replaceVars)
         case "texturePack" => parseDocumentElemArray(parseTexturePack, game, name, elem, replaceVars)
         case "variable" => parseDocumentElemArray(parseVariable, game, name, elem, replaceVars)
-        case _ => logger.warn("Unknown Json element: ${name}")
+        case _ => LOGGER.warn("Unknown Json element: ${name}")
     }
 }

@@ -205,9 +205,8 @@ public class ResourceManager <: Iterable<ResourceBundle> & Resource {
 
     public func setInputAction(key: SFMLEvent, obj: ?Action): Unit {
         match (key) {
-            case EvtKeyPressed(event) where event.code == KeyCode.Count || event.scancode == Scancode.Count =>
-                m_resources.back.anyKeyAction = obj
-                return
+            case EvtKeyPressed(event) where event.code == KeyCode.Count || event.scancode == Scancode.Count => m_resources
+                .back.anyKeyAction = obj
             case _ => match (obj) {
                 case Some(obj) => m_resources.back.inputActions.add(key, obj)
                 case None => m_resources.back.inputActions.remove(key)

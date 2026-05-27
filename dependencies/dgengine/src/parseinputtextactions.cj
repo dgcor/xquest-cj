@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseInputTextClick(elem: JsonValue): ?Action {
     ActInputTextClick(getStringCharKey(elem, "id"))

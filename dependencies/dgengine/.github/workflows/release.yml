@@ -1,0 +1,57 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g., v1.0.0). Leave empty to auto-detect from cjpm.toml.'
+        required: false
+        default: ''
+      prerelease:
+        description: 'Is this a pre-release?'
+        required: true
+        type: boolean
+        default: false
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Get Version
+        id: version
+        run: |
+          INPUT_VER="${{ github.event.inputs.version }}"
+          if [ -z "$INPUT_VER" ]; then
+            RAW_VER=$(grep -Po '(?m)^\s*version\s*=\s*"\K[^"]+' cjpm.toml)
+            if [ -z "$RAW_VER" ]; then
+              echo "Error: Could not detect version from cjpm.toml"
+              exit 1
+            fi
+            if [[ "$RAW_VER" != v* ]]; then
+              RAW_VER="v$RAW_VER"
+            fi
+            echo "VERSION=$RAW_VER" >> $GITHUB_OUTPUT
+            echo "Detected version: $RAW_VER"
+          else
+            echo "VERSION=$INPUT_VER" >> $GITHUB_OUTPUT
+            echo "Using input version: $INPUT_VER"
+          fi
+        shell: bash
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          name: ${{ github.event.repository.name }} ${{ steps.version.outputs.VERSION }}
+          prerelease: ${{ github.event.inputs.prerelease == 'true' }}
+          generate_release_notes: true

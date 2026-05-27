@@ -1,0 +1,83 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }} with Cangjie ${{ matrix.cangjie_version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            cangjie_version: 1.0.0
+            preset: linux-release
+            triplet: x64-linux
+          - os: ubuntu-latest
+            cangjie_version: 1.0.5
+            preset: linux-release
+            triplet: x64-linux
+          - os: windows-latest
+            cangjie_version: 1.0.5
+            preset: windows-release
+            triplet: x64-mingw-dynamic
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install CSFML dependencies (Linux)
+        if: runner.os == 'Linux'
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libx11-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libgl1-mesa-dev nasm
+          version: 1.0
+          execute_install_scripts: true
+
+      - name: Setup w64devkit (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/skeeto/w64devkit/releases/download/v2.1.0/w64devkit-x64-2.1.0.exe" -OutFile "w64devkit-x64-2.1.0.exe"
+          Start-Process -FilePath "w64devkit-x64-2.1.0.exe" -ArgumentList "-oC:\", "-y" -Wait
+          echo "C:\w64devkit\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Verify w64devkit installation (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          gcc --version
+          g++ --version
+
+      - name: Setup Cangjie
+        uses: Zxilly/setup-cangjie@v2
+        with:
+          channel: lts
+          version: ${{ matrix.cangjie_version }}
+          archive-path: ./cangjie-archive
+
+      - name: Download CSFML
+        shell: bash
+        run: ./download_csfml.sh
+
+      - name: Build and Install SFML
+        uses: johnwason/vcpkg-action@v7
+        id: vcpkg
+        with:
+          pkgs: sfml
+          triplet: ${{ matrix.triplet }}
+          cache-key: vcpkg-${{ matrix.preset }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          vcpkg-subdir: 'vcpkg-repo'
+          revision: '84bab45d415d22042bd0b9081aea57f362da3f35'  # 2025.12.12
+
+      - name: Build CSFML
+        run: |
+          cd csfml
+          cmake --preset ${{ matrix.preset }} -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg-repo/scripts/buildsystems/vcpkg.cmake
+          cmake --build --preset ${{ matrix.preset }} --target install
+
+      - name: Build
+        run: cjpm build
+
+      - name: Test
+        if: matrix.cangjie_version != '1.0.0'
+        run: cjpm test

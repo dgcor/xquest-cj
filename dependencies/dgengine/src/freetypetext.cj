@@ -13,14 +13,14 @@ public class FreeTypeText <: DrawableText {
     private var m_anchor: Anchor = Anchor.Top | Anchor.Left
     private var m_color: Color = Color.WHITE
     private var m_charSize: UInt32 = 0
+    private var m_style: TextStyle = TextStyle.Regular
     private var m_visible: Bool = true
 
     public init(font: FreeTypeFont, characterSize!: UInt32) {
         m_text = SFMLText(font.font, characterSize: characterSize)
         m_font = font
         m_charSize = characterSize
-        updateCharSize()
-        updateColor()
+        updatePropertiesWithFontDefaults()
     }
 
     // Resource
@@ -42,7 +42,7 @@ public class FreeTypeText <: DrawableText {
         m_text.position = drawPos
     }
 
-    private func updateCharSize(): Unit {
+    private func updatePropertiesWithFontDefaults(): Unit {
         if (m_charSize == 0) {
             var val = m_font.characterSize
             if (val == 0) {
@@ -52,24 +52,37 @@ public class FreeTypeText <: DrawableText {
         } else {
             m_text.characterSize = m_charSize
         }
+        updateColor()
+        updateStyle()
     }
 
     private func updateColor(): Unit {
         if (m_color == Color.WHITE) {
             m_text.fillColor = m_font.color
         } else {
-            m_text.fillColor = color
+            m_text.fillColor = m_color
+        }
+    }
+
+    private func updateStyle(): Unit {
+        if (m_style == TextStyle.Regular) {
+            m_text.style = m_font.style
+        } else {
+            m_text.style = m_style
         }
     }
 
     public override func clone(): FreeTypeText {
         let copy = FreeTypeText(m_font, characterSize: m_text.characterSize)
+        copy.m_text.string = m_text.string
         copy.m_pos = m_pos
         copy.m_horizAlign = m_horizAlign
         copy.m_vertAlign = m_vertAlign
         copy.m_anchor = m_anchor
         copy.m_color = m_color
+        copy.m_style = m_style
         copy.m_visible = m_visible
+        copy.updatePropertiesWithFontDefaults()
         return copy
     }
 
@@ -125,12 +138,13 @@ public class FreeTypeText <: DrawableText {
         set(value) {
             if (m_horizAlign != value) {
                 m_horizAlign = value
-                let style = match (value) {
-                    case AlignLeft => TextStyle.Regular
-                    case AlignCenter => TextStyle.HorizontalAlignCenter
-                    case AlignRight => TextStyle.HorizontalAlignRight
+                var newStyle = m_style
+                match (value) {
+                    case AlignLeft => ()
+                    case AlignCenter => newStyle.set(TextStyle.HorizontalAlignCenter)
+                    case AlignRight => newStyle.set(TextStyle.HorizontalAlignRight)
                 }
-                m_text.style = style
+                m_text.style = newStyle
                 calculateDrawPosition()
             }
         }
@@ -262,8 +276,22 @@ public class FreeTypeText <: DrawableText {
         set(value) {
             m_font = value
             m_text.font = value.font
-            updateCharSize()
-            updateColor()
+            updatePropertiesWithFontDefaults()
+        }
+    }
+
+    public mut prop style: TextStyle {
+        get() {
+            m_style
+        }
+        set(value) {
+            var newStyle = value
+            newStyle.clear(TextStyle.HorizontalAlignCenter | TextStyle.HorizontalAlignRight)
+            if (m_style != newStyle) {
+                m_style = newStyle
+                updateStyle()
+                calculateDrawPosition()
+            }
         }
     }
 }

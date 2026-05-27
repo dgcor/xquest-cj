@@ -50,9 +50,9 @@ class TestParseFileBytes {
             match (game.resources.getFileBytes("key02")) {
                 case Some(bytes) =>
                     @Expect(bytes.size, 2054)
-                    @Expect(bytes[0], "2"[0])
-                    @Expect(bytes[1], "5"[0])
-                    @Expect(bytes[2], "5"[0])
+                    @Expect(bytes[0], b'2')
+                    @Expect(bytes[1], b'5')
+                    @Expect(bytes[2], b'5')
                 case _ => @Fail("Expected FileBytes: key02")
             }
 
@@ -60,9 +60,9 @@ class TestParseFileBytes {
             match (game.resources.getFileBytes("key03")) {
                 case Some(bytes) =>
                     @Expect(bytes.size, 3)
-                    @Expect(bytes[0], "5"[0])
-                    @Expect(bytes[1], "5"[0])
-                    @Expect(bytes[2], ","[0])
+                    @Expect(bytes[0], b'5')
+                    @Expect(bytes[1], b'5')
+                    @Expect(bytes[2], b',')
                 case _ => @Fail("Expected FileBytes: key03")
             }
 
@@ -70,9 +70,9 @@ class TestParseFileBytes {
             match (game.resources.getFileBytes("key04")) {
                 case Some(bytes) =>
                     @Expect(bytes.size, 2051)
-                    @Expect(bytes[0], ","[0])
-                    @Expect(bytes[1], " "[0])
-                    @Expect(bytes[2], "0"[0])
+                    @Expect(bytes[0], b',')
+                    @Expect(bytes[1], b' ')
+                    @Expect(bytes[2], b'0')
                 case _ => @Fail("Expected FileBytes: key04")
             }
 

@@ -1,9 +1,9 @@
 package xquest
 
 import dgengine.*
-import stdx.encoding.json.*
+import stdjson2.*
 
-public func parseLevelAddHighScore(elem: JsonValue): ?Action {
+func parseLevelAddHighScore(elem: JsonValue): ?Action {
     ActLevelAddHighScore(
         getStringCharKey(elem, "level"),
         getStringCharKey(elem, "scoreName"),
@@ -12,32 +12,32 @@ public func parseLevelAddHighScore(elem: JsonValue): ?Action {
     )
 }
 
-public func parseLevelLoadGame(elem: JsonValue): ?Action {
+func parseLevelLoadGame(elem: JsonValue): ?Action {
     ActLevelLoadGame(
         getStringCharKey(elem, "level"),
         getStringCharKey(elem, "file")
     )
 }
 
-public func parseLevelNewGame(elem: JsonValue): ?Action {
+func parseLevelNewGame(elem: JsonValue): ?Action {
     ActLevelNewGame(getStringCharKey(elem, "level"))
 }
 
-public func parseLevelPause(elem: JsonValue): ?Action {
+func parseLevelPause(elem: JsonValue): ?Action {
     ActLevelPause(
         getStringCharKey(elem, "level"),
         getBoolKey(elem, "pause", default: true)
     )
 }
 
-public func parseLevelSaveGame(elem: JsonValue): ?Action {
+func parseLevelSaveGame(elem: JsonValue): ?Action {
     ActLevelSaveGame(
         getStringCharKey(elem, "level"),
         getStringCharKey(elem, "file")
     )
 }
 
-public func parseLevelSetShader(elem: JsonValue): ?Action {
+func parseLevelSetShader(elem: JsonValue): ?Action {
     ActLevelSetShader(
         getStringCharKey(elem, "level"),
         getStringCharKey(elem, "shader")

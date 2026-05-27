@@ -3,6 +3,7 @@ package dgengine
 import cenum.*
 import customiterators.*
 import std.collection.*
+import std.unicode.UnicodeStringExtension
 
 @FlagEnum[public TextOp](
     Set
@@ -12,6 +13,8 @@ import std.collection.*
     ReplaceAll
     Trim
     RemoveEmptyLines
+    Lowercase
+    Uppercase
 )
 
 public class TextUtils {
@@ -94,6 +97,12 @@ public class TextUtils {
         }
         if (textOp.isSet(TextOp.RemoveEmptyLines)) {
             str.value = removeEmptyLines(str.value)
+        }
+        if (textOp.isSet(TextOp.Lowercase)) {
+            str.value = str.value.toLower()
+        }
+        if (textOp.isSet(TextOp.Uppercase)) {
+            str.value = str.value.toUpper()
         }
     }
 }

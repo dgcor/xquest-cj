@@ -1,21 +1,22 @@
 package dgengine
 
 import cjsfml.graphics.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func cloneFont(game: Game, elem: JsonValue): Bool {
     if (let Some(cloneId) <- getValidString(elem, "clone")) {
         if (let Some(id) <- getValidString(elem, "id")) {
             if (cloneId != id && isValidId(id) == true) {
                 if (let Some(obj) <- game.resources.getFont(cloneId)) {
-                    let elem = elem.asObject()
                     try {
                         match (obj) {
                             case FontBitmap(obj) =>
                                 let font = obj.clone()
-                                if (elem.containsKey("fontPalette") == true && game.shaders.sprite.isSome() == true) {
-                                    let palette = game.resources.getPalette(getStringChar(elem["fontPalette"]))
-                                    font.palette = palette
+                                if (let Some(elem) <- elem.get("fontPalette")) {
+                                    if (game.shaders.sprite.isSome() == true) {
+                                        let palette = game.resources.getPalette(getStringChar(elem))
+                                        font.palette = palette
+                                    }
                                 }
                                 if (let Some(elem) <- elem.get("fontColor")) {
                                     font.color = getColorVal(elem, default: Color.WHITE)
@@ -31,12 +32,15 @@ public func cloneFont(game: Game, elem: JsonValue): Bool {
                                 if (let Some(elem) <- elem.get("fontSize")) {
                                     font.characterSize = getUIntVal(elem)
                                 }
+                                if (let Some(elem) <- elem.get("style")) {
+                                    font.style = getTextStyleVal(elem)
+                                }
                                 game.resources.addFont(id, FontFreeType(font),
                                     resourceId: getStringCharKey(elem, "resource"))
                                 return true
                         }
                     } catch (ex: Exception) {
-                        logger.error(ex.toString())
+                        LOGGER.error(ex.toString())
                     }
                 }
             }
@@ -58,12 +62,13 @@ public func parseBitmapFont(game: Game, elem: JsonValue): Bool {
         let tab = getIntKey(elem, "tab", default: -1)
 
         try {
-            let elem = elem.asObject()
             let font = BitmapFont(texturePack, newLine: newLine, space: space, tab: tab)
 
-            if (elem.containsKey("fontPalette") == true && game.shaders.sprite.isSome() == true) {
-                let palette = game.resources.getPalette(getStringChar(elem["fontPalette"]))
-                font.palette = palette
+            if (let Some(elem) <- elem.get("fontPalette")) {
+                if (game.shaders.sprite.isSome() == true) {
+                    let palette = game.resources.getPalette(getStringChar(elem))
+                    font.palette = palette
+                }
             }
             if (let Some(elem) <- elem.get("fontColor")) {
                 font.color = getColorVal(elem, default: Color.WHITE)
@@ -78,7 +83,7 @@ public func parseBitmapFont(game: Game, elem: JsonValue): Bool {
             game.resources.addFont(id, FontBitmap(font), resourceId: getStringCharKey(elem, "resource"))
             return true
         } catch (ex: Exception) {
-            logger.error(ex.toString())
+            LOGGER.error(ex.toString())
         }
     }
     return false
@@ -91,7 +96,6 @@ public func parseFreeTypeFont(game: Game, elem: JsonValue): Bool {
         if (id.isEmpty() == true) {
             return false
         }
-        let elem = elem.asObject()
         try {
             let font = FreeTypeFont(PhysFSStream(file))
 
@@ -101,6 +105,9 @@ public func parseFreeTypeFont(game: Game, elem: JsonValue): Bool {
             if (let Some(elem) <- elem.get("fontSize")) {
                 font.characterSize = getUIntVal(elem)
             }
+            if (let Some(elem) <- elem.get("style")) {
+                font.style = getTextStyleVal(elem)
+            }
             if (let Some(elem) <- elem.get("smooth")) {
                 font.smooth = getBoolVal(elem, default: true)
             }
@@ -108,7 +115,7 @@ public func parseFreeTypeFont(game: Game, elem: JsonValue): Bool {
             game.resources.addFont(id, FontFreeType(font), resourceId: getStringCharKey(elem, "resource"))
             return true
         } catch (ex: Exception) {
-            logger.error(ex.toString())
+            LOGGER.error(ex.toString())
         }
     }
     return false

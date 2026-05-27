@@ -173,6 +173,7 @@ class Starfield <: UIObject {
     }
 
     // Starfield
+
     public func setSpeed(speed: Float32): Unit {
         m_elapsedTime.timeout = clamp(speed, 0.0, MAX_TIMEOUT)
     }

@@ -2,6 +2,16 @@ package cjsfml.audio
 
 import cenum.CEnum
 
+/**
+ * Types of sound channels that can be read/written from sound buffers/files.
+ *
+ * In multi-channel audio, each sound channel can be
+ * assigned a position. The position of the channel is
+ * used to determine where to place a sound when it
+ * is spatialized. Assigning an incorrect sound channel
+ * will result in multi-channel audio being positioned
+ * incorrectly when using spatialization.
+ */
 @CEnum[public SoundChannel](
     Unspecified
     Mono

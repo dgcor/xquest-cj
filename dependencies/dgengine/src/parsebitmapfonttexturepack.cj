@@ -1,7 +1,7 @@
 package dgengine
 
 import cjsfml.graphics.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseBitmapFontTexturePack(game: Game, elem: JsonValue): ?TexturePack {
     var texture = Option<Texture>.None

@@ -17,23 +17,28 @@ You can specify `binding` variables that are evaluated at runtime and the text i
 
 ### Properties
 
-Name                    | Type    | Default            | Description
------------------------ | ------- | ------------------ | ----------------------------
-`color`                 | color   | white              | text color
-`file`                  | text    |                    | file to load text from
-**`font`**              | text    |                    | font to use
-`fontSize`              | int     | 12 or font default | font size (TrueType)
-`horizontalAlign`       | int     | left               | horizontal align text. `left`, `center` or `right`
-`horizontalSpaceOffset` | int     | 0                  | horizontal space offset between lines
-`onChange`              | text    |                    | on text change action
-`text`                  | text    |                    | text to display
-`wordWrap`              | int     |                    | split text when lines have more than n chars
-`verticalAlign`         | color   | bottom             | vertical align text. `top`, `center` or `bottom`
-`verticalSpaceOffset`   | int     | 0                  | vertical space offset between chars
+Name                    | Type          | Default            | Description
+----------------------- | ------------- | ------------------ | ----------------------------
+`color`                 | color         | white              | text color
+`file`                  | text          |                    | file to load text from
+**`font`**              | text          |                    | font to use
+`fontSize`              | int           | 12 or font default | font size (FreeType)
+`horizontalAlign`       | text          | left               | horizontal align text. `left`, `center` or `right`
+`horizontalSpaceOffset` | int           | 0                  | horizontal space offset between lines
+`lowercase`             | bool          | false              | makes text lowercase
+`onChange`              | text          |                    | on text change action
+`style`                 | text or array | regular            | font style (FreeType)
+`text`                  | text          |                    | text to display
+`uppercase`             | bool          | false              | makes text uppercase
+`wordWrap`              | int           |                    | split text when lines have more than n chars
+`verticalAlign`         | text          | bottom             | vertical align text. `top`, `center` or `bottom`
+`verticalSpaceOffset`   | int           | 0                  | vertical space offset between chars
 
 Properties in **bold** are required.  
 
-Once a text is created with one type of font (Bitmap, TrueType), you can't change the font to another type.  
+Once a text is created with one type of font (Bitmap, FreeType), you can't change the font to another type.  
+
+`style` can be a combination of: `regular`, `bold`, `italic`, `underlined` and `strikethrough`.  
 
 Horizontal and vertical aligned text use the position as reference. A text at position [0,0] that
 is left aligned starts at the left edge of the game window. A text at position [640,0] that is
@@ -75,14 +80,14 @@ BindingFlag  | Description
 }
 ```
 
-#### TrueTypeText
+#### FreeTypeText
 
 ```json
 {
   "init": true,
   "text": {
     "id": "text1",
-    "font": "trueTypeFont1",
+    "font": "freeTypeFont1",
     "fontSize": 20,
     "text": "hello"
   }
@@ -96,7 +101,7 @@ BindingFlag  | Description
   "init": true,
   "text": {
     "id": "text1",
-    "font": "trueTypeFont1",
+    "font": "freeTypeFont1",
     "color": "0xFF0000",
     "text": "hello"
   }

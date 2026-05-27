@@ -1,6 +1,21 @@
 package dgengine
 
 import cjsfml.system.*
+import physfs4cj.PhysFSException
+
+foreign {
+    func PHYSFS_openRead(filename: CString): CPointer<Unit>
+
+    func PHYSFS_close(handle: CPointer<Unit>): Int32
+
+    func PHYSFS_tell(handle: CPointer<Unit>): Int64
+
+    func PHYSFS_seek(handle: CPointer<Unit>, pos: UInt64): Int32
+
+    func PHYSFS_fileLength(handle: CPointer<Unit>): Int64
+
+    func PHYSFS_readBytes(handle: CPointer<Unit>, buffer: CPointer<Byte>, len: UInt64): Int64
+}
 
 @C
 private func physfsInputStreamRead(data: CPointer<Byte>, size: UIntNative, userData: CPointer<Unit>): Int64 {
@@ -19,7 +34,7 @@ private func physfsInputStreamSeek(position: UIntNative, userData: CPointer<Unit
 
 public class PhysFSStream <: InputStream {
     /**
-     * @throws IllegalStateException
+     * @throws PhysFSException
      */
     public init(fileName: String) {
         super(
@@ -39,7 +54,7 @@ public class PhysFSStream <: InputStream {
             }
         }
         if (handle.isNull()) {
-            throw IllegalStateException(PhysFS.getLastError())
+            throw PhysFSException()
         }
         m_stream.userData = handle
     }

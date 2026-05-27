@@ -1,14 +1,13 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parsePalette(game: Game, elem: JsonValue): Unit {
     if (parseResourceFromId<Palette>(game.resources, elem) == true) {
         return
     }
-    if (let JsObject <- elem.kind()) {
+    if (elem.isObject()) {
         try {
-            let elem = elem.asObject()
             if (let Some(file) <- getValidString(elem, "file")) {
                 let id = parseValidIdOrFilePath(elem, file)
                 if (id.isEmpty() == true) {
@@ -18,13 +17,13 @@ public func parsePalette(game: Game, elem: JsonValue): Unit {
                     return
                 }
                 var colorFormat = ColorFormat.RGB
-                if (isValidString(elem, "colorFormat") == true) {
-                    colorFormat = ColorFormat.get(getStringChar(elem["colorFormat"]))
+                if (let Some(str) <- getValidString(elem, "colorFormat")) {
+                    colorFormat = ColorFormat.get(str)
                 }
                 let palette = Palette(file, colorFormat)
                 game.resources.addPalette(id, palette, resourceId: getStringCharKey(elem, "resource"))
             } else if (isValidString(elem, "palette") && isValidString(elem, "trnFile")) {
-                let file = getStringChar(elem["trnFile"])
+                let file = elem.getString("trnFile") ?? String.empty
                 let id = parseValidIdOrFilePath(elem, file)
                 if (id.isEmpty() == true) {
                     return
@@ -32,7 +31,7 @@ public func parsePalette(game: Game, elem: JsonValue): Unit {
                 if (game.resources.hasPalette(id) == true) {
                     return
                 }
-                if (let Some(refPalette) <- game.resources.getPalette(getStringChar(elem["palette"]))) {
+                if (let Some(refPalette) <- game.resources.getPalette(elem.getString("palette") ?? String.empty)) {
                     let trnFile = FileUtils.readBytes(file)
                     let trnStart = Int64(min(getUIntKey(elem, "trnStart"), UInt32.Max))
                     let trnLength = Int64(min(getUIntKey(elem, "trnLength", default: 256), 256))
@@ -51,7 +50,7 @@ public func parsePalette(game: Game, elem: JsonValue): Unit {
                 }
             }
         } catch (ex: Exception) {
-            logger.error(ex.toString())
+            LOGGER.error(ex.toString())
         }
     }
 }

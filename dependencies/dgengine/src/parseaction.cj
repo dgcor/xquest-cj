@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseActionElem(game: Game, elem: JsonValue): ?Action {
     match (getValidString(elem, "name")) {
@@ -183,7 +183,7 @@ public func getActionVal(game: Game, elem: JsonValue): ?Action {
     if (elem.isNull()) {
         return None
     } else if (let Some(str) <- getValidString(elem)) {
-        if (Rune(str[0]) != r'#') {
+        if (str[0] != b'#') {
             return game.resources.getAction(str)
         } else {
             return game.getQueryAction(str[1..str.size])
@@ -192,7 +192,7 @@ public func getActionVal(game: Game, elem: JsonValue): ?Action {
         return parseActionElem(game, elem)
     } else if (let Some(elem) <- getValidArray(elem)) {
         let actionList = ActionList()
-        for (elem in elem.getItems()) {
+        for (elem in elem) {
             if (let Some(action) <- getActionVal(game, elem)) {
                 actionList.add(action)
             }
@@ -205,25 +205,21 @@ public func getActionVal(game: Game, elem: JsonValue): ?Action {
 }
 
 public func getActionKey(game: Game, elem: JsonValue, key: String): ?Action {
-    if (let Some(elem) <- getValidObject(elem)) {
-        if (let Some(elem) <- elem.get(key)) {
-            return getActionVal(game, elem)
-        }
+    if (let Some(elem) <- elem.get(key)) {
+        return getActionVal(game, elem)
     }
     return None
 }
 
 public func parseActionAndExecute(game: Game, elem: JsonValue): Unit {
-    match (elem.kind()) {
-        case JsString =>
-            if (let Some(action) <- game.resources.getAction(getStringChar(elem))) {
-                action(game)
-            }
-        case JsObject =>
-            if (let Some(action) <- parseActionElem(game, elem)) {
-                action(game)
-            }
-        case JsArray => for (elem in elem.asArray().getItems()) {
+    match {
+        case elem.isString() => if (let Some(action) <- game.resources.getAction(getStringChar(elem))) {
+            action(game)
+        }
+        case elem.isObject() => if (let Some(action) <- parseActionElem(game, elem)) {
+            action(game)
+        }
+        case elem.isArray() => for (elem in elem) {
             if (let Some(action) <- getActionVal(game, elem)) {
                 action(game)
             }

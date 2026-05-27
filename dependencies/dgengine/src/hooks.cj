@@ -2,7 +2,7 @@ package dgengine
 
 import cjsfml.graphics.Image as SFMLImage
 import cjsfml.system.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 private type InitializeShaderManagerFunc = (shaderManager: ShaderManager) -> Unit
 
@@ -29,6 +29,16 @@ public class Hooks {
     public static var decodeImage: ?DecodeImageFunc = None
     public static var parseTextureImg: ?ParseTextureImgFunc = None
     public static var registerArchivers: ?RegisterArchiversFunc = None
+}
 
-    public static var archiveExtensions: Array<String> = [".zip", ".7z"]
+public class Defaults {
+    public static var ARCHIVE_EXTENSIONS: Array<String> = [".zip", ".7z"]
+    public static var GAME_SIZE_X: UInt32 = 640
+    public static var GAME_SIZE_Y: UInt32 = 480
+    public static var GAME_MIN_SIZE_X: UInt32 = 640
+    public static var GAME_MIN_SIZE_Y: UInt32 = 480
+    public static var GAME_REF_SIZE_X: UInt32 = 640
+    public static var GAME_REF_SIZE_Y: UInt32 = 480
+    public static var FADE_STEP: UInt32 = 25
+    public static var FADE_REFRESH: Time = Time(milliseconds: 15)
 }

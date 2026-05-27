@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func getMenuObj(game: Game, elem: JsonValue): ?Menu {
     if (let Some(referenceButton) <- parseTextButton(game, elem)) {
@@ -8,18 +8,16 @@ public func getMenuObj(game: Game, elem: JsonValue): ?Menu {
         parseButtonActions(game, elem, referenceButton)
 
         let menu = Menu()
-        let elem = elem.asObject()
-        if (elem.containsKey("items") == true) {
+        if (let Some(items) <- elem.get("items")) {
             var menuIdx = 0
 
             let relativePos = getBoolKey(elem, "relativeCoords", default: true)
             let resource = getStringCharKey(elem, "resource")
 
-            let items = elem["items"]
-            match (items.kind()) {
-                case JsObject => menuIdx = parseMenuItem(game, items, menu, menuIdx, referenceButton, relativePos,
-                    resource)
-                case JsArray => for (itemVal in items.asArray().getItems()) {
+            match {
+                case items.isObject() => menuIdx = parseMenuItem(game, items, menu, menuIdx, referenceButton,
+                    relativePos, resource)
+                case items.isArray() => for (itemVal in items) {
                     menuIdx = parseMenuItem(game, itemVal, menu, menuIdx, referenceButton, relativePos, resource)
                 }
                 case _ => ()
@@ -42,11 +40,11 @@ public func getMenuObj(game: Game, elem: JsonValue): ?Menu {
         menu.setVerticalPad(getIntKey(elem, "verticalPad"))
         menu.setVisibleItems(Int64(getUIntKey(elem, "visibleItems")))
 
-        if (elem.containsKey("onScrollDown")) {
-            menu.setAction("scrollDown", getActionVal(game, elem["onScrollDown"]))
+        if (let Some(elem) <- elem.get("onScrollDown")) {
+            menu.setAction("scrollDown", getActionVal(game, elem))
         }
-        if (elem.containsKey("onScrollUp")) {
-            menu.setAction("scrollUp", getActionVal(game, elem["onScrollUp"]))
+        if (let Some(elem) <- elem.get("onScrollUp")) {
+            menu.setAction("scrollUp", getActionVal(game, elem))
         }
 
         menu.updateVisibleItems()

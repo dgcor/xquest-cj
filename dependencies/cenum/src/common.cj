@@ -6,6 +6,19 @@ import std.math.abs
 
 // cjlint-ignore -start !G.FUN.01 function should be less than 50 lines of code
 
+/**
+ * @brief Generates the beginning block of the enum struct.
+ *
+ * Constructs the struct definition, constructors, and operator overloads
+ * based on the provided parameters.
+ *
+ * @param visibility The access modifier token (e.g., `public`, `private`).
+ * @param name The name of the enum struct.
+ * @param valueType The underlying integer type token (e.g., `Int32`, `UInt8`).
+ * @param addFlagOps If `true`, adds bitwise operators for flag enums.
+ * @param ffi_c If `true`, generates a C-compatible struct (without protocols like Hashable).
+ * @return A `Tokens` object containing the generated struct definition header.
+ */
 private func enumBlockBegin(visibility: Token, name: Token, valueType: Token, addFlagOps!: Bool, ffi_c!: Bool): Tokens {
     let block = quote()
     if (ffi_c) {
@@ -95,6 +108,16 @@ private func enumBlockBegin(visibility: Token, name: Token, valueType: Token, ad
     return block
 }
 
+/**
+ * @brief Parses the value assigned to an enum member.
+ *
+ * Analyzes the tokens following an identifier to determine the enum's value.
+ * If no assignment is found, it uses the `currentEnumIndex`.
+ *
+ * @param currentEnumIndex The current auto-incremented index.
+ * @param tokenIt An iterator over the tokens.
+ * @return A tuple containing the tokens representing the value and the new index.
+ */
 private func parseEnumValue(currentEnumIndex: Int32, tokenIt: Iterator<Token>): (Tokens, Int32) {
     let valueTokens = quote()
     var hasAssign = false
@@ -130,6 +153,19 @@ private const ERROR_MSG = "Invalid CEnum syntax"
 private const ERROR_HINT = "Syntax: CEnum[<Private|public|..> <Identifier> <type>]()\n" +
     "Example: CEnum[Seek](...),  CEnum[public Seek](...), CEnum[public Seek UInt32](...)"
 
+/**
+ * @brief Generates the full definition of a C-style enum.
+ *
+ * This is the core logic function that processes attribute and input tokens
+ * to produce the enum struct and its static members.
+ *
+ * @param attrTokens Tokens containing visibility, name, and type information.
+ * @param inputTokens Tokens containing the enum member identifiers.
+ * @param flagEnum If `true`, treats the enum as a bitfield (doubling values for auto-increment).
+ * @param startValue The starting value for the first enum member.
+ * @param ffi_c If `true`, generates a C-compatible struct.
+ * @return The generated `Tokens` representing the complete enum definition.
+ */
 func makeEnum(attrTokens: Tokens, inputTokens: Tokens, flagEnum!: Bool = false, startValue!: Int32 = 0,
     ffi_c!: Bool = false): Tokens {
     var visibility = Token(INTERNAL)

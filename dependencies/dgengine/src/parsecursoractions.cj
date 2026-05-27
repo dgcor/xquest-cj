@@ -1,7 +1,7 @@
 package dgengine
 
 import cjsfml.graphics.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseCursorCenterOnDrawable(elem: JsonValue): ?Action {
     ActCursorCenterOnDrawable(getStringCharKey(elem, "id"))

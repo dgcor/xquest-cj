@@ -47,7 +47,7 @@ class TestImageUtils {
 
     @TestCase
     func packImages() {
-        let json = ##"
+        let json = #"
         {
           "imageContainer": [
             {
@@ -57,7 +57,7 @@ class TestImageUtils {
               "blendMode": "add"
             }
           ]
-        }"##
+        }"#
 
         try (game = Game()) {
             parseJson(game, json)

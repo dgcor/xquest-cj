@@ -74,14 +74,43 @@ foreign {
     func sfRectangleShape_getGlobalBounds(handle: CPointer<Unit>): FloatRect
 }
 
+/**
+ * Specialized shape representing a rectangle.
+ *
+ * This class inherits all the functions of `Transformable`
+ * (position, rotation, scale, bounds, ...) as well as the
+ * functions of `Shape` (outline, color, texture, ...).
+ *
+ * Usage example:
+ * ```
+ * let rectangle = RectangleShape();
+ * rectangle.size = Vector2f(100.0, 50.0);
+ * rectangle.outlineColor = Color.RED;
+ * rectangle.outlineThickness = 5.0;
+ * rectangle.position = Vector2f(10.0, 20.0);
+ * ...
+ * window.draw(rectangle);
+ * ```
+ *
+ * @see `Shape`, `CircleShape`, `ConvexShape`
+ */
 public class RectangleShape <: ResourceHandle & RenderTargetDrawable & Transformable & Equatable<RectangleShape> {
     private var m_handle: CPointer<Unit> = CPointer()
 
+    /**
+     * Default constructor.
+     *
+     * @throws SFMLNullHandleException
+     */
     public init() {
         this(Vector2f())
     }
 
     /**
+     * Construct the rectangle shape with a size.
+     *
+     * @param size Size of the rectangle
+     *
      * @throws SFMLNullHandleException
      */
     public init(size: Vector2f) {
@@ -89,12 +118,16 @@ public class RectangleShape <: ResourceHandle & RenderTargetDrawable & Transform
         if (m_handle.isNull()) {
             throw SFMLNullHandleException()
         }
-        if (size.x != 0.0 && size.y != 0.0) {
+        if (size.x != 0.0 && size.y != 0.0) { // cjlint-ignore !G.EXP.02 comparing floats
             unsafe { sfRectangleShape_setSize(m_handle, size) }
         }
     }
 
     /**
+     * Construct the rectangle shape from an existing handle.
+     *
+     * @param handle The handle to use.
+     *
      * @throws SFMLNullHandleException
      */
     private init(handle: CPointer<Unit>) {
@@ -111,6 +144,11 @@ public class RectangleShape <: ResourceHandle & RenderTargetDrawable & Transform
         }
     }
 
+    /**
+     * Create a copy of the shape.
+     *
+     * @return A new shape instance that is a copy of this one.
+     */
     public func clone(): RectangleShape {
         RectangleShape(unsafe { sfRectangleShape_copy(m_handle) })
     }
@@ -137,11 +175,11 @@ public class RectangleShape <: ResourceHandle & RenderTargetDrawable & Transform
 
     // Equatable
 
-    public operator override func ==(right: RectangleShape): Bool {
+    public override operator func ==(right: RectangleShape): Bool {
         m_handle.toUIntNative() == right.m_handle.toUIntNative()
     }
 
-    public operator override func !=(right: RectangleShape): Bool {
+    public override operator func !=(right: RectangleShape): Bool {
         m_handle.toUIntNative() != right.m_handle.toUIntNative()
     }
 
@@ -225,6 +263,15 @@ public class RectangleShape <: ResourceHandle & RenderTargetDrawable & Transform
 
     // Shape
 
+    /**
+     * Get the source texture of the shape.
+     *
+     * If the shape has no source texture, a `None` is returned.
+     * The returned reference is const, which means that you can't
+     * modify the texture when you retrieve it with this function.
+     *
+     * @return Reference to the shape's texture
+     */
     public mut prop texture: ?Texture {
         get() {
             let texturePtr = unsafe { sfRectangleShape_getTexture(m_handle) }
@@ -238,10 +285,32 @@ public class RectangleShape <: ResourceHandle & RenderTargetDrawable & Transform
         }
     }
 
+    /**
+     * Change the source texture of the shape.
+     *
+     * The `texture` argument refers to a texture that must
+     * exist as long as the shape uses it. Indeed, the shape
+     * doesn't store its own copy of the texture, but rather keeps
+     * a pointer to the one that you passed to this function.
+     * If the source texture is destroyed and the shape tries to
+     * use it, the behavior is undefined.
+     * `resetRect` automatically adjusts the texture rectangle
+     * to the size of the new texture.
+     *
+     * @param texture   New texture
+     * @param resetRect Should the texture rect be reset to the size of the new texture?
+     */
     public func setTexture(texture: ?Texture, resetRect!: Bool = false): Unit {
         unsafe { sfRectangleShape_setTexture(m_handle, texture?.handle ?? CPointer(), resetRect) }
     }
 
+    /**
+     * Set the sub-rectangle of the texture that the shape will display.
+     *
+     * By default, the texture rect covers the entire texture.
+     *
+     * @param value Rectangle defining the region of the texture to display
+     */
     public mut prop textureRect: IntRect {
         get() {
             unsafe { sfRectangleShape_getTextureRect(m_handle) }
@@ -251,6 +320,16 @@ public class RectangleShape <: ResourceHandle & RenderTargetDrawable & Transform
         }
     }
 
+    /**
+     * Set the fill color of the shape.
+     *
+     * This color is modulated (multiplied) with the shape's
+     * texture if any. It can be used to colorize the shape,
+     * or change its global opacity.
+     * By default, the shape's fill color is opaque white.
+     *
+     * @param value New fill color of the shape
+     */
     public mut prop fillColor: Color {
         get() {
             unsafe { sfRectangleShape_getFillColor(m_handle) }
@@ -260,6 +339,13 @@ public class RectangleShape <: ResourceHandle & RenderTargetDrawable & Transform
         }
     }
 
+    /**
+     * Set the outline color of the shape.
+     *
+     * By default, the shape's outline color is opaque white.
+     *
+     * @param value New outline color of the shape
+     */
     public mut prop outlineColor: Color {
         get() {
             unsafe { sfRectangleShape_getOutlineColor(m_handle) }
@@ -269,6 +355,16 @@ public class RectangleShape <: ResourceHandle & RenderTargetDrawable & Transform
         }
     }
 
+    /**
+     * Set the thickness of the shape's outline.
+     *
+     * By default, the outline thickness is 0.
+     *
+     * Be aware that using a negative value for the outline
+     * thickness will cause distorted rendering.
+     *
+     * @param value New outline thickness, in pixels
+     */
     public mut prop outlineThickness: Float32 {
         get() {
             unsafe { sfRectangleShape_getOutlineThickness(m_handle) }
@@ -278,6 +374,12 @@ public class RectangleShape <: ResourceHandle & RenderTargetDrawable & Transform
         }
     }
 
+    /**
+     * Get the number of points defining the shape.
+     *
+     * @return Number of points of the shape. For rectangle
+     *         shapes, this number is always 4.
+     */
     public mut prop pointCount: UInt32 {
         get() {
             unsafe { UInt32(sfRectangleShape_getPointCount(m_handle)) }
@@ -285,16 +387,42 @@ public class RectangleShape <: ResourceHandle & RenderTargetDrawable & Transform
         set(_) {}
     }
 
+    /**
+     * Get a point of the rectangle.
+     *
+     * The returned point is in local coordinates, that is,
+     * the shape's transforms (position, rotation, scale) are
+     * not taken into account.
+     * The result is undefined if `index` is out of the valid range.
+     *
+     * @param index Index of the point to get, in range [0 .. 3]
+     *
+     * @return `index`-th point of the shape
+     */
     public func getPoint(index: UInt32): Vector2f {
         unsafe { sfRectangleShape_getPoint(m_handle, UIntNative(index)) }
     }
 
+    /**
+     * Get the geometric center of the rectangle.
+     *
+     * The returned point is in local coordinates, that is,
+     * the shape's transforms (position, rotation, scale) are
+     * not taken into account.
+     *
+     * @return The geometric center of the shape
+     */
     public prop geometricCenter: Vector2f {
         get() {
             unsafe { sfRectangleShape_getGeometricCenter(m_handle) }
         }
     }
 
+    /**
+     * Set the size of the rectangle.
+     *
+     * @param value New size of the rectangle
+     */
     public mut prop size: Vector2f {
         get() {
             unsafe { sfRectangleShape_getSize(m_handle) }
@@ -304,12 +432,34 @@ public class RectangleShape <: ResourceHandle & RenderTargetDrawable & Transform
         }
     }
 
+    /**
+     * Get the local bounding rectangle of the entity.
+     *
+     * The returned rectangle is in local coordinates, which means
+     * that it ignores the transformations (translation, rotation,
+     * scale, ...) that are applied to the entity.
+     * In other words, this function returns the bounds of the
+     * entity in the entity's coordinate system.
+     *
+     * @return Local bounding rectangle of the entity
+     */
     public prop localBounds: FloatRect {
         get() {
             unsafe { sfRectangleShape_getLocalBounds(m_handle) }
         }
     }
 
+    /**
+     * Get the global bounding rectangle of the entity.
+     *
+     * The returned rectangle is in global coordinates, which means
+     * that it takes into account the transformations (translation,
+     * rotation, scale, ...) that are applied to the entity.
+     * In other words, this function returns the bounds of the
+     * shape in the global 2D world's coordinate system.
+     *
+     * @return Global bounding rectangle of the entity
+     */
     public prop globalBounds: FloatRect {
         get() {
             unsafe { sfRectangleShape_getGlobalBounds(m_handle) }

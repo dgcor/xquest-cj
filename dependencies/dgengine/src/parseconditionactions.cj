@@ -1,7 +1,7 @@
 package dgengine
 
-import stdx.encoding.json.*
 import std.collection.*
+import stdjson2.*
 
 public func parseIfCondition(condition: String, game: Game, elem: JsonValue): ?Action {
     ActIfCondition(
@@ -16,7 +16,7 @@ public func parseIfCondition(condition: String, game: Game, elem: JsonValue): ?A
 public func parseInListCondition(game: Game, elem: JsonValue): ?Action {
     let list = ArrayList<Variable>()
     if (let Some(elem) <- getValidArray(elem, "list")) {
-        for (val in elem.getItems()) {
+        for (val in elem) {
             if (let Some(value) <- getVariableVal(val)) {
                 list.add(value)
             }
@@ -30,12 +30,12 @@ public func parseInListCondition(game: Game, elem: JsonValue): ?Action {
     )
 }
 
-public func parseMultiIfConditionHelper(game: Game, conditions: IfCondition, elem: JsonArray): Unit {
+public func parseMultiIfConditionHelper(game: Game, conditions: IfCondition, elem: JsonValue): Unit {
     var step = 0
     var condition = "=="
     var param1 = VaVariable(VaString(String.empty))
     var param2 = VaVariable(VaString(String.empty))
-    for (val in elem.getItems()) {
+    for (val in elem) {
         // step 0 - param 1 - can be a new condition array
         // step 1 - == != > >= < <= regex
         // step 2 - param 2 - adds condition ex: (param 1 > param2)
@@ -83,7 +83,7 @@ public func parseMultiIfCondition(game: Game, elem: JsonValue): ?Action {
     return None
 }
 
-public func parseSwitchConditionHelper(game: Game, elem: JsonObject, actionName: String,
+public func parseSwitchConditionHelper(game: Game, elem: JsonValue, actionName: String,
     cases: ArrayList<(Variable, ?Action)>): ?Action {
     if (let Some(elem) <- elem.get(actionName)) {
         if (elem.isObject() == false) {
@@ -103,7 +103,7 @@ public func parseSwitchCondition(game: Game, elem: JsonValue): ?Action {
     if (let Some(elem) <- getValidObject(elem)) {
         let cases = ArrayList<(Variable, ?Action)>()
         if (let Some(elem) <- getValidArray(elem, "case")) {
-            for (val in elem.getItems()) {
+            for (val in elem) {
                 if (let Some(val) <- getValidObject(val)) {
                     if (let Some(value) <- getVariableKey(val, "value")) {
                         cases.add((value, parseSwitchConditionHelper(game, val, "action", cases)))

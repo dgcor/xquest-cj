@@ -2,7 +2,7 @@ package dgengine
 
 import cjsfml.graphics.*
 import cjsfml.system.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func getRectangleObj(game: Game, elem: JsonValue): Rectangle {
     let rectangle = Rectangle(getSizeKey(elem, "size"))
@@ -13,11 +13,9 @@ public func getRectangleObj(game: Game, elem: JsonValue): Rectangle {
         }
     }
 
-    if (let Some(elem) <- getValidObject(elem)) {
-        if (elem.containsKey("textureRect")) {
-            let rect = IntRect(0, 0, Int32(game.drawRegionSize.x), Int32(game.drawRegionSize.y))
-            rectangle.textureRect = getIntRectVal(elem["textureRect"], default: rect)
-        }
+    if (let Some(elem) <- elem.get("textureRect")) {
+        let rect = IntRect(0, 0, Int32(game.drawRegionSize.x), Int32(game.drawRegionSize.y))
+        rectangle.textureRect = getIntRectVal(elem, default: rect)
     }
 
     parseDrawableProperties(game, elem, rectangle)

@@ -2,8 +2,7 @@ package xquest
 
 import cjsfml.system.*
 import dgengine.*
-import stdx.encoding.json.*
-import std.math.*
+import stdjson2.*
 
 func getStarfieldObj(game: Game, elem: JsonValue): Starfield {
     let size = getVector2fKey(elem, "size", default: Vector2f(320.0, 240.0))

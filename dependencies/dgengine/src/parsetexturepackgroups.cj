@@ -1,15 +1,15 @@
 package dgengine
 
 import cjsfml.system.*
-import stdx.encoding.json.*
 import std.collection.*
+import stdjson2.*
 
 private func parseAnimationGroup(elem: JsonValue, defaultAnimInfo: AnimationInfo): AnimationGroup {
     var directions = 0u32
     var directionsVec = Option<ArrayList<(UInt32, UInt32)>>.None
     if (let Some(elem) <- getValidArray(elem, "directions")) {
         let directions = ArrayList<(UInt32, UInt32)>()
-        for (elem in elem.getItems()) {
+        for (elem in elem) {
             let directionRange = getVector2uVal(elem)
             if (directionRange.y < directionRange.x) {
                 continue
@@ -51,10 +51,9 @@ public func parseTexturePackGroups(texturePack: Box<?TexturePack>, elem: JsonVal
         texturePack.value = newTexturePack
     }
     if (let Some(texturePack) <- texturePack2) {
-        let elem = elem.asObject()
         if (let Some(elem) <- elem.get("groups")) {
-            if (let Some(elem) <- getValidArray(elem)) {
-                for (elem in elem.getItems()) {
+            if (elem.isArray() == true) {
+                for (elem in elem) {
                     texturePack.addGroup(parseAnimationGroup(elem, defaultAnimInfo))
                 }
             } else {

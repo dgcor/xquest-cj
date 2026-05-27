@@ -1,8 +1,8 @@
 package dgengine
 
 import cjsfml.system.*
-import stdx.encoding.json.*
 import std.collection.*
+import stdjson2.*
 
 public type MenuFilterObject = (condition: String, property: String, value: Variable)
 
@@ -11,8 +11,8 @@ public func parseMenuFilterObj(elem: JsonValue, list: ArrayList<MenuFilterObject
         if (let Some(elem) <- elem.get("value")) {
             let condition = getStringCharKey(elem, "if")
             let property = getStringKey(elem, "property")
-            if (let Some(elem) <- getValidArray(elem)) {
-                for (val in elem.getItems()) {
+            if (let Some(elem) <- elem.getArray()) {
+                for (val in elem) {
                     list.add((condition, property, getVariableVal(val) ?? VaString(String.empty)))
                 }
             } else {
@@ -24,9 +24,9 @@ public func parseMenuFilterObj(elem: JsonValue, list: ArrayList<MenuFilterObject
 
 public func parseMenuFilterList(elem: JsonValue): ArrayList<MenuFilterObject> {
     let list = ArrayList<MenuFilterObject>()
-    match (elem.kind()) {
-        case JsObject => parseMenuFilterObj(elem, list)
-        case JsArray => for (val in elem.asArray().getItems()) {
+    match (elem) {
+        case JsObject(_) => parseMenuFilterObj(elem, list)
+        case JsArray(items) => for (val in items) {
             if (val.isObject() == true) {
                 parseMenuFilterObj(val, list)
             }
@@ -75,7 +75,7 @@ public func getMenuFilterResult(filterList: ArrayList<MenuFilterObject>, queryab
     return skip
 }
 
-public func parseMenuButton(game: Game, elem: JsonObject, menu: Menu, referenceButton: TextButton, relativePos: Bool,
+public func parseMenuButton(game: Game, elem: JsonValue, menu: Menu, referenceButton: TextButton, relativePos: Bool,
     resource: String): Unit {
     let button = referenceButton.clone()
 
@@ -84,7 +84,7 @@ public func parseMenuButton(game: Game, elem: JsonObject, menu: Menu, referenceB
     parseTextDisplayText(elem, button)
     parseBindableTextObj(game, elem, button)
 
-    let recalculatePosition = elem.containsKey("position") == false
+    let recalculatePosition = elem.hasMember("position") == false
     if (recalculatePosition == false) {
         let pos = Box(getVector2fVal(elem["position"], default: referenceButton.position))
         if (relativePos == true && game.refSize != game.drawRegionSize) {
@@ -107,11 +107,10 @@ public func parseMenuButton(game: Game, elem: JsonObject, menu: Menu, referenceB
 public func parseMenuItem(game: Game, elem: JsonValue, menu: Menu, menuIdx: Int64, referenceButton: TextButton,
     relativePos: Bool, resource: String): Int64 {
     if (let Some(query) <- getValidString(elem, "load")) {
-        let elem = elem.asObject()
         var menuIdx = menuIdx
-        let (include, filterList) = match (false) {
-            case _ where elem.containsKey("exclude") => (false, parseMenuFilterList(elem["exclude"]))
-            case _ where elem.containsKey("include") => (true, parseMenuFilterList(elem["include"]))
+        let (include, filterList) = match {
+            case elem.hasMember("exclude") => (false, parseMenuFilterList(elem["exclude"]))
+            case elem.hasMember("include") => (true, parseMenuFilterList(elem["include"]))
             case _ => (true, ArrayList<MenuFilterObject>())
         }
         let menuItems = game.getQueryableList(query)
@@ -172,7 +171,7 @@ public func parseMenuItem(game: Game, elem: JsonValue, menu: Menu, menuIdx: Int6
                         }
                     )
             }
-            parseMenuButton(game, elemCopy.asObject(), menu, referenceButton, relativePos, resource)
+            parseMenuButton(game, elemCopy, menu, referenceButton, relativePos, resource)
             parseAndExecuteMenuAction(game, elemCopy)
             menuIdx++
         }
@@ -189,7 +188,7 @@ public func parseMenuItem(game: Game, elem: JsonValue, menu: Menu, menuIdx: Int6
                 )
             }
         )
-        parseMenuButton(game, elemCopy.asObject(), menu, referenceButton, relativePos, resource)
+        parseMenuButton(game, elemCopy, menu, referenceButton, relativePos, resource)
         parseAndExecuteMenuAction(game, elemCopy)
         return menuIdx + 1
     } else {

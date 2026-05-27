@@ -1,22 +1,22 @@
 package xquest
 
 import dgengine.*
-import stdx.encoding.json.*
 import std.collection.*
 import std.math.*
+import stdjson2.*
 
-func parseLevelOptions(optionsManager: LevelOptionsManager, elem: JsonArray): Unit {
+func parseLevelOptions(optionsManager: LevelOptionsManager, elem: JsonValue): Unit {
     var options = LevelOptions()
     let allOptions = ArrayList<LevelOptions>()
-    for (val in elem.getItems()) {
+    for (val in elem) {
         options = options.clone()
         options.level = getInt64Key(val, "level", default: options.level + 1)
-        options.numLives = clamp(getInt64Key(val, "lives"), 0, 99)
-        options.numSmartBombs = clamp(getInt64Key(val, "smartBombs"), 1, 99)
+        options.lives = clamp(getInt64Key(val, "lives"), 0, 99)
+        options.smartBombs = clamp(getInt64Key(val, "smartBombs"), 1, 99)
 
         if (let Some(elem) <- getValidArray(val, "insert")) {
             options.insert.clear()
-            for (val in elem.getItems()) {
+            for (val in elem) {
                 let id = getStringKey(val, "id")
                 if (id.isEmpty() == true) {
                     continue
@@ -27,7 +27,7 @@ func parseLevelOptions(optionsManager: LevelOptionsManager, elem: JsonArray): Un
         }
         if (let Some(elem) <- getValidArray(val, "spawn")) {
             options.spawns.clear()
-            for (val in elem.getItems()) {
+            for (val in elem) {
                 let id = getStringVal(val)
                 if (id.isEmpty() == true) {
                     continue
@@ -36,7 +36,7 @@ func parseLevelOptions(optionsManager: LevelOptionsManager, elem: JsonArray): Un
             }
         }
         if (let Some(elem) <- getValidArray(val, "formulas")) {
-            for (val in elem.getItems()) {
+            for (val in elem) {
                 let key = getStringKey(val, "key")
                 if (key.isEmpty() == true) {
                     continue
@@ -51,7 +51,7 @@ func parseLevelOptions(optionsManager: LevelOptionsManager, elem: JsonArray): Un
         }
         if (let Some(elem) <- getValidArray(val, "maxObjectsById")) {
             options.maxObjectsById.clear()
-            for (val in elem.getItems()) {
+            for (val in elem) {
                 let id = getStringKey(val, "id")
                 if (id.isEmpty() == true) {
                     continue
@@ -62,7 +62,7 @@ func parseLevelOptions(optionsManager: LevelOptionsManager, elem: JsonArray): Un
         }
         if (let Some(elem) <- getValidArray(val, "maxObjectsByType")) {
             options.maxObjectsByType.clear()
-            for (val in elem.getItems()) {
+            for (val in elem) {
                 let unitType = getStringKey(val, "type")
                 if (unitType.isEmpty() == true) {
                     continue

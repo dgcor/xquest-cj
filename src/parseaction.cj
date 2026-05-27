@@ -1,7 +1,7 @@
 package xquest
 
 import dgengine.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 func parseActionElem(_: Game, name: String, elem: JsonValue): ?Action {
     match (name) {

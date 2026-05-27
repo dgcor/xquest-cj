@@ -1,0 +1,15 @@
+[package]
+  cjc-version = "1.0.0"
+  name = "stdjson2"
+  description = "stdjson2 JSON encoding/decoding library - based on stdx.encoding.json"
+  version = "1.0.0"
+  target-dir = ""
+  src-dir = ""
+  output-type = "dynamic"
+  compile-option = "--dy-std -Woff=deprecated -Woff=unused"
+  override-compile-option = ""
+  link-option = ""
+  package-configuration = {}
+
+[ffi.c]
+  StdJson2Wrapper = { path = "./stdjson2/build/lib" }

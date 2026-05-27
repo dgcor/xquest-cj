@@ -1,8 +1,8 @@
 package dgengine
 
 import cjsfml.system.*
-import stdx.encoding.json.*
 import std.collection.*
+import stdjson2.*
 
 /**
  * @throws NoneValueException
@@ -20,10 +20,10 @@ public func parseTexturePackAnimatedTextures(texturePack: Box<?TexturePack>, ele
             texturePack.value = newTexturePack
         }
         if (let Some(texturePack) <- texturePack2) {
-            for (elem in elem.getItems()) {
+            for (elem in elem) {
                 if (let Some(elemIndexes) <- getValidArray(elem, "indexes")) {
                     let indexes = ArrayList<UInt32>()
-                    for (elem in elemIndexes.getItems()) {
+                    for (elem in elemIndexes) {
                         indexes.add(getUIntVal(elem))
                     }
                     let animIndex = getUIntKey(elem, "index", default: indexes.front)

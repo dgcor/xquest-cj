@@ -1,7 +1,7 @@
 package dgengine
 
-import stdx.encoding.json.*
 import std.collection.*
+import stdjson2.*
 
 public func parseCompositeTexturePack(compTexture: CompositeTexturePack, game: Game, elem: JsonValue): Bool {
     if (let Some(id) <- getValidString(elem)) {
@@ -13,19 +13,19 @@ public func parseCompositeTexturePack(compTexture: CompositeTexturePack, game: G
     return false
 }
 
-public func parseCompositeTexturePacks(compTexture: CompositeTexturePack, game: Game, elem: JsonObject): Unit {
+public func parseCompositeTexturePacks(compTexture: CompositeTexturePack, game: Game, elem: JsonValue): Unit {
     if (let Some(texturePacksElem) <- elem.get("texturePacks")) {
         if (isValidString(texturePacksElem) == true) {
             parseCompositeTexturePack(compTexture, game, texturePacksElem)
         } else if (let Some(texturePacksElem) <- getValidArray(texturePacksElem)) {
-            for (val in texturePacksElem.getItems()) {
+            for (val in texturePacksElem) {
                 parseCompositeTexturePack(compTexture, game, val)
             }
         }
     }
 }
 
-public func parseCompositeTexturePackDirectionLayerOrders(compTexture: CompositeTexturePack, elem: JsonObject): Unit {
+public func parseCompositeTexturePackDirectionLayerOrders(compTexture: CompositeTexturePack, elem: JsonValue): Unit {
     let groupIdx = compTexture.compositeTextureGroupSize
 
     if (compTexture.addGroup() == true) {
@@ -33,7 +33,7 @@ public func parseCompositeTexturePackDirectionLayerOrders(compTexture: Composite
             let layerOrder = ArrayList<Int8>()
             let numLayers = compTexture.getLayerCount(groupIdx)
             var orderIdx = 0u32
-            for (layerOrderElem in elem.getItems()) {
+            for (layerOrderElem in elem) {
                 if (let Some(layerOrderElem) <- getValidArray(layerOrderElem)) {
                     let newSize = layerOrder.size + Int64(numLayers)
                     if (layerOrder.size > newSize) {
@@ -45,7 +45,7 @@ public func parseCompositeTexturePackDirectionLayerOrders(compTexture: Composite
                     }
                     var subOrderIdx = Int64(orderIdx)
                     var layerIdx = 0u32
-                    for (val in layerOrderElem.getItems()) {
+                    for (val in layerOrderElem) {
                         if (val.isNumber() == true) {
                             let newIdx = Int8(clamp(getIntVal(val, default: -1), -1, 127))
                             if (Int64(newIdx) < Int64(numLayers)) {
@@ -66,7 +66,7 @@ public func parseCompositeTexturePackDirectionLayerOrders(compTexture: Composite
     }
 }
 
-public func parseCompositeTexturePackGroup(compTexture: CompositeTexturePack, game: Game, elem: JsonObject): Unit {
+public func parseCompositeTexturePackGroup(compTexture: CompositeTexturePack, game: Game, elem: JsonValue): Unit {
     parseCompositeTexturePacks(compTexture, game, elem)
 
     if (compTexture.texturePackCount == 0) {
@@ -76,11 +76,11 @@ public func parseCompositeTexturePackGroup(compTexture: CompositeTexturePack, ga
     parseCompositeTexturePackDirectionLayerOrders(compTexture, elem)
 }
 
-public func getCompositeTexturePackObj(game: Game, elem: JsonObject): ?TexturePack {
+public func getCompositeTexturePackObj(game: Game, elem: JsonValue): ?TexturePack {
     let compTexture = CompositeTexturePack()
 
     if (let Some(elem) <- getValidArray(elem, "groups")) {
-        for (val in elem.getItems()) {
+        for (val in elem) {
             if (let Some(val) <- getValidObject(val)) {
                 parseCompositeTexturePackGroup(compTexture, game, val)
             }

@@ -13,7 +13,7 @@ public class Regex {
                 m_regex = StdRegex(pattern)
             }
         } catch (_: Exception) {
-            logger.debug("Regex error: ${pattern}")
+            LOGGER.debug("Regex error: ${pattern}")
         }
     }
 
@@ -31,7 +31,7 @@ public class Regex {
                 }
             }
         } catch (_: Exception) {
-            logger.debug("matcher error: ${str}")
+            LOGGER.debug("matcher error: ${str}")
         }
         return false
     }
@@ -40,7 +40,7 @@ public class Regex {
         try {
             return Regex(pattern).matcher(str)
         } catch (_: Exception) {
-            logger.debug("matchPattern error: ${pattern}")
+            LOGGER.debug("matchPattern error: ${pattern}")
         }
         return false
     }

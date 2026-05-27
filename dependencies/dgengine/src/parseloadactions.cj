@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseLoad(elem: JsonValue): ?Action {
     ActLoad(getStringVectorKey(elem, "file").toArray())
@@ -9,8 +9,7 @@ public func parseLoad(elem: JsonValue): ?Action {
 public func parseLoadJson(elem: JsonValue): ?Action {
     var json = String.empty
     if (let Some(elem) <- getValidObject(elem)) {
-        if (elem.containsKey("json") == true) {
-            let elem = elem["json"]
+        if (let Some(elem) <- elem.get("json")) {
             if (let Some(str) <- getValidString(elem)) {
                 json = str
             } else {

@@ -2,7 +2,7 @@ package xquest
 
 import cjsfml.graphics.Image as SFMLImage
 import dgengine.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 func parseTextureImg(game: Game, elem: JsonValue, img: Box<?SFMLImage>): Bool {
     let path = getStringCharKey(elem, "file")
@@ -15,7 +15,6 @@ func parseTextureImg(game: Game, elem: JsonValue, img: Box<?SFMLImage>): Bool {
         }
         let imgContainer = getImageContainerObj(game, elem)
         if (let Some(imgContainer) <- imgContainer) {
-            let elem = elem.asObject()
             if (let Some(elem) <- elem.get("frame")) {
                 let frameIdx = getUIntVal(elem)
                 img.value = ImageUtils.loadImageFrame(imgContainer, pal, frameIdx)

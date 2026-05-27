@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseMoviePause(elem: JsonValue): ?Action {
     ActMoviePause(getStringCharKey(elem, "id"))

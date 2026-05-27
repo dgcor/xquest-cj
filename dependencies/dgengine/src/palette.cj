@@ -56,7 +56,7 @@ public class Palette <: Iterable<Color> & Resource {
 
         let bytes = NumberVector<UInt8>(fileName, maxNumElements: 1024).data
         if (bytes.size < 768) {
-            logger.warn("Invalid palette. using grayscale palette.")
+            LOGGER.warn("Invalid palette. using grayscale palette.")
             for (index in 0..palette.size) {
                 let c = UInt8(index)
                 palette[index] = Color(c, c, c, palette[index].a)

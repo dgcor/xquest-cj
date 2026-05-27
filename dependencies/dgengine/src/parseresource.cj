@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseResourceFromId<T>(resources: ResourceManager, elem: JsonValue): Bool where T <: Any {
     if (let Some(fromId) <- getValidString(elem, "fromId")) {

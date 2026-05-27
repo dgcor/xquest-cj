@@ -27,7 +27,7 @@ extend Game {
             m_refSize
         }
         set(value) {
-            if (value.x >= RefSizeX && value.y >= RefSizeY) {
+            if (value.x >= Defaults.GAME_REF_SIZE_X && value.y >= Defaults.GAME_REF_SIZE_Y) {
                 m_refSize = value
             }
         }
@@ -39,7 +39,7 @@ extend Game {
         }
         set(value) {
             var needsUpdate = false
-            if (value.x >= MinSizeX && value.y >= MinSizeY) {
+            if (value.x >= Defaults.GAME_MIN_SIZE_X && value.y >= Defaults.GAME_MIN_SIZE_Y) {
                 m_minSize = value
                 if (m_window?.isOpen == true) {
                     needsUpdate = true
@@ -126,10 +126,10 @@ extend Game {
             m_frameRate
         }
         set(value) {
-            m_frameRate = match (value) {
-                case 0 => 0
-                case _ where value < 30 => 30
-                case _ where value > 240 => 240
+            m_frameRate = match {
+                case value == 0 => 0
+                case value < 30 => 30
+                case value > 240 => 240
                 case _ => value
             }
             if (m_window?.isOpen == true) {
@@ -335,8 +335,8 @@ extend Game {
             m_musicVolume
         }
         set(value) {
-            m_musicVolume = match (value) {
-                case _ where value <= 100 => value
+            m_musicVolume = match {
+                case value <= 100 => value
                 case _ => 100
             }
         }
@@ -347,8 +347,8 @@ extend Game {
             m_soundVolume
         }
         set(value) {
-            m_soundVolume = match (value) {
-                case _ where value <= 100 => value
+            m_soundVolume = match {
+                case value <= 100 => value
                 case _ => 100
             }
         }
@@ -359,8 +359,8 @@ extend Game {
             m_gamma
         }
         set(value) {
-            m_gamma = match (value) {
-                case _ where value <= 100 => value
+            m_gamma = match {
+                case value <= 100 => value
                 case _ => 100
             }
         }

@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseGameAddToProperty(elem: JsonValue): ?Action {
     ActGameAddToProperty(
@@ -50,10 +50,10 @@ public func parseGameSetProperty(elem: JsonValue): ?Action {
         getVariableKey(elem, "value") ?? VaString(String.empty)
     )
     if (let Some(elem) <- getValidObject(elem)) {
-        if (elem.containsKey("propRange") == true) {
+        if (elem.hasMember("propRange") == true) {
             action.setPropRange(getVector2iKey(elem, "propRange"))
         }
-        if (elem.containsKey("valueRange") == true) {
+        if (elem.hasMember("valueRange") == true) {
             action.setValueRange(getVector2iKey(elem, "valueRange"))
         }
     }

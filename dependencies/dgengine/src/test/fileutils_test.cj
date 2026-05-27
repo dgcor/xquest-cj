@@ -1,6 +1,7 @@
 package dgengine.test
 
 import dgengine.*
+import physfs4cj.*
 import std.unittest.*
 
 // cjlint-ignore -start !G.NAM.04 function names should be lower camel case
@@ -20,8 +21,8 @@ class TestFileUtils {
 
     @TestCase
     func test_exists() {
-        @Expect(FileUtils.exists("text.txt"), true)
-        @Expect(FileUtils.exists("unknown.file"), false)
+        @Expect(PhysFS.exists("text.txt"), true)
+        @Expect(PhysFS.exists("unknown.file"), false)
     }
 
     @TestCase
@@ -162,18 +163,18 @@ class TestFileUtils {
 
     @TestCase
     func test_saveDir_uninitialized() {
-        @Expect(PhysFS.setWriteDir(None), true)
-        @Expect(FileUtils.getSaveDir(), "")
+        PhysFS.setWriteDir(None)
+        @Expect(FileUtils.getSaveDir().isNone())
     }
 
     @TestCase
     func test_saveDir_initialized() {
         @Expect(FileUtils.setSaveDir("invalidDir"), true)
-        @Expect(FileUtils.getSaveDir().endsWith("invalidDir" + PhysFS.getDirSeparator()), true)
+        @Expect(FileUtils.getSaveDir()?.endsWith("invalidDir" + PhysFS.getDirSeparator()) ?? false, true)
         @Expect(FileUtils.setSaveDir("dir1"), true)
-        @Expect(FileUtils.getSaveDir().endsWith("dir1" + PhysFS.getDirSeparator()), true)
+        @Expect(FileUtils.getSaveDir()?.endsWith("dir1" + PhysFS.getDirSeparator()) ?? false, true)
         @Expect(FileUtils.setSaveDir(""), false)
-        @Expect(FileUtils.getSaveDir().endsWith("dir1" + PhysFS.getDirSeparator()), true)
+        @Expect(FileUtils.getSaveDir()?.endsWith("dir1" + PhysFS.getDirSeparator()) ?? false, true)
     }
 
     @TestCase
@@ -186,24 +187,24 @@ class TestFileUtils {
 
         @Expect(FileUtils.createDir("newDir"), true)
         @Expect(FileUtils.createDir("newDir/subDir"), true)
-        @Expect(FileUtils.exists("newDir"), false)
-        @Expect(FileUtils.exists("newDir/subDir"), false)
+        @Expect(PhysFS.exists("newDir"), false)
+        @Expect(PhysFS.exists("newDir/subDir"), false)
 
         // mount save dir
 
-        @Expect(FileUtils.mount(FileUtils.getSaveDir(), "save", false), true)
-        @Expect(FileUtils.exists("save/newDir"), true)
-        @Expect(FileUtils.exists("save/newDir/subDir"), true)
+        @Expect(FileUtils.mount(FileUtils.getSaveDir() ?? "", "save", false), true)
+        @Expect(PhysFS.exists("save/newDir"), true)
+        @Expect(PhysFS.exists("save/newDir/subDir"), true)
 
         // create files
 
         var bytes: Array<Byte> = [1, 2, 3]
 
         @Expect(FileUtils.saveBytes("newFile.bin", bytes), true)
-        @Expect(FileUtils.exists("save/newFile.bin"), true)
+        @Expect(PhysFS.exists("save/newFile.bin"), true)
 
         @Expect(FileUtils.saveText("newFile.txt", "saving text..."), true)
-        @Expect(FileUtils.exists("save/newFile.txt"), true)
+        @Expect(PhysFS.exists("save/newFile.txt"), true)
 
         // read files
 
@@ -224,10 +225,10 @@ class TestFileUtils {
         bytes = [4, 5, 6]
 
         @Expect(FileUtils.saveBytes("newFile.bin", bytes), true)
-        @Expect(FileUtils.exists("save/newFile.bin"), true)
+        @Expect(PhysFS.exists("save/newFile.bin"), true)
 
         @Expect(FileUtils.saveText("newFile.txt", "updating text..."), true)
-        @Expect(FileUtils.exists("save/newFile.txt"), true)
+        @Expect(PhysFS.exists("save/newFile.txt"), true)
 
         // read files
 
@@ -242,32 +243,32 @@ class TestFileUtils {
         @Expect(FileUtils.deleteFile("save/newFile.bin"), false)
 
         // save dir should only be mounted in "", so unmount "save" mountPoint and mount it in ""
-        @Expect(FileUtils.unmount(FileUtils.getSaveDir()), true)
-        @Expect(FileUtils.mount(FileUtils.getSaveDir(), "", false), true)
+        @Expect(FileUtils.unmount(FileUtils.getSaveDir() ?? ""), true)
+        @Expect(FileUtils.mount(FileUtils.getSaveDir() ?? "", "", false), true)
 
         @Expect(FileUtils.getDirList("", onlyWritableDirs: false).toArray(), ["dir1", "dir2", "json", "newDir", "res"])
         @Expect(FileUtils.getDirList("", onlyWritableDirs: true).toArray(), ["newDir"])
         @Expect(FileUtils.getDirList("newDir", onlyWritableDirs: false).toArray(), ["subDir"])
         @Expect(FileUtils.getDirList("newDir", onlyWritableDirs: true).toArray(), ["subDir"])
 
-        @Expect(FileUtils.exists("newDir"), true)
-        @Expect(FileUtils.exists("newFile.bin"), true)
+        @Expect(PhysFS.exists("newDir"), true)
+        @Expect(PhysFS.exists("newFile.bin"), true)
 
         @Expect(FileUtils.deleteFile("newFile.bin"), true)
 
-        @Expect(FileUtils.exists("newFile.bin"), false)
-        @Expect(FileUtils.exists("newFile.txt"), true)
+        @Expect(PhysFS.exists("newFile.bin"), false)
+        @Expect(PhysFS.exists("newFile.txt"), true)
 
         @Expect(FileUtils.deleteAll("", deleteRoot: false), true)
 
-        @Expect(FileUtils.exists("newDir"), false)
-        @Expect(FileUtils.exists("newFile.txt"), false)
-        @Expect(FileUtils.exists("text.txt"), true)
+        @Expect(PhysFS.exists("newDir"), false)
+        @Expect(PhysFS.exists("newFile.txt"), false)
+        @Expect(PhysFS.exists("text.txt"), true)
 
         // unmount save dir
 
-        @Expect(FileUtils.unmount(FileUtils.getSaveDir()), true)
-        @Expect(FileUtils.exists("text.txt"), true)
+        @Expect(FileUtils.unmount(FileUtils.getSaveDir() ?? ""), true)
+        @Expect(PhysFS.exists("text.txt"), true)
     }
 }
 

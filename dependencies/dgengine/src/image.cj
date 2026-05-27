@@ -45,7 +45,7 @@ public open class Image <: UIObject {
 
     // UIObject
 
-    public mut open prop anchor: Anchor {
+    public open mut prop anchor: Anchor {
         get() {
             m_anchor
         }
@@ -84,7 +84,7 @@ public open class Image <: UIObject {
         }
     }
 
-    public mut open prop position: Vector2f {
+    public open mut prop position: Vector2f {
         get() {
             m_sprite.position
         }
@@ -93,7 +93,7 @@ public open class Image <: UIObject {
         }
     }
 
-    public mut open prop size: Vector2f {
+    public open mut prop size: Vector2f {
         get() {
             m_sprite.globalBounds.size
         }
@@ -113,7 +113,7 @@ public open class Image <: UIObject {
         }
     }
 
-    public mut open prop visible: Bool {
+    public open mut prop visible: Bool {
         get() {
             m_visible
         }

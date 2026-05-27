@@ -1,7 +1,7 @@
 package dgengine
 
 import cjsfml.system.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func getScrollableObj(game: Game, elem: JsonValue): ?Scrollable {
     if (let Some(uiObj) <- game.resources.getDrawable(getStringKey(elem, "drawable"))) {
@@ -22,7 +22,6 @@ public func getScrollableObj(game: Game, elem: JsonValue): ?Scrollable {
         scrollable.reset()
         scrollable.updateView(game)
 
-        let elem = elem.asObject()
         if (let Some(elem) <- elem.get("onComplete")) {
             scrollable.setAction("complete", getActionVal(game, elem))
         }

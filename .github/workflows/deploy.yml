@@ -1,16 +1,28 @@
 name: Deploy
 
-on: [workflow_dispatch]
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g., v1.0.0). Leave empty to auto-detect from cjpm.toml.'
+        required: false
+        default: ''
+      prerelease:
+        description: 'Is this a pre-release?'
+        required: true
+        type: boolean
+        default: false
+
+env:
+  APP_NAME: XQuest
+  APP_NAME_LOWERCASE: xquest
+  CANGJIE_CHANNEL: sts
+  CANGJIE_VERSION: 1.1.0
 
 jobs:
   deploy:
     name: ${{ matrix.name }} deploy
     runs-on: ${{ matrix.os }}
-    env:
-      APP_NAME: XQuest
-      APP_NAME_LOWERCASE: xquest
-      CANGJIE_STD_VERSION: 1.0.4.1
-      CANGJIE_VERSION: 1.0.4
     strategy:
       fail-fast: false
       matrix:
@@ -18,14 +30,14 @@ jobs:
           - name: Linux
             os: ubuntu-latest
             triplet: x64-linux
-            zip-name-suffix: linux-x86_64.AppImage
+            suffix: linux-x86_64
           - name: Windows x64
             os: windows-latest
-            zip-name-suffix: windows-x64
+            suffix: windows-x64
 
     steps:
       - name: Checkout ${{ env.APP_NAME }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Ubuntu dependencies (Linux)
         if: runner.os == 'Linux'
@@ -47,10 +59,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           revision: '84bab45d415d22042bd0b9081aea57f362da3f35'  # 2025.12.12
 
-      - name: Setup Ninja Build (Linux)
-        if: runner.os == 'Linux'
-        uses: turtlesec-no/get-ninja@main
-
       - name: Build and install CSFML (Linux)
         if: runner.os == 'Linux'
         run: |
@@ -59,23 +67,6 @@ jobs:
           cd dependencies/csfml
           cmake --preset linux-release -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
           cmake --build --preset linux-release --target install
-
-      - name: Build and install physfs (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          git clone --branch release-3.2.0 https://github.com/icculus/physfs.git dependencies/physfs
-          cp -f dependencies/CMakePresets.json dependencies/physfs/CMakePresets.json
-          cd dependencies/physfs
-          cmake --preset linux-release
-          cmake --build --preset linux-release --target install
-
-      - name: Download Cangjie stdx (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          cd dependencies
-          wget https://gitcode.com/Cangjie/cangjie_stdx/releases/download/v${{ env.CANGJIE_STD_VERSION }}/cangjie-stdx-linux-x64-${{ env.CANGJIE_STD_VERSION }}.zip -O stdx.zip
-          mkdir stdx
-          unzip stdx.zip -d stdx
 
       - name: Download CSFML (Windows)
         if: runner.os == 'Windows'
@@ -86,24 +77,23 @@ jobs:
           Move-Item -Path "dependencies\csfml\bin\*.*" -Destination "dependencies\csfml"
           Move-Item -Path "dependencies\csfml\lib\gcc\*.*" -Destination "dependencies\csfml"
 
-      - name: Download physfs (Windows)
+      - name: Setup llvm-mingw (Windows)
         if: runner.os == 'Windows'
         run: |
-          Invoke-WebRequest -Uri "https://github.com/dgcor/physfs-mirror/releases/download/bin-3.2.0/physfs-windows-64-bit.zip" -OutFile "physfs-windows-64-bit.zip"
-          New-Item -ItemType Directory -Path "dependencies\physfs" -Force
-          Expand-Archive -Path "physfs-windows-64-bit.zip" -DestinationPath "dependencies\physfs"
+          $env:LLVM_VERSION = "20260311"
+          $env:ARCHIVE_NAME = "llvm-mingw-$env:LLVM_VERSION-msvcrt-x86_64"
+          Invoke-WebRequest -Uri "https://github.com/mstorsjo/llvm-mingw/releases/download/$env:LLVM_VERSION/$env:ARCHIVE_NAME.zip" -OutFile "llvm-mingw.zip"
+          7z x "llvm-mingw.zip" -o"C:\llvm-mingw" -y
+          echo "C:\llvm-mingw\$env:ARCHIVE_NAME\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
-      - name: Download Cangjie stdx (Windows)
+      - name: Verify llvm-mingw installation (Windows)
         if: runner.os == 'Windows'
-        run: |
-          Invoke-WebRequest -Uri "https://gitcode.com/Cangjie/cangjie_stdx/releases/download/v${{ env.CANGJIE_STD_VERSION }}/cangjie-stdx-windows-x64-${{ env.CANGJIE_STD_VERSION }}.zip" -OutFile "stdx.zip"
-          New-Item -ItemType Directory -Path "dependencies\stdx" -Force
-          Expand-Archive -Path "stdx.zip" -DestinationPath "dependencies\stdx"
+        run: clang --version
 
       - name: Setup Cangjie
-        uses: Zxilly/setup-cangjie@v2.1.0
+        uses: Zxilly/setup-cangjie@v2
         with:
-          channel: lts
+          channel: ${{ env.CANGJIE_CHANNEL }}
           version: ${{ env.CANGJIE_VERSION }}
           archive-path: ./cangjie-archive
 
@@ -128,7 +118,7 @@ jobs:
       - name: Create AppImage (Linux)
         if: runner.os == 'Linux'
         run: |
-          export LD_LIBRARY_PATH=dependencies/csfml:dependencies/physfs:$LD_LIBRARY_PATH
+          export LD_LIBRARY_PATH=dependencies/csfml:$LD_LIBRARY_PATH
           ./linuxdeploy-x86_64.AppImage \
             --executable=target/release/bin/${{ env.APP_NAME }} \
             --appdir out/appdir \
@@ -136,26 +126,97 @@ jobs:
             --icon-file=pkg/linux/icon.png \
             --output=appimage
 
-      - name: Create ${{ env.APP_NAME }} zip (Linux)
+      - name: Prepare ${{ env.APP_NAME }} Files (Linux)
         if: runner.os == 'Linux'
-        run: 7z a ${{ env.APP_NAME }}-${{ matrix.zip-name-suffix }}.zip ${{ env.APP_NAME }}*.AppImage LICENSE.* README.* main.json gamefiles*
-
-      - name: Create ${{ env.APP_NAME }} zip (Windows)
-        if: runner.os == 'Windows'
         run: |
-          mv target/release/bin/${{ env.APP_NAME }}.exe ${{ env.APP_NAME }}.exe
-          mv dependencies/csfml/*.dll .
-          mv dependencies/physfs/*.dll .
-          rm csfml-network-3.dll
-          rm sfml-network-3.dll
-          cp C:/hostedtoolcache/windows/cangjie/${{ env.CANGJIE_VERSION }}/x64/cangjie/runtime/lib/windows_x86_64_llvm/libcangjie-runtime.dll
-          cp C:/hostedtoolcache/windows/cangjie/${{ env.CANGJIE_VERSION }}/x64/cangjie/runtime/lib/windows_x86_64_llvm/libsecurec.dll
-          upx -9 *.exe
-          upx -9 *.dll
-          7z a ${{ env.APP_NAME }}-${{ matrix.zip-name-suffix }}.zip *.exe *.dll LICENSE.* README.* main.json gamefiles*
+          mkdir -p upload-artifact
+          mv ${{ env.APP_NAME }}*.AppImage upload-artifact/
+          cp LICENSE.* README.* main.json upload-artifact/ || true
+          cp -r gamefiles* upload-artifact/ || true
 
-      - name: Create ${{ env.APP_NAME }} zip artifact
-        uses: actions/upload-artifact@v4
+      - name: Prepare ${{ env.APP_NAME }} Files (Windows)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: |
+          mkdir upload-artifact
+          mv target/release/bin/${{ env.APP_NAME }}.exe upload-artifact/
+          mv dependencies/csfml/*.dll upload-artifact/
+          rm upload-artifact/csfml-network-3.dll
+          rm upload-artifact/sfml-network-3.dll
+          upx -9 upload-artifact/*.dll
+          cp LICENSE.* README.* main.json upload-artifact/ || true
+          cp -r gamefiles* upload-artifact/ || true
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v7
         with:
-          name: artifact-${{ env.APP_NAME }}-${{ matrix.zip-name-suffix }}
-          path: ${{ env.APP_NAME }}-${{ matrix.zip-name-suffix }}.zip
+          name: ${{ env.APP_NAME }}-${{ matrix.suffix }}
+          path: upload-artifact/
+
+  release:
+    name: Create Release
+    needs: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Get Version
+        id: version
+        run: |
+          INPUT_VER="${{ github.event.inputs.version }}"
+          if [ -z "$INPUT_VER" ]; then
+            RAW_VER=$(grep -Po '(?m)^\s*version\s*=\s*"\K[^"]+' cjpm.toml)
+            if [ -z "$RAW_VER" ]; then
+              echo "Error: Could not detect version from cjpm.toml"
+              exit 1
+            fi
+            if [[ "$RAW_VER" != v* ]]; then
+              RAW_VER="v$RAW_VER"
+            fi
+            echo "VERSION=$RAW_VER" >> $GITHUB_OUTPUT
+            echo "Detected version: $RAW_VER"
+          else
+            echo "VERSION=$INPUT_VER" >> $GITHUB_OUTPUT
+            echo "Using input version: $INPUT_VER"
+          fi
+        shell: bash
+
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+
+      - name: Prepare Release Assets
+        id: assets
+        env:
+          APP_NAME: ${{ env.APP_NAME }}
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        run: |
+          CLEAN_VERSION="${VERSION#v}"
+          for dir in artifacts/*/; do
+            [ -d "$dir" ] || continue
+            FOLDER_NAME=$(basename "$dir")
+            SUFFIX="${FOLDER_NAME#$APP_NAME-}"
+            ZIP_NAME="${APP_NAME}-${SUFFIX}-${CLEAN_VERSION}.zip"
+            (cd "$dir" && zip -r "$OLDPWD/$ZIP_NAME" .)
+            echo "Prepared: $ZIP_NAME"
+          done
+          echo "Generated files:"
+          ls -l *.zip
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          name: ${{ env.APP_NAME }} ${{ steps.version.outputs.VERSION }}
+          prerelease: ${{ github.event.inputs.prerelease == 'true' }}
+          generate_release_notes: true
+          files: |
+            *.zip

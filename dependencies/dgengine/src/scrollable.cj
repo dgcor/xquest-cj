@@ -122,8 +122,8 @@ public class Scrollable <: ActionQueryable & UIObject {
                     var center = m_view.center
                     var finished = false
 
-                    match (m_direction.value) {
-                        case v where v == Direction.Up.value =>
+                    match {
+                        case m_direction == Direction.Up =>
                             let sizeY = m_uiObj.size.y
                             if (center.y + (m_scrollSize / 2.0) > 0.0) {
                                 center.y -= 1.0
@@ -133,7 +133,7 @@ public class Scrollable <: ActionQueryable & UIObject {
                                 }
                                 finished = true
                             }
-                        case v where v == Direction.Down.value =>
+                        case m_direction == Direction.Down =>
                             let sizeY = m_uiObj.size.y
                             if (center.y - (m_scrollSize / 2.0) < sizeY) {
                                 center.y += 1.0
@@ -143,7 +143,7 @@ public class Scrollable <: ActionQueryable & UIObject {
                                 }
                                 finished = true
                             }
-                        case v where v == Direction.Left.value =>
+                        case m_direction == Direction.Left =>
                             let sizeX = m_uiObj.size.x
                             if (center.x + (m_scrollSize / 2.0) > 0.0) {
                                 center.x -= 1.0
@@ -153,7 +153,7 @@ public class Scrollable <: ActionQueryable & UIObject {
                                 }
                                 finished = true
                             }
-                        case v where v == Direction.Right.value =>
+                        case m_direction == Direction.Right =>
                             let sizeX = m_uiObj.size.x
                             if (center.x - (m_scrollSize / 2.0) < sizeX) {
                                 center.x += 1.0
@@ -187,9 +187,9 @@ public class Scrollable <: ActionQueryable & UIObject {
             case "paused" => VaBoolean(m_pause)
             case "scrollPosition" =>
                 let center = m_view.center
-                match (m_direction.value) {
-                    case v where v == Direction.Up.value || v == Direction.Down.value => VaInteger(Int64(center.y))
-                    case v where v == Direction.Left.value || v == Direction.Right.value => VaInteger(Int64(center.x))
+                match {
+                    case m_direction == Direction.Up || m_direction == Direction.Down => VaInteger(Int64(center.y))
+                    case m_direction == Direction.Left || m_direction == Direction.Right => VaInteger(Int64(center.x))
                     case _ => None
                 }
             case _ =>
@@ -212,17 +212,17 @@ public class Scrollable <: ActionQueryable & UIObject {
             case false => m_uiObj.size
         }
         let vSize = m_view.visibleSize
-        match (m_direction.value) {
-            case v where v == Direction.Up.value =>
+        match {
+            case m_direction == Direction.Up =>
                 m_view.reset(FloatRect(0.0, uiObjSize.y + m_offset, vSize.x, vSize.y))
                 m_scrollSize = vSize.y
-            case v where v == Direction.Down.value =>
+            case m_direction == Direction.Down =>
                 m_view.reset(FloatRect(0.0, -(vSize.y + m_offset), vSize.x, vSize.y))
                 m_scrollSize = vSize.y
-            case v where v == Direction.Left.value =>
+            case m_direction == Direction.Left =>
                 m_view.reset(FloatRect(uiObjSize.x + m_offset, 0.0, vSize.x, vSize.y))
                 m_scrollSize = vSize.x
-            case v where v == Direction.Right.value =>
+            case m_direction == Direction.Right =>
                 m_view.reset(FloatRect(-(vSize.x + m_offset), 0.0, vSize.x, vSize.y))
                 m_scrollSize = vSize.x
             case _ => ()

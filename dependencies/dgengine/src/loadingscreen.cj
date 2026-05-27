@@ -45,7 +45,7 @@ public class LoadingScreen <: Animation & ActionQueryable {
         m_progressBar.position = super.position + m_barPosOffset
     }
 
-    public mut override prop position: Vector2f {
+    public override mut prop position: Vector2f {
         get() {
             super.position
         }
@@ -55,7 +55,7 @@ public class LoadingScreen <: Animation & ActionQueryable {
         }
     }
 
-    public mut override prop visible: Bool {
+    public override mut prop visible: Bool {
         get() {
             m_visible
         }
@@ -104,9 +104,9 @@ public class LoadingScreen <: Animation & ActionQueryable {
             m_percent
         }
         set(value) {
-            m_percent = match (value) {
-                case _ where value < 0 => 0
-                case _ where value > 100 => 100
+            m_percent = match {
+                case value < 0 => 0
+                case value > 100 => 100
                 case _ => value
             }
 

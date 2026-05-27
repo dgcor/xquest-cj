@@ -1,7 +1,6 @@
 package dgengine.test
 
 import dgengine.*
-import std.unittest.*
 
 // cjlint-ignore -start !G.NAM.04 function names should be lower camel case
 
@@ -23,7 +22,7 @@ func test_getIdFromFile() {
 
 @Test
 func test_getValidArray() {
-    let json = ##"
+    let json = #"
     {
       "key01": "text",
       "key02": null,
@@ -34,7 +33,7 @@ func test_getValidArray() {
       "key07": ["text", 1],
       "key08": [1.2, null],
       "key09": [[10, 20], [true, false]]
-    }"##
+    }"#
 
     if (let Some(doc) <- JsonUtils.loadJson(json)) {
         @Expect(getValidArray(doc, "key01").isNone())
@@ -47,17 +46,17 @@ func test_getValidArray() {
         @Expect(getValidArray(doc, "key08").isSome())
         @Expect(getValidArray(doc, "key09").isSome())
         @Expect(getValidArray(doc, "invalid").isNone())
-        @Expect(getValidArray(doc.asObject().get("key01").getOrThrow(), "invalid").isNone())
+        @Expect(getValidArray(doc.get("key01").getOrThrow(), "invalid").isNone())
 
-        @Expect(getValidArray(doc.asObject().get("key01").getOrThrow()).isNone())
-        @Expect(getValidArray(doc.asObject().get("key05").getOrThrow()).isNone())
-        @Expect(getValidArray(doc.asObject().get("key06").getOrThrow()).isSome())
+        @Expect(getValidArray(doc.get("key01").getOrThrow()).isNone())
+        @Expect(getValidArray(doc.get("key05").getOrThrow()).isNone())
+        @Expect(getValidArray(doc.get("key06").getOrThrow()).isSome())
     }
 }
 
 @Test
 func test_isValidArray() {
-    let json = ##"
+    let json = #"
     {
       "key01": "text",
       "key02": null,
@@ -68,7 +67,7 @@ func test_isValidArray() {
       "key07": ["text", 1],
       "key08": [1.2, null],
       "key09": [[10, 20], [true, false]]
-    }"##
+    }"#
 
     if (let Some(doc) <- JsonUtils.loadJson(json)) {
         @Expect(isValidArray(doc, "key01"), false)
@@ -81,11 +80,11 @@ func test_isValidArray() {
         @Expect(isValidArray(doc, "key08"), true)
         @Expect(isValidArray(doc, "key09"), true)
         @Expect(isValidArray(doc, "invalid"), false)
-        @Expect(isValidArray(doc.asObject().get("key01").getOrThrow(), "invalid"), false)
+        @Expect(isValidArray(doc.get("key01").getOrThrow(), "invalid"), false)
 
-        @Expect(isValidArray(doc.asObject().get("key01").getOrThrow()), false)
-        @Expect(isValidArray(doc.asObject().get("key05").getOrThrow()), false)
-        @Expect(isValidArray(doc.asObject().get("key06").getOrThrow()), true)
+        @Expect(isValidArray(doc.get("key01").getOrThrow()), false)
+        @Expect(isValidArray(doc.get("key05").getOrThrow()), false)
+        @Expect(isValidArray(doc.get("key06").getOrThrow()), true)
     }
 }
 
@@ -109,7 +108,7 @@ func test_isValidId() {
 
 @Test
 func test_getValidObject() {
-    let json = ##"
+    let json = #"
     {
       "key01": "text",
       "key02": null,
@@ -118,7 +117,7 @@ func test_getValidObject() {
       "key05": {},
       "key06": { "key": 1 },
       "key07": { "key": 1, "key2": "text" }
-    }"##
+    }"#
 
     if (let Some(doc) <- JsonUtils.loadJson(json)) {
         @Expect(getValidObject(doc, "key01").isNone())
@@ -129,17 +128,17 @@ func test_getValidObject() {
         @Expect(getValidObject(doc, "key06").isSome())
         @Expect(getValidObject(doc, "key07").isSome())
         @Expect(getValidObject(doc, "invalid").isNone())
-        @Expect(getValidObject(doc.asObject().get("key01").getOrThrow(), "invalid").isNone())
+        @Expect(getValidObject(doc.get("key01").getOrThrow(), "invalid").isNone())
 
-        @Expect(getValidObject(doc.asObject().get("key01").getOrThrow()).isNone())
-        @Expect(getValidObject(doc.asObject().get("key05").getOrThrow()).isNone())
-        @Expect(getValidObject(doc.asObject().get("key06").getOrThrow()).isSome())
+        @Expect(getValidObject(doc.get("key01").getOrThrow()).isNone())
+        @Expect(getValidObject(doc.get("key05").getOrThrow()).isNone())
+        @Expect(getValidObject(doc.get("key06").getOrThrow()).isSome())
     }
 }
 
 @Test
 func test_isValidObject() {
-    let json = ##"
+    let json = #"
     {
       "key01": "text",
       "key02": null,
@@ -148,7 +147,7 @@ func test_isValidObject() {
       "key05": {},
       "key06": { "key": 1 },
       "key07": { "key": 1, "key2": "text" }
-    }"##
+    }"#
 
     if (let Some(doc) <- JsonUtils.loadJson(json)) {
         @Expect(isValidObject(doc, "key01"), false)
@@ -159,17 +158,17 @@ func test_isValidObject() {
         @Expect(isValidObject(doc, "key06"), true)
         @Expect(isValidObject(doc, "key07"), true)
         @Expect(isValidObject(doc, "invalid"), false)
-        @Expect(isValidObject(doc.asObject().get("key01").getOrThrow(), "invalid"), false)
+        @Expect(isValidObject(doc.get("key01").getOrThrow(), "invalid"), false)
 
-        @Expect(isValidObject(doc.asObject().get("key01").getOrThrow()), false)
-        @Expect(isValidObject(doc.asObject().get("key05").getOrThrow()), false)
-        @Expect(isValidObject(doc.asObject().get("key06").getOrThrow()), true)
+        @Expect(isValidObject(doc.get("key01").getOrThrow()), false)
+        @Expect(isValidObject(doc.get("key05").getOrThrow()), false)
+        @Expect(isValidObject(doc.get("key06").getOrThrow()), true)
     }
 }
 
 @Test
 func test_getValidString() {
-    let json = ##"
+    let json = #"
     {
       "key01": "text",
       "key02": "",
@@ -177,7 +176,7 @@ func test_getValidString() {
       "key04": 1,
       "key05": true,
       "key06": ["text"]
-    }"##
+    }"#
 
     if (let Some(doc) <- JsonUtils.loadJson(json)) {
         @Expect(getValidString(doc, "key01"), Some("text"))
@@ -187,13 +186,13 @@ func test_getValidString() {
         @Expect(getValidString(doc, "key05"), None)
         @Expect(getValidString(doc, "key06"), None)
         @Expect(getValidString(doc, "invalid"), None)
-        @Expect(getValidString(doc.asObject().get("key01").getOrThrow(), "invalid"), None)
+        @Expect(getValidString(doc.get("key01").getOrThrow(), "invalid"), None)
     }
 }
 
 @Test
 func test_isValidString() {
-    let json = ##"
+    let json = #"
     {
       "key01": "text",
       "key02": "",
@@ -201,11 +200,11 @@ func test_isValidString() {
       "key04": 1,
       "key05": true,
       "key06": ["text"]
-    }"##
+    }"#
 
     if (let Some(doc) <- JsonUtils.loadJson(json)) {
-        @Expect(isValidString(doc.asObject().get("key01").getOrThrow()), true)
-        @Expect(isValidString(doc.asObject().get("key02").getOrThrow()), false)
+        @Expect(isValidString(doc.get("key01").getOrThrow()), true)
+        @Expect(isValidString(doc.get("key02").getOrThrow()), false)
 
         @Expect(isValidString(doc, "key01"), true)
         @Expect(isValidString(doc, "key02"), false)
@@ -214,7 +213,7 @@ func test_isValidString() {
         @Expect(isValidString(doc, "key05"), false)
         @Expect(isValidString(doc, "key06"), false)
         @Expect(isValidString(doc, "invalid"), false)
-        @Expect(isValidString(doc.asObject().get("key01").getOrThrow(), "invalid"), false)
+        @Expect(isValidString(doc.get("key01").getOrThrow(), "invalid"), false)
     }
 }
 

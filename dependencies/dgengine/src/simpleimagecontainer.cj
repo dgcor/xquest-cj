@@ -57,7 +57,7 @@ public open class SimpleImageContainer <: ImageContainer & Resource {
 
     // ImageContainer
 
-    public mut open prop blendMode: BlendModeType {
+    public open mut prop blendMode: BlendModeType {
         get() {
             m_blendMode
         }

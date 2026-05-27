@@ -1,0 +1,12 @@
+[package]
+  cjc-version = "1.0.0"
+  name = "stdlog"
+  description = "stdlog logger library - based on stdx.log"
+  version = "1.0.0"
+  target-dir = ""
+  src-dir = ""
+  output-type = "dynamic"
+  compile-option = "--dy-std -Woff=unused"
+  override-compile-option = ""
+  link-option = ""
+  package-configuration = {}

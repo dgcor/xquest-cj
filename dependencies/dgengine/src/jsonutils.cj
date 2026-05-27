@@ -1,48 +1,13 @@
 package dgengine
 
-import stdx.encoding.json.*
-import stdx.encoding.json.stream.*
 import std.collection.*
 import std.io.*
-
-extend JsonValue {
-    func clone(): JsonValue {
-        JsonValue.fromStr(toString())
-    }
-
-    func isUInt(): Bool {
-        match (kind()) {
-            case JsInt where asInt().getValue() >= 0 => true
-            case _ => false
-        }
-    }
-
-    func isNull(): Bool {
-        match (kind()) {
-            case JsNull => true
-            case _ => false
-        }
-    }
-
-    func isNumber(): Bool {
-        match (kind()) {
-            case JsInt | JsFloat => true
-            case _ => false
-        }
-    }
-
-    func isObject(): Bool {
-        match (kind()) {
-            case JsObject => true
-            case _ => false
-        }
-    }
-}
+import stdjson2.*
 
 public class JsonUtils {
     // replaces string value occurrences of "%str%" with obj.getProperty("str")
     public static func replaceStringValueWithQueryable(elem: JsonValue, obj: Queryable, changeValueType!: Bool = false): JsonValue {
-        let str = (elem as JsonString)?.getValue() ?? String.empty
+        let str = elem.getString() ?? String.empty
         if (str.size <= 2) {
             return elem
         }
@@ -74,7 +39,7 @@ public class JsonUtils {
             firstTokenStart = secondTokenStop
         }
         if (hadMatch == true && str != str2) {
-            return JsonString(str2)
+            return JsString(str2)
         }
         return elem
     }
@@ -82,7 +47,7 @@ public class JsonUtils {
     // replaces string value with variable
     public static func replaceStringValueWithVariable(elem: JsonValue, str: String, variable: Variable,
         changeValueType!: Bool = false): JsonValue {
-        let str1 = (elem as JsonString)?.getValue() ?? String.empty
+        let str1 = elem.getString() ?? String.empty
         if (str1.isEmpty()) {
             return elem
         }
@@ -91,7 +56,7 @@ public class JsonUtils {
         }
         let str2 = str1.replace(str, variable.toString())
         if (str1 != str2) {
-            return JsonString(str2)
+            return JsString(str2)
         }
         return elem
     }
@@ -99,34 +64,32 @@ public class JsonUtils {
     // replaces value with variable
     public static func replaceValueWithVariable(variable: Variable): JsonValue {
         match (variable) {
-            case VaString(value) => JsonString(value)
-            case VaInteger(value) => JsonInt(value)
-            case VaDouble(value) => JsonFloat(value)
-            case VaBoolean(value) => JsonBool(value)
-            case VaTuple2i(value) => JsonArray([JsonInt(value[0]), JsonInt(value[1])])
-            case VaTuple3i(value) => JsonArray([JsonInt(value[0]), JsonInt(value[1]), JsonInt(value[2])])
-            case VaTuple4i(value) => JsonArray(
-                [JsonInt(value[0]), JsonInt(value[1]), JsonInt(value[2]), JsonInt(value[3])])
-            case VaTuple2f(value) => JsonArray([JsonFloat(value[0]), JsonFloat(value[1])])
-            case VaTuple3f(value) => JsonArray([JsonFloat(value[0]), JsonFloat(value[1]), JsonFloat(value[2])])
-            case VaTuple4f(value) => JsonArray(
-                [JsonFloat(value[0]), JsonFloat(value[1]), JsonFloat(value[2]), JsonFloat(value[3])])
+            case VaString(value) => JsString(value)
+            case VaInteger(value) => JsInt(value)
+            case VaDouble(value) => JsDouble(value)
+            case VaBoolean(value) => JsBool(value)
+            case VaTuple2i(value) => JsArray(ArrayList([JsInt(value[0]), JsInt(value[1])]))
+            case VaTuple3i(value) => JsArray(ArrayList([JsInt(value[0]), JsInt(value[1]), JsInt(value[2])]))
+            case VaTuple4i(value) => JsArray(
+                ArrayList([JsInt(value[0]), JsInt(value[1]), JsInt(value[2]), JsInt(value[3])]))
+            case VaTuple2f(value) => JsArray(ArrayList([JsDouble(value[0]), JsDouble(value[1])]))
+            case VaTuple3f(value) => JsArray(ArrayList([JsDouble(value[0]), JsDouble(value[1]), JsDouble(value[2])]))
+            case VaTuple4f(value) => JsArray(
+                ArrayList([JsDouble(value[0]), JsDouble(value[1]), JsDouble(value[2]), JsDouble(value[3])]))
         }
     }
 
     // replaces all string values with function
     public static func replaceValuesWithFunction(elem: JsonValue, stringValueReplaceFunc: (JsonValue) -> JsonValue): JsonValue {
-        match (elem.kind()) {
-            case JsString => return stringValueReplaceFunc(elem)
-            case JsObject =>
-                let items = elem.asObject().getFields()
+        match (elem) {
+            case JsString(_) => return stringValueReplaceFunc(elem)
+            case JsObject(items) =>
                 for ((key, value) in items) {
                     let newValue = replaceValuesWithFunction(value, stringValueReplaceFunc)
-                    items.add(key, newValue)
+                    items.replace(key, newValue)
                 }
                 return elem
-            case JsArray =>
-                let items = elem.asArray().getItems()
+            case JsArray(items) =>
                 for (index in 0..items.size) {
                     let newValue = replaceValuesWithFunction(items[index], stringValueReplaceFunc)
                     items[index] = newValue
@@ -142,10 +105,10 @@ public class JsonUtils {
             elem,
             {
                 value =>
-                    let str1 = value.asString().getValue()
+                    let str1 = value.getString() ?? return value
                     let str2 = str1.replace(oldStr, newStr)
                     if (str1 != str2) {
-                        return JsonString(str2)
+                        return JsString(str2)
                     }
                     return value
             }
@@ -159,7 +122,7 @@ public class JsonUtils {
             elem,
             {
                 value =>
-                    let str = value.asString().getValue()
+                    let str = value.getString() ?? return value
                     if (str.size <= 2) {
                         return value
                     }
@@ -170,7 +133,7 @@ public class JsonUtils {
                     }
                     var str2 = GameUtils.replaceStringWithVarOrProp(str, game, token: token)
                     if (str != str2) {
-                        return JsonString(str2)
+                        return JsString(str2)
                     }
                     return value
             }
@@ -178,37 +141,37 @@ public class JsonUtils {
     }
 
     public static func toString(elem: JsonValue): String {
-        match (elem.kind()) {
-            case JsFloat => toString(elem.asFloat().getValue())
-            case JsString => elem.asString().getValue()
+        match (elem) {
+            case JsDouble(value) => toString(value)
+            case JsString(str) => str
             case _ => elem.toString()
         }
     }
 
     public static func jsonToString(elem: JsonValue): String {
-        match (elem.kind()) {
-            case JsFloat => toString(elem.asFloat().getValue())
+        match (elem) {
+            case JsDouble(value) => toString(value)
             case _ => elem.toString()
         }
     }
 
     private static func writePrettyString(writer: JsonWriter, elem: JsonValue): Unit {
-        match (elem.kind()) {
-            case JsString => writer.writeValue(elem.asString().getValue())
-            case JsInt => writer.writeValue(elem.asInt().getValue())
-            case JsFloat => writer.writeValue(elem.asFloat().getValue())
-            case JsBool => writer.writeValue(elem.asBool().getValue())
-            case JsArray =>
+        match (elem) {
+            case JsString(value) => writer.writeValue(value)
+            case JsInt(value) => writer.writeValue(value)
+            case JsDouble(value) => writer.writeValue(value)
+            case JsBool(value) => writer.writeValue(value)
+            case JsArray(items) =>
                 writer.writeConfig.newline = ""
                 writer.startArray()
-                for (elem in elem.asArray().getItems()) {
+                for (elem in items) {
                     writePrettyString(writer, elem)
                 }
                 writer.endArray()
                 writer.writeConfig.newline = "\n"
-            case JsObject =>
+            case JsObject(items) =>
                 writer.startObject()
-                for ((name, elem) in elem.asObject().getFields()) {
+                for ((name, elem) in items) {
                     writer.writeName(name)
                     writePrettyString(writer, elem)
                 }
@@ -243,7 +206,7 @@ public class JsonUtils {
         try {
             return JsonValue.fromStr(json)
         } catch (ex: Exception) {
-            logger.warn("loadJson error: ${ex}")
+            LOGGER.warn("loadJson error: ${ex}")
         }
         return None
     }

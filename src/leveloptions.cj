@@ -4,22 +4,22 @@ import dgengine.*
 import std.collection.*
 
 struct LevelOptions {
-    public LevelOptions(
-        public var level!: Int64 = 0,
-        public var numLives!: Int64 = 2,
-        public var numSmartBombs!: Int64 = 3,
-        public var formulas!: HashMap<String, Formula> = HashMap<String, Formula>(),
-        public var maxObjectsById!: HashMap<String, Int64> = HashMap<String, Int64>(),
-        public var maxObjectsByType!: HashMap<String, Int64> = HashMap<String, Int64>(),
-        public var insert!: ArrayList<(String, Formula)> = ArrayList<(String, Formula)>(),
-        public var spawns!: ArrayList<String> = ArrayList<String>()
+    LevelOptions(
+        var level!: Int64 = 0,
+        var lives!: Int64 = 2,
+        var smartBombs!: Int64 = 3,
+        var formulas!: HashMap<String, Formula> = HashMap<String, Formula>(),
+        var maxObjectsById!: HashMap<String, Int64> = HashMap<String, Int64>(),
+        var maxObjectsByType!: HashMap<String, Int64> = HashMap<String, Int64>(),
+        var insert!: ArrayList<(String, Formula)> = ArrayList<(String, Formula)>(),
+        var spawns!: ArrayList<String> = ArrayList<String>()
     ) {}
 
-    public func clone(): LevelOptions {
+    func clone(): LevelOptions {
         LevelOptions(
             level: level,
-            numLives: numLives,
-            numSmartBombs: numSmartBombs,
+            lives: lives,
+            smartBombs: smartBombs,
             formulas: formulas.clone(),
             maxObjectsById: maxObjectsById.clone(),
             maxObjectsByType: maxObjectsByType.clone(),
@@ -28,11 +28,11 @@ struct LevelOptions {
         )
     }
 
-    public func getMaxObjectsById(id: String): Int64 {
-        maxObjectsById.get(id) ?? 0
-    }
+    // func getMaxObjectsById(id: String): Int64 {
+    //     maxObjectsById.get(id) ?? 0
+    // }
 
-    public func getMaxObjectsByType(unitType: String): Int64 {
-        maxObjectsByType.get(unitType) ?? 0
-    }
+    // func getMaxObjectsByType(unitType: String): Int64 {
+    //     maxObjectsByType.get(unitType) ?? 0
+    // }
 }

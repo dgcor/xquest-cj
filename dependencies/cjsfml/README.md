@@ -36,6 +36,61 @@ returns textures that are not supposed to be freed (`RenderTexture`) and as such
 returns non owning `Texture`s for SFML internal resources. It's safe to call `close()`
 on these objects. These objects shouldn't be used after the owning object has been freed.
 
+## Building
+
+To use `cjsfml` in your project, download the latest release and extract the `cjsfml` folder
+into your project directory. Then, configure your `cjpm.toml` to use it as a binary dependency.
+
+### Static Linking
+
+When linking statically, you must explicitly provide the CSFML link options in your `cjpm.toml`.
+
+```toml
+[package]
+  cjc-version = "1.0.5"
+  name = "test"
+  description = "nothing here"
+  version = "1.0.0"
+  target-dir = ""
+  output-type = "executable"
+  compile-option = ""
+  override-compile-option = ""
+  link-option = "-lcsfml-audio -lcsfml-graphics -lcsfml-system -lcsfml-window"
+  package-configuration = {}
+
+[target.x86_64-unknown-linux-gnu.bin-dependencies]
+  path-option = ["cjsfml/linux_x86_64_cjnative/static/cjsfml"]
+
+[target.x86_64-w64-mingw32.bin-dependencies]
+  path-option = ["cjsfml/windows_x86_64_cjnative/static/cjsfml"]
+```
+
+### Dynamic Linking
+
+When linking dynamically, you do not need to specify `link-option`. However, you must ensure
+that the SFML and CSFML shared libraries (`.so` or `.dll` files) included in the release's
+`sfml` folder are placed in the same directory as your compiled executable at runtime.
+
+```toml
+[package]
+  cjc-version = "1.0.5"
+  name = "test"
+  description = "nothing here"
+  version = "1.0.0"
+  target-dir = ""
+  output-type = "executable"
+  compile-option = ""
+  override-compile-option = ""
+  link-option = ""
+  package-configuration = {}
+
+[target.x86_64-unknown-linux-gnu.bin-dependencies]
+  path-option = ["cjsfml/linux_x86_64_cjnative/dynamic/cjsfml"]
+
+[target.x86_64-w64-mingw32.bin-dependencies]
+  path-option = ["cjsfml/windows_x86_64_cjnative/dynamic/cjsfml"]
+```
+
 ## License
 
 zlib

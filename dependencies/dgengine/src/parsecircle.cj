@@ -2,7 +2,7 @@ package dgengine
 
 import cjsfml.graphics.*
 import cjsfml.system.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func getCircleObj(game: Game, elem: JsonValue): Circle {
     let circle = Circle(Float32(getIntKey(elem, "radius")))
@@ -13,11 +13,9 @@ public func getCircleObj(game: Game, elem: JsonValue): Circle {
         }
     }
 
-    if (let Some(elem) <- getValidObject(elem)) {
-        if (elem.containsKey("textureRect")) {
-            let rect = IntRect(0, 0, Int32(game.drawRegionSize.x), Int32(game.drawRegionSize.y))
-            circle.textureRect = getIntRectVal(elem["textureRect"], default: rect)
-        }
+    if (let Some(elem) <- elem.get("textureRect")) {
+        let rect = IntRect(0, 0, Int32(game.drawRegionSize.x), Int32(game.drawRegionSize.y))
+        circle.textureRect = getIntRectVal(elem, default: rect)
     }
 
     parseDrawableProperties(game, elem, circle)

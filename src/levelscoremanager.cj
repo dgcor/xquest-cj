@@ -9,12 +9,12 @@ class LevelScoreManager {
     private static const MAX_SIZE = 10
     private var m_levelScores = ArrayList<LevelScore>()
 
-    public func add(levelScore: LevelScore): Unit {
+    func add(levelScore: LevelScore): Unit {
         m_levelScores.add(levelScore)
         updateScores()
     }
 
-    public func set(levelScores: ArrayList<LevelScore>): Unit {
+    func set(levelScores: ArrayList<LevelScore>): Unit {
         m_levelScores = levelScores
         updateScores()
     }
@@ -37,13 +37,13 @@ class LevelScoreManager {
         }
     }
 
-    public prop size: Int64 {
+    prop size: Int64 {
         get() {
             m_levelScores.size
         }
     }
 
-    public func getProperty(propName: String): ?Variable {
+    func getProperty(propName: String): ?Variable {
         if (propName.size <= 1) {
             return None
         }

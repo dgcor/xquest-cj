@@ -1,18 +1,13 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseFileBytes(game: Game, elem: JsonValue): Unit {
     if (parseResourceFromId<Array<Byte>>(game.resources, elem) == true) {
         return
     }
-    if (let JsObject <- elem.kind()) {
-        let elem = elem.asObject()
-        if (elem.containsKey("file") == false) {
-            return
-        }
-
-        let file = getStringChar(elem["file"])
+    if (let Some(elemFile) <- elem.get("file")) {
+        let file = getStringChar(elemFile)
         let id = parseValidIdOrFilePath(elem, file)
 
         if (id.isEmpty() == true) {

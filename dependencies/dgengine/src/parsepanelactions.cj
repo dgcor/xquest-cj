@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parsePanelAddDrawable(elem: JsonValue): ?Action {
     ActPanelAddDrawable(getStringCharKey(elem, "id"), getStringCharKey(elem, "drawable"))

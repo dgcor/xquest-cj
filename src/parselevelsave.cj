@@ -2,10 +2,9 @@ package xquest
 
 import cjsfml.system.*
 import dgengine.*
-import stdx.encoding.json.*
-import std.collection.*
+import stdjson2.*
 
-func parseLevelSaveObj(level: Level, elem: JsonValue): LevelSaveObject {
+func parseLevelSaveObj(_: Level, elem: JsonValue): LevelSaveObject {
     var levelSave = LevelSaveObject()
 
     levelSave.state.state = LevelState.create(getInt64Key(elem, "state"))

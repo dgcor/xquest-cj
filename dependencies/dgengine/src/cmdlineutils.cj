@@ -1,5 +1,7 @@
 package dgengine
 
+import physfs4cj.PhysFS
+
 public class CmdLineUtils {
     // returns true if any export command was found (reagrdless of success)
     public static func processCmdLine(args: Array<String>): Bool {
@@ -24,7 +26,7 @@ public class CmdLineUtils {
 
         match (commandStr[0]) {
             case "--export" =>
-                if (FileUtils.exists(args[2]) == true) {
+                if (PhysFS.exists(args[2]) == true) {
                     FileUtils.exportFile(args[2], args[3])
                 }
             case _ => ()

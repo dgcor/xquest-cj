@@ -51,7 +51,7 @@ public class VariableManager {
     }
 
     public func getVarOrProp(queryable: Queryable, key: String): ?Variable {
-        if ((key.size > 2) && (Rune(key[0]) == r'%') && (Rune(key[key.size - 1]) == r'%')) {
+        if ((key.size > 2) && (key[0] == b'%') && (key[key.size - 1] == b'%')) {
             let key2 = key[1..key.size - 1]
             return getVarOrPropNoToken(queryable, key2)
         }
@@ -112,7 +112,7 @@ public class VariableManager {
     }
 
     public func getVarOrPropStringS(queryable: Queryable, key: String, outStr: Box<String>): Bool {
-        if ((key.size > 2) && (Rune(key[0]) == r'%') && (Rune(key[key.size - 1]) == r'%')) {
+        if ((key.size > 2) && (key[0] == b'%') && (key[key.size - 1] == b'%')) {
             let key2 = key[1..key.size - 1]
             if (let Some(variable) <- getVariableNoToken(key2)) {
                 match (variable) {

@@ -1,7 +1,10 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
+/**
+ * @throws Exception
+ */
 public func parseMountFile(game: Game, elem: JsonValue): Unit {
     var file = getStringKey(elem, "file")
     if (file.isEmpty() == true) {
@@ -10,7 +13,8 @@ public func parseMountFile(game: Game, elem: JsonValue): Unit {
     if (getBoolKey(elem, "useSaveDir") == false) {
         file = game.path + file
     } else {
-        file = FileUtils.getSaveDir() + file
+        let saveDir = FileUtils.getSaveDir() ?? throw Exception("parseMountFile: saveDir is None")
+        file = saveDir + file
     }
     if (getBoolKey(elem, "unmount") == false) {
         let mount = getStringCharKey(elem, "mount")

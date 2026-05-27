@@ -1,12 +1,14 @@
 package dgengine
 
+import physfs4cj.PhysFS
+
 public class PredFileExists <: Predicate {
     public PredFileExists(private let file: String) {}
 
     public operator func ()(game: Game): Variable {
         let file2 = GameUtils.replaceStringWithVarOrProp(file, game)
         if (file2.isEmpty() == false) {
-            return VaBoolean(FileUtils.exists(file2))
+            return VaBoolean(PhysFS.exists(file2))
         }
         return VaBoolean(false)
     }

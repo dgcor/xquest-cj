@@ -1,0 +1,73 @@
+/*
+ * Copyright (c) Huawei Technologies Co., Ltd. 2025. All rights reserved.
+ * Copyright (c) causerp 2026. All rights reserved.
+ *
+ * This source file is derived from the Cangjie project, licensed under Apache-2.0
+ * with Runtime Library Exception.
+ *
+ * Modified by causerp in 2026.
+ *
+ * See https://cangjie-lang.cn/pages/LICENSE for license information.
+ */
+
+package stdlog
+
+public struct LogLevel <: ToString & Comparable<LogLevel> {
+
+    // intended to turn off logging.
+    public static const OFF: LogLevel = LogLevel("OFF", 0x7FFF_FFFF)
+
+    // indicates that the system is unusable and requires immediate attention.
+    public static const FATAL: LogLevel = LogLevel("FATAL", 6000)
+
+    // indicates error conditions that impair some operation but are less severe than critical situations.
+    public static const ERROR: LogLevel = LogLevel("ERROR", 5000)
+
+    // signifies potential issues that may lead to errors or unexpected behavior in the future if not addressed.
+    public static const WARN: LogLevel = LogLevel("WARN", 4000)
+
+    // Informational (info): includes messages that provide a record of the normal operation of the system.
+    public static const INFO: LogLevel = LogLevel("INFO", 3000)
+
+    // intended for logging detailed information about the system for debugging purposes.
+    public static const DEBUG: LogLevel = LogLevel("DEBUG", 2000)
+
+    //  Only when I would be "tracing" the code and trying to find one part of a function specifically.
+    public static const TRACE: LogLevel = LogLevel("TRACE", 1000)
+
+    // intended to turn on all logging.
+    public static const ALL: LogLevel = LogLevel("ALL", -0x8000_0000)
+
+    public let name: String
+    public let value: Int32
+
+    public const init(name: String, value: Int32) {
+        this.name = name
+        this.value = value
+    }
+
+    public operator func ==(rhs: LogLevel): Bool {
+        this.value == rhs.value
+    }
+    public operator func !=(rhs: LogLevel): Bool {
+        this.value != rhs.value
+    }
+    public operator func >=(rhs: LogLevel): Bool {
+        this.value >= rhs.value
+    }
+    public operator func <=(rhs: LogLevel): Bool {
+        this.value <= rhs.value
+    }
+    public operator func >(rhs: LogLevel): Bool {
+        this.value > rhs.value
+    }
+    public operator func <(rhs: LogLevel): Bool {
+        this.value < rhs.value
+    }
+    public func compare(rhs: LogLevel): Ordering {
+        this.value.compare(rhs.value)
+    }
+    public func toString(): String {
+        name
+    }
+}

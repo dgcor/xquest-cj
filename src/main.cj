@@ -1,10 +1,29 @@
 package xquest
 
 import dgengine.*
+import std.env.getStdOut
+import stdlog.{LogLevel, setGlobalLogger}
+import stdlog.logger.SimpleLogger
+
+@When[os == "Windows"]
+foreign func AttachConsole(processId: UInt32): Bool
+
+@When[debug]
+const LOG_LEVEL = LogLevel.DEBUG
+@When[!debug]
+const LOG_LEVEL = LogLevel.INFO
 
 main(args: Array<String>) {
     try {
-        logger.info("Welcome to XQuest!")
+        let logger = SimpleLogger(getStdOut())
+        logger.level = LOG_LEVEL
+        setGlobalLogger(logger)
+
+        // print logs to the console on windows if parent process is console
+        @When[os == "Windows"]
+        let _ = unsafe { AttachConsole(0xFFFFFFFFu32) }
+
+        LOGGER.info("Welcome to XQuest!")
 
         registerHooks()
         FileUtils.initPhysFS()
@@ -22,14 +41,14 @@ main(args: Array<String>) {
             }
         }
     } catch (ex: Exception) {
-        logger.error(ex.toString())
+        LOGGER.error(ex.toString())
         ex.printStackTrace()
     } catch (ex: Error) {
-        logger.error(ex.toString())
+        LOGGER.error(ex.toString())
         ex.printStackTrace()
     } finally {
         FileUtils.deinitPhysFS()
-        logger.info("Goodbye!")
+        LOGGER.info("Goodbye!")
     }
     return 0
 }

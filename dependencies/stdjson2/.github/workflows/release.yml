@@ -1,0 +1,281 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g., v1.0.0). Leave empty to auto-detect from cjpm.toml.'
+        required: false
+        default: ''
+      prerelease:
+        description: 'Is this a pre-release?'
+        required: true
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    name: Build ${{ matrix.cangjie_version }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, ubuntu-24.04-arm, windows-latest, macos-latest]
+        cangjie_version: [1.0.5, 1.1.0]
+        include:
+          - os: ubuntu-latest
+            os_dir: linux_x86_64_cjnative
+            artifact_suffix: linux-x64
+          - os: ubuntu-24.04-arm
+            os_dir: linux_aarch64_cjnative
+            artifact_suffix: linux-aarch64
+          - os: windows-latest
+            os_dir: windows_x86_64_cjnative
+            artifact_suffix: windows-x64
+          - os: macos-latest
+            os_dir: darwin_aarch64_cjnative
+            artifact_suffix: mac-aarch64
+          - cangjie_version: 1.0.5
+            cangjie_channel: lts
+          - cangjie_version: 1.1.0
+            cangjie_channel: sts
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup llvm-mingw (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          $env:LLVM_VERSION = "20260311"
+          $env:ARCHIVE_NAME = "llvm-mingw-$env:LLVM_VERSION-msvcrt-x86_64"
+          Invoke-WebRequest -Uri "https://github.com/mstorsjo/llvm-mingw/releases/download/$env:LLVM_VERSION/$env:ARCHIVE_NAME.zip" -OutFile "llvm-mingw.zip"
+          7z x "llvm-mingw.zip" -o"C:\llvm-mingw" -y
+          echo "C:\llvm-mingw\$env:ARCHIVE_NAME\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Verify llvm-mingw installation (Windows)
+        if: runner.os == 'Windows'
+        run: clang --version
+
+      - name: Set macOS Deployment Target (macOS)
+        if: runner.os == 'macOS'
+        run: echo "MACOSX_DEPLOYMENT_TARGET=12.0" >> $GITHUB_ENV
+
+      - name: Setup Cangjie
+        uses: Zxilly/setup-cangjie@v2
+        with:
+          channel: ${{ matrix.cangjie_channel }}
+          version: ${{ matrix.cangjie_version }}
+          archive-path: ./cangjie-archive
+
+      - name: Prepare Root Files
+        run: |
+          mkdir -p staging/${{ matrix.os_dir }}/static/${{ github.event.repository.name }}
+          mkdir -p staging/${{ matrix.os_dir }}/dynamic/${{ github.event.repository.name }}
+
+          if [ -f "README.md" ]; then cp README.md staging/${{ matrix.os_dir }}/; fi
+          if [ -f "License.txt" ]; then cp License.txt staging/${{ matrix.os_dir }}/; fi
+        shell: bash
+
+      - name: Build Static
+        run: |
+          if [ -f "cjpm-release-static.toml" ]; then
+            cp cjpm-release-static.toml cjpm.toml
+          else
+            echo "Error: cjpm-release-static.toml not found!"
+            exit 1
+          fi
+          rm -rf target
+          cjpm build
+        shell: bash
+
+      - name: Stage Static Artifacts
+        run: |
+          DEST_DIR="staging/${{ matrix.os_dir }}/static/${{ github.event.repository.name }}"
+          mkdir -p "$DEST_DIR"
+
+          # Copy Cangjie Build Output
+          find target/release/${{ github.event.repository.name }} -type f ! -name 'incremental-cache.json' -exec cp {} "$DEST_DIR/" \;
+
+          # Copy Dependencies
+          PARENT_DIR=$(dirname "$DEST_DIR")
+          for dep_dir in target/release/*/; do
+            DEP_NAME=$(basename "$dep_dir")
+            if [ "$DEP_NAME" != "${{ github.event.repository.name }}" ]; then
+              echo "Processing dependency: $DEP_NAME"
+              mkdir -p "$PARENT_DIR/$DEP_NAME"
+              find "$dep_dir" -name "*.cjo" -exec cp {} "$PARENT_DIR/$DEP_NAME/" \;
+            fi
+          done
+        shell: bash
+
+      - name: Build Dynamic
+        run: |
+          if [ -f "cjpm-release-dynamic.toml" ]; then
+            cp cjpm-release-dynamic.toml cjpm.toml
+          else
+            echo "Error: cjpm-release-dynamic.toml not found!"
+            exit 1
+          fi
+          rm -rf target
+          cjpm build
+        shell: bash
+
+      - name: Stage Dynamic Artifacts
+        run: |
+          DEST_DIR="staging/${{ matrix.os_dir }}/dynamic/${{ github.event.repository.name }}"
+          mkdir -p "$DEST_DIR"
+
+          # Copy Cangjie Build Output
+          find target/release/${{ github.event.repository.name }} -type f ! -name 'incremental-cache.json' -exec cp {} "$DEST_DIR/" \;
+
+          # Copy Dependencies
+          PARENT_DIR=$(dirname "$DEST_DIR")
+          for dep_dir in target/release/*/; do
+            DEP_NAME=$(basename "$dep_dir")
+            if [ "$DEP_NAME" != "${{ github.event.repository.name }}" ]; then
+              echo "Processing dependency: $DEP_NAME"
+              mkdir -p "$PARENT_DIR/$DEP_NAME"
+              find "$dep_dir" -name "*.cjo" -exec cp {} "$PARENT_DIR/$DEP_NAME/" \;
+            fi
+          done
+        shell: bash
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.os_dir }}-cj${{ matrix.cangjie_version }}
+          path: staging/${{ matrix.os_dir }}
+
+      - name: Build Benchmark
+        run: cjpm build -o benchmark
+        working-directory: benchmark
+        shell: bash
+
+      - name: Stage Benchmark Artifacts
+        run: |
+          mkdir -p benchmark-staging
+          if [ "$RUNNER_OS" == "Windows" ]; then
+            CJC_DIR=$(dirname "$(which cjc.exe)")
+            CJ_ROOT=$(cd "$CJC_DIR/.." && pwd)
+            RUNTIME_DIR="$CJ_ROOT/runtime/lib/windows_x86_64_cjnative"
+            cp benchmark/target/release/bin/benchmark.exe benchmark-staging/
+            cp "$RUNTIME_DIR/libcangjie-runtime.dll" benchmark-staging/
+            cp "$RUNTIME_DIR/libboundscheck.dll" benchmark-staging/
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+            if [[ "${{ matrix.cangjie_version }}" == 1.0.* ]]; then
+              CJC_DIR=$(dirname "$(which cjc)")
+              CJ_ROOT=$(cd "$CJC_DIR/.." && pwd)
+              RUNTIME_DIR="$CJ_ROOT/runtime/lib/darwin_aarch64_cjnative"
+              cp benchmark/target/release/bin/benchmark benchmark-staging/
+              cp "$RUNTIME_DIR/libcangjie-runtime.dylib" benchmark-staging/
+              cp "$RUNTIME_DIR/libboundscheck.dylib" benchmark-staging/
+            else
+              cp benchmark/target/release/bin/benchmark benchmark-staging/
+            fi
+          else
+            cp benchmark/target/release/bin/benchmark benchmark-staging/
+          fi
+          cp benchmark/large-file.json benchmark-staging/
+          chmod +x benchmark-staging/benchmark*
+        shell: bash
+
+      - name: Upload Benchmark Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: benchmark-${{ matrix.os_dir }}-cj${{ matrix.cangjie_version }}
+          path: benchmark-staging
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Get Version
+        id: version
+        run: |
+          INPUT_VER="${{ github.event.inputs.version }}"
+          if [ -z "$INPUT_VER" ]; then
+            RAW_VER=$(grep -Po '(?m)^\s*version\s*=\s*"\K[^"]+' cjpm.toml)
+            if [ -z "$RAW_VER" ]; then
+              echo "Error: Could not detect version from cjpm.toml"
+              exit 1
+            fi
+            if [[ "$RAW_VER" != v* ]]; then
+              RAW_VER="v$RAW_VER"
+            fi
+            echo "VERSION=$RAW_VER" >> $GITHUB_OUTPUT
+            echo "Detected version: $RAW_VER"
+          else
+            echo "VERSION=$INPUT_VER" >> $GITHUB_OUTPUT
+            echo "Using input version: $INPUT_VER"
+          fi
+        shell: bash
+
+      - name: Download All Artifacts
+        uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+
+      - name: Prepare Release Assets
+        id: assets
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        run: |
+          CLEAN_VERSION="${VERSION#v}"
+          declare -A ARTIFACT_SUFFIXES=(
+            ["linux_x86_64_cjnative"]="linux-x64"
+            ["linux_aarch64_cjnative"]="linux-aarch64"
+            ["windows_x86_64_cjnative"]="windows-x64"
+            ["darwin_aarch64_cjnative"]="mac-aarch64"
+          )
+          for dir in artifacts/*/; do
+            FOLDER_NAME=$(basename "$dir")
+            if [[ "$FOLDER_NAME" == benchmark-* ]]; then
+              continue
+            fi
+            CJ_VERSION=$(echo "$FOLDER_NAME" | sed -n 's/.*-cj\([0-9.]*\)$/\1/p')
+            BASE_OS_DIR=$(echo "$FOLDER_NAME" | sed 's/-cj[0-9.]*$//')
+            if [ -z "$CJ_VERSION" ] || [ -z "${ARTIFACT_SUFFIXES[$BASE_OS_DIR]}" ]; then
+              echo "Skipping unknown artifact format: $FOLDER_NAME"
+              continue
+            fi
+            ARTIFACT_SUFFIX="${ARTIFACT_SUFFIXES[$BASE_OS_DIR]}"
+            ZIP_NAME="${{ github.event.repository.name }}-${ARTIFACT_SUFFIX}-cj${CJ_VERSION}-${CLEAN_VERSION}.zip"
+            mv "$dir" "$BASE_OS_DIR"
+            zip -r "$ZIP_NAME" "$BASE_OS_DIR"
+            rm -rf "$BASE_OS_DIR"
+          done
+          for dir in artifacts/benchmark-*/; do
+            [ -d "$dir" ] || continue
+            FOLDER_NAME=$(basename "$dir")
+            CJ_VERSION=$(echo "$FOLDER_NAME" | sed -n 's/.*-cj\([0-9.]*\)$/\1/p')
+            TEMP_OS_DIR=$(echo "$FOLDER_NAME" | sed 's/^benchmark-//; s/-cj[0-9.]*$//')
+            ARTIFACT_SUFFIX="${ARTIFACT_SUFFIXES[$TEMP_OS_DIR]}"
+            if [ -z "$CJ_VERSION" ] || [ -z "$ARTIFACT_SUFFIX" ]; then
+              echo "Skipping unknown benchmark format: $FOLDER_NAME"
+              continue
+            fi
+            ZIP_NAME="benchmark-${ARTIFACT_SUFFIX}-cj${CJ_VERSION}-${CLEAN_VERSION}.zip"
+            (cd "$dir" && zip -r "$OLDPWD/$ZIP_NAME" .)
+          done
+          echo "Generated files:"
+          ls -l *.zip
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          name: ${{ github.event.repository.name }} ${{ steps.version.outputs.VERSION }}
+          prerelease: ${{ github.event.inputs.prerelease == 'true' }}
+          generate_release_notes: true
+          files: |
+            *.zip

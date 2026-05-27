@@ -16,6 +16,8 @@ protected class Buffer <: ResourceHandle {
     private var m_handle: CPointer<Unit> = CPointer()
 
     /**
+     * Create an empty buffer
+     *
      * @throws SFMLNullHandleException
      */
     public init() {
@@ -54,12 +56,22 @@ protected class Buffer <: ResourceHandle {
 
     // buffer
 
+    /**
+     * Return the size of a buffer
+     *
+     * @return Size in bytes
+     */
     public prop size: Int64 {
         get() {
             unsafe { Int64(sfBuffer_getSize(m_handle)) }
         }
     }
 
+    /**
+     * Get a read-only pointer to the array of bytes of a buffer
+     *
+     * @return Read-only pointer to the array of bytes
+     */
     public prop data: CPointer<UInt8> {
         get() {
             unsafe { sfBuffer_getData(m_handle) }

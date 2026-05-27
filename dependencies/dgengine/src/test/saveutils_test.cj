@@ -2,10 +2,9 @@ package dgengine.test
 
 import cjsfml.system.*
 import dgengine.*
-import stdx.encoding.json.stream.*
 import std.collection.*
 import std.io.*
-import std.unittest.*
+import stdjson2.*
 
 // cjlint-ignore -start !G.NAM.04 function names should be lower camel case
 

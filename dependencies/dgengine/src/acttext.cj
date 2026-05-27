@@ -40,6 +40,14 @@ public abstract class ActTextAppendOrSetText <: Action {
     public func trim(): Unit {
         textOp = textOp.set(TextOp.Trim)
     }
+
+    public func lowercase(): Unit {
+        textOp = textOp.set(TextOp.Lowercase)
+    }
+
+    public func uppercase(): Unit {
+        textOp = textOp.set(TextOp.Uppercase)
+    }
 }
 
 public class ActTextAppendText <: ActTextAppendOrSetText {

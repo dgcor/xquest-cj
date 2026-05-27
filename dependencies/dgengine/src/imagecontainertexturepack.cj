@@ -63,7 +63,7 @@ public class ImageContainerTexturePack <: TexturePack {
                 try (img = img) {
                     m_cache[index] = (Texture(img), imgInfo)
                 } catch (ex: Exception) {
-                    logger.error(ex.message)
+                    LOGGER.error(ex.message)
                     return false
                 }
             }

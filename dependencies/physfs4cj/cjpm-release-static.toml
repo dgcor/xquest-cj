@@ -1,0 +1,18 @@
+[package]
+  cjc-version = "1.0.0"
+  name = "physfs4cj"
+  description = "physfs4cj; a portable, flexible file i/o abstraction library"
+  version = "1.0.1"
+  target-dir = ""
+  src-dir = ""
+  output-type = "static"
+  compile-option = "-O2"
+  override-compile-option = ""
+  link-option = ""
+  package-configuration = {}
+
+[dependencies]
+  cenum = { path = "../cenum" }
+
+[ffi.c]
+  physfs = { path = "./physfs/build/lib" }

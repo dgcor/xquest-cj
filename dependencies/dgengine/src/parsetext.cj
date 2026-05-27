@@ -1,7 +1,8 @@
 package dgengine
 
 import cjsfml.graphics.*
-import stdx.encoding.json.*
+import std.unicode.UnicodeStringExtension
+import stdjson2.*
 
 public func parseTextObj(game: Game, elem: JsonValue, text: Text): Unit {
     text.horizontalSpaceOffset = getIntKey(elem, "horizontalSpaceOffset")
@@ -10,6 +11,7 @@ public func parseTextObj(game: Game, elem: JsonValue, text: Text): Unit {
     text.verticalAlign = VerticalAlign.get(getStringCharKey(elem, "verticalAlign"), default: AlignBottom)
 
     text.color = getColorKey(elem, "color", default: Color.WHITE)
+    text.style = getTextStyleKey(elem, "style")
 
     parseTextDisplayText(elem, text)
 
@@ -26,13 +28,17 @@ public func parseTextDisplayText(elem: JsonValue, text: Text): Unit {
         displayText = FileUtils.readText(file)
     }
 
-    if (let Some(elem) <- getValidObject(elem)) {
-        if (elem.containsKey("wordWrap") == true) {
-            let maxLength = Int64(getUIntVal(elem["wordWrap"]))
-            if (maxLength > 0) {
-                displayText = wordWrap(displayText, maxLength)
-            }
+    if (let Some(elem) <- elem.get("wordWrap")) {
+        let maxLength = Int64(getUIntVal(elem))
+        if (maxLength > 0) {
+            displayText = wordWrap(displayText, maxLength)
         }
+    }
+    if (getBoolKey(elem, "lowercase") == true) {
+        displayText = displayText.toLower()
+    }
+    if (getBoolKey(elem, "uppercase") == true) {
+        displayText = displayText.toUpper()
     }
     text.text = displayText
 }
@@ -51,7 +57,7 @@ public func getTextObj(game: Game, elem: JsonValue): ?Text {
 
 public func parseBindableTextObj(game: Game, elem: JsonValue, text: BindableText): Unit {
     if (let Some(elem) <- getValidObject(elem)) {
-        let hasBinding = elem.containsKey("binding") == true
+        let hasBinding = elem.hasMember("binding") == true
         if (hasBinding == true) {
             text.setBinding(getStringVectorKey(elem, "binding"))
             if (getBoolKey(elem, "bindToFormat", default: true) == true) {
@@ -61,8 +67,8 @@ public func parseBindableTextObj(game: Game, elem: JsonValue, text: BindableText
             }
             text.bindingFlags = getBindingFlagsKey(elem, "bindingFlags")
         }
-        if (elem.containsKey("onChange")) {
-            text.setAction("change", getActionVal(game, elem["onChange"]))
+        if (let Some(elem) <- elem.get("onChange")) {
+            text.setAction("change", getActionVal(game, elem))
         }
         if (hasBinding == true) {
             text.updateText(game)

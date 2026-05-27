@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseTextureGroup(game: Game, elem: JsonValue, textureKey: String): ?TextureGroup {
     if (let Some(id) <- getValidString(elem, textureKey)) {

@@ -19,7 +19,7 @@ public class IfCondition {
         match (varOrPred) {
             case VaVariable(value) =>
                 if (let VaString(str) <- value) {
-                    if (str.isEmpty() == false && Rune(str[0]) == r'#') {
+                    if (str.isEmpty() == false && str[0] == b'#') {
                         let strNoShebang = str[1..str.size]
                         let str2 = GameUtils.replaceStringWithVarOrProp(strNoShebang, game, token: '!')
                         if (let Some(value) <- game.getVarOrProp(str2)) {

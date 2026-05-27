@@ -1,13 +1,13 @@
 package dgengine
 
 import cjsfml.graphics.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func getShapeObj(game: Game, elem: JsonValue): ?Shape {
     let shape = Shape(getPrimitiveTypeKey(elem, "type"))
 
     if (let Some(elem) <- getValidArray(elem, "vertices")) {
-        for (elem in elem.getItems()) {
+        for (elem in elem) {
             shape.addVertex(
                 Vertex(
                     position: getVector2fKey(elem, "position"),

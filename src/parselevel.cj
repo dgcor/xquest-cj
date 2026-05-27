@@ -1,7 +1,7 @@
 package xquest
 
 import dgengine.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 func parseLevel(game: Game, elem: JsonValue): Unit {
     let id = getStringCharKey(elem, "id")
@@ -16,7 +16,7 @@ func parseLevel(game: Game, elem: JsonValue): Unit {
         game.resources.addDrawable(id, lvl, manageObjDrawing: true, resourceId: getStringCharKey(elem, "resource"))
         game.resources.setCurrentLevel(lvl)
         lvl.id = id
-        lvl.setShader(game.shaders.level)
+        lvl.gameShader = game.shaders.level
 
         let size = Box(getVector2fKey(elem, "size"))
         parseDrawableProperties(game, elem, lvl, size)
@@ -28,15 +28,15 @@ func parseLevel(game: Game, elem: JsonValue): Unit {
             if (let Some(elem) <- elem.get("name")) {
                 level.name = getStringChar(elem)
             }
-            // if (let Some(elem) <- elem.get("scoreFormula")) {
-            //     level.setScoreFormula(getStringChar(elem))
-            // }
-            // if (let Some(elem) <- getValidArray(elem, "levels")) {
-            //     parseLevelOptions(level.allOptions, elem)
-            // }
-            // if (let Some(elem) <- getValidArray(elem, "highScores")) {
-            //     parseLevelScores(level.highScores, elem)
-            // }
+            if (let Some(elem) <- elem.get("scoreFormula")) {
+                level.scoreFormula = Formula(getStringChar(elem))
+            }
+            if (let Some(elem) <- getValidArray(elem, "levels")) {
+                parseLevelOptions(level.optionsManager, elem)
+            }
+            if (let Some(elem) <- getValidArray(elem, "highScores")) {
+                parseLevelScores(level.highScores, elem)
+            }
 
             if (let Some(elem) <- elem.get("onLeftClick")) {
                 level.setAction(

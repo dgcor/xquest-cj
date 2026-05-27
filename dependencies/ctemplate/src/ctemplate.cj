@@ -3,6 +3,17 @@ macro package ctemplate
 import std.ast.{diagReport, DiagReportLevel, Token, Tokens, TokenKind}
 import std.collection.{ArrayList, enumerate, filter, first, last, zip}
 
+/**
+ * @brief Parses the macro attributes to extract template parameters.
+ *
+ * This function analyzes the attribute tokens to determine the generic
+ * parameters and their corresponding replacement types.
+ *
+ * @param attrTokens The tokens provided in the macro attribute list.
+ *
+ * @return An ArrayList of parameter sets, where each set represents one
+ *         overload to be generated.
+ */
 private func getParams(attrTokens: Tokens): ArrayList<ArrayList<(Token, Token)>> {
     let allParams = ArrayList<ArrayList<(Token, Token)>>()
     let genericParams = ArrayList<Token>()
@@ -43,6 +54,27 @@ private func getParams(attrTokens: Tokens): ArrayList<ArrayList<(Token, Token)>>
     return allParams
 }
 
+/**
+ * @brief Generates code by replacing template parameters with concrete types.
+ *
+ * This macro mimics C++ templates. It takes a set of type parameters and
+ * a block of code, then generates a copy of that code for each set of
+ * replacement types provided.
+ *
+ * Example:
+ * ```
+ * @Template[T: Int32, Int64, Float32](
+ * func getNum(n: T): T {
+ *     // implementation
+ * })
+ * ```
+ * This generates three functions: one for `Int32`, one for `Int64`, and one for `Float32`.
+ *
+ * @param attrTokens Tokens defining the template parameters and replacement types.
+ * @param inputTokens The code block to be duplicated and parameterized.
+ *
+ * @return The generated tokens containing all the overloaded definitions.
+ */
 public macro Template(attrTokens: Tokens, inputTokens: Tokens) {
     var ret = quote()
     let allParams = getParams(attrTokens)

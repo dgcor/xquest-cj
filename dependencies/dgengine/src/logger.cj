@@ -1,7 +1,5 @@
 package dgengine
 
-import stdx.log.*
-import stdx.logger.*
-import std.env.*
+import stdlog.{getGlobalLogger, Logger}
 
-public var logger: Logger = SimpleLogger(getStdOut())
+public let LOGGER: Logger = getGlobalLogger()

@@ -33,7 +33,7 @@ public class NumberVector<T> <: Collection<T> where T <: CType & LittleEndianOrd
         try (file = PhysFSStream(fileName)) {
             loadBinary(file, maxNumElements: maxNumElements)
         } catch (_: Exception) {
-            logger.debug("loadBinary error: ${fileName}")
+            LOGGER.debug("loadBinary error: ${fileName}")
         }
     }
 

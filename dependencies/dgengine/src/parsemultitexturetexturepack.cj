@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseMultiTextureTexturePack(game: Game, elem: JsonValue): ?TexturePack {
     if (let Some(texElem) <- getValidArray(elem, "texture")) {
@@ -10,7 +10,7 @@ public func parseMultiTextureTexturePack(game: Game, elem: JsonValue): ?TextureP
         }
         let texturePack = MultiTexturePack(palette)
         let globalOffset = getVector2fKey(elem, "offset")
-        for (val in texElem.getItems()) {
+        for (val in texElem) {
             if (isValidString(val, "id") == false) {
                 continue
             }

@@ -10,15 +10,6 @@ import std.math.*
 import std.runtime.*
 
 public class Game <: Resource {
-    public static var DefaultSizeX: UInt32 = 640
-    public static var DefaultSizeY: UInt32 = 480
-
-    public static var MinSizeX: UInt32 = 640
-    public static var MinSizeY: UInt32 = 480
-
-    public static var RefSizeX: UInt32 = 640
-    public static var RefSizeY: UInt32 = 480
-
     protected var m_window: ?RenderWindow = None
     protected var m_gameTexture: ?RenderTexture = None
     protected var m_gameSprite: ?Sprite = None
@@ -101,9 +92,9 @@ public class Game <: Resource {
 
     public init(reset!: Bool = false) {
         if (reset == true) {
-            m_refSize = Vector2u(RefSizeX, RefSizeY)
-            m_minSize = Vector2u(MinSizeX, MinSizeY)
-            m_size = Vector2u(DefaultSizeX, DefaultSizeY)
+            m_refSize = Vector2u(Defaults.GAME_REF_SIZE_X, Defaults.GAME_REF_SIZE_Y)
+            m_minSize = Vector2u(Defaults.GAME_MIN_SIZE_X, Defaults.GAME_MIN_SIZE_Y)
+            m_size = Vector2u(Defaults.GAME_SIZE_X, Defaults.GAME_SIZE_Y)
             m_windowedSize = m_size
             m_drawRegionSize = m_size
             m_frameRate = 60
@@ -142,9 +133,9 @@ public class Game <: Resource {
         m_gameSprite = None
 
         m_position = None
-        m_refSize = Vector2u(RefSizeX, RefSizeY)
-        m_minSize = Vector2u(MinSizeX, MinSizeY)
-        m_size = Vector2u(DefaultSizeX, DefaultSizeY)
+        m_refSize = Vector2u(Defaults.GAME_REF_SIZE_X, Defaults.GAME_REF_SIZE_Y)
+        m_minSize = Vector2u(Defaults.GAME_MIN_SIZE_X, Defaults.GAME_MIN_SIZE_Y)
+        m_size = Vector2u(Defaults.GAME_SIZE_X, Defaults.GAME_SIZE_Y)
         m_windowedSize = m_size
         m_drawRegionSize = m_size
         m_oldDrawRegionSize = Vector2u()

@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseRandom(game: Game, elem: JsonValue): ?Action {
     ActRandom(
@@ -13,7 +13,7 @@ public func parseRandom(game: Game, elem: JsonValue): ?Action {
 public func parseRandomList(game: Game, elem: JsonValue): ?Action {
     let actionList = ActRandomList()
     if (let Some(elem) <- getValidArray(elem, "actions")) {
-        for (val in elem.getItems()) {
+        for (val in elem) {
             if (let Some(action) <- getActionVal(game, val)) {
                 actionList.add(action)
             }

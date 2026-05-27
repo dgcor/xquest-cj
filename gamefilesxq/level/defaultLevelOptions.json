@@ -29,6 +29,7 @@
         "smartBombs": 2
       },
       {
+        "level": 2,
         "insert": [
           { "id": "mine", "count": 3 },
           { "id": "crystal", "count": 16 }
@@ -38,6 +39,7 @@
         ]
       },
       {
+        "level": 3,
         "insert": [
           { "id": "mine", "count": 4 },
           { "id": "crystal", "count": 17 }
@@ -45,6 +47,493 @@
         "formulas": [
           { "key": "maxEnemies", "value": 5 },
           { "key": "gateWidth", "value": 26 }
+        ]
+      },
+      {
+        "level": 4,
+        "insert": [
+          { "id": "mine", "count": 5 },
+          { "id": "crystal", "count": 18 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 6 },
+          { "key": "time", "value": 25 }
+        ]
+      },
+      {
+        "level": 5,
+        "insert": [
+          { "id": "mine", "count": 6 },
+          { "id": "crystal", "count": 19 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 7 },
+          { "key": "gateWidth", "value": 25 },
+          { "key": "time", "value": 25 }
+        ]
+      },
+      {
+        "level": 6,
+        "insert": [
+          { "id": "mine", "count": 6 },
+          { "id": "crystal", "count": 20 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 8 },
+          { "key": "time", "value": 30 }
+        ]
+      },
+      {
+        "level": 7,
+        "insert": [
+          { "id": "mine", "count": 7 },
+          { "id": "crystal", "count": 21 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 9 },
+          { "key": "gateWidth", "value": 24 }
+        ]
+      },
+      {
+        "level": 8,
+        "insert": [
+          { "id": "mine", "count": 7 },
+          { "id": "crystal", "count": 22 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 10 },
+          { "key": "enemyRelease", "value": 0.006 },
+          { "key": "time", "value": 35 }
+        ]
+      },
+      {
+        "level": 9,
+        "insert": [
+          { "id": "mine", "count": 8 },
+          { "id": "crystal", "count": 23 }
+        ],
+        "formulas": [
+          { "key": "gateWidth", "value": 23 }
+        ]
+      },
+      {
+        "level": 10,
+        "insert": [
+          { "id": "mine", "count": 8 },
+          { "id": "crystal", "count": 24 }
+        ],
+        "formulas": [
+          { "key": "time", "value": 40 }
+        ]
+      },
+      {
+        "level": 11,
+        "insert": [
+          { "id": "mine", "count": 9 },
+          { "id": "crystal", "count": 24 }
+        ],
+        "maxObjectsById": [
+          { "id": "smartBomb", "count": 2 }
+        ],
+        "formulas": [
+          { "key": "gateWidth", "value": 22 }
+        ]
+      },
+      {
+        "level": 12,
+        "insert": [
+          { "id": "mine", "count": 9 },
+          { "id": "crystal", "count": 25 }
+        ],
+        "formulas": [
+          { "key": "enemyRelease", "value": 0.007 },
+          { "key": "time", "value": 45 }
+        ]
+      },
+      {
+        "level": 13,
+        "insert": [
+          { "id": "mine", "count": 10 },
+          { "id": "crystal", "count": 25 }
+        ],
+        "formulas": [
+          { "key": "gateWidth", "value": 21 }
+        ]
+      },
+      {
+        "level": 14,
+        "insert": [
+          { "id": "mine", "count": 10 },
+          { "id": "crystal", "count": 26 }
+        ],
+        "formulas": [
+          { "key": "enemyRelease", "value": 0.008 }
+        ]
+      },
+      {
+        "level": 15,
+        "insert": [
+          { "id": "mine", "count": 10 },
+          { "id": "crystal", "count": 26 }
+        ],
+        "formulas": [
+          { "key": "gateWidth", "value": 20 },
+          { "key": "time", "value": 50 }
+        ]
+      },
+      {
+        "level": 16,
+        "insert": [
+          { "id": "mine", "count": 11 },
+          { "id": "crystal", "count": 27 }
+        ],
+        "formulas": [
+          { "key": "enemyRelease", "value": 0.009 }
+        ]
+      },
+      {
+        "level": 17,
+        "insert": [
+          { "id": "mine", "count": 11 },
+          { "id": "crystal", "count": 27 }
+        ],
+        "formulas": [
+          { "key": "gateWidth", "value": 19 }
+        ]
+      },
+      {
+        "level": 18,
+        "insert": [
+          { "id": "mine", "count": 11 },
+          { "id": "crystal", "count": 28 }
+        ],
+        "formulas": [
+          { "key": "enemyRelease", "value": 0.01 },
+          { "key": "time", "value": 55 }
+        ]
+      },
+      {
+        "level": 19,
+        "insert": [
+          { "id": "mine", "count": 12 },
+          { "id": "crystal", "count": 28 }
+        ],
+        "formulas": [
+          { "key": "gateWidth", "value": 18 }
+        ]
+      },
+      {
+        "level": 20,
+        "insert": [
+          { "id": "mine", "count": 12 },
+          { "id": "crystal", "count": 29 }
+        ],
+        "formulas": [
+          { "key": "time", "value": 55 },
+          { "key": "smartProb", "value": 0.3 }
+        ]
+      },
+      {
+        "level": 21,
+        "insert": [
+          { "id": "mine", "count": 12 },
+          { "id": "crystal", "count": 29 }
+        ],
+        "formulas": [
+          { "key": "gateWidth", "value": 17 },
+          { "key": "time", "value": 60 }
+        ]
+      },
+      {
+        "level": 22,
+        "insert": [
+          { "id": "mine", "count": 13 },
+          { "id": "crystal", "count": 30 }
+        ]
+      },
+      {
+        "level": 23,
+        "insert": [
+          { "id": "mine", "count": 13 },
+          { "id": "crystal", "count": 30 }
+        ]
+      },
+      {
+        "level": 24,
+        "insert": [
+          { "id": "mine", "count": 13 },
+          { "id": "crystal", "count": 31 }
+        ]
+      },
+      {
+        "level": 25,
+        "insert": [
+          { "id": "mine", "count": 13 },
+          { "id": "crystal", "count": 31 }
+        ],
+        "formulas": [
+          { "key": "time", "value": 65 }
+        ]
+      },
+      {
+        "level": 26,
+        "insert": [
+          { "id": "mine", "count": 14 },
+          { "id": "crystal", "count": 32 }
+        ]
+      },
+      {
+        "level": 27,
+        "insert": [
+          { "id": "mine", "count": 14 },
+          { "id": "crystal", "count": 32 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 11 }
+        ]
+      },
+      {
+        "level": 28,
+        "insert": [
+          { "id": "mine", "count": 14 },
+          { "id": "crystal", "count": 33 }
+        ]
+      },
+      {
+        "level": 29,
+        "insert": [
+          { "id": "mine", "count": 14 },
+          { "id": "crystal", "count": 33 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 12 },
+          { "key": "time", "value": 70 }
+        ]
+      },
+      {
+        "level": 30,
+        "insert": [
+          { "id": "mine", "count": 15 },
+          { "id": "crystal", "count": 34 }
+        ]
+      },
+      {
+        "level": 31,
+        "insert": [
+          { "id": "mine", "count": 15 },
+          { "id": "crystal", "count": 34 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 13 }
+        ]
+      },
+      {
+        "level": 32,
+        "insert": [
+          { "id": "mine", "count": 15 },
+          { "id": "crystal", "count": 35 }
+        ]
+      },
+      {
+        "level": 33,
+        "insert": [
+          { "id": "mine", "count": 15 },
+          { "id": "crystal", "count": 35 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 14 },
+          { "key": "gateMove", "value": 10 },
+          { "key": "time", "value": 75 }
+        ]
+      },
+      {
+        "level": 34,
+        "insert": [
+          { "id": "mine", "count": 16 },
+          { "id": "crystal", "count": 36 }
+        ],
+        "formulas": [
+          { "key": "gateMove", "value": 20 }
+        ]
+      },
+      {
+        "level": 35,
+        "insert": [
+          { "id": "mine", "count": 16 },
+          { "id": "crystal", "count": 36 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 15 },
+          { "key": "gateMove", "value": 30 }
+        ]
+      },
+      {
+        "level": 36,
+        "insert": [
+          { "id": "mine", "count": 16 },
+          { "id": "crystal", "count": 37 }
+        ],
+        "formulas": [
+          { "key": "gateMove", "value": 40 }
+        ]
+      },
+      {
+        "level": 37,
+        "insert": [
+          { "id": "mine", "count": 16 },
+          { "id": "crystal", "count": 37 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 16 },
+          { "key": "enemyRelease", "value": 0.025 },
+          { "key": "gateMove", "value": 50 },
+          { "key": "time", "value": 80 }
+        ]
+      },
+      {
+        "level": 38,
+        "insert": [
+          { "id": "mine", "count": 17 },
+          { "id": "crystal", "count": 38 }
+        ],
+        "formulas": [
+          { "key": "enemyRelease", "value": 0.011 },
+          { "key": "gateMove", "value": 60 }
+        ]
+      },
+      {
+        "level": 39,
+        "insert": [
+          { "id": "mine", "count": 17 },
+          { "id": "crystal", "count": 38 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 17 },
+          { "key": "enemyRelease", "value": 0.012 },
+          { "key": "gateMove", "value": 70 }
+        ]
+      },
+      {
+        "level": 40,
+        "insert": [
+          { "id": "mine", "count": 17 },
+          { "id": "crystal", "count": 39 }
+        ],
+        "formulas": [
+          { "key": "gateMove", "value": 80 }
+        ]
+      },
+      {
+        "level": 41,
+        "insert": [
+          { "id": "mine", "count": 17 },
+          { "id": "crystal", "count": 39 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 18 },
+          { "key": "enemyRelease", "value": 0.013 },
+          { "key": "gateMove", "value": 90 },
+          { "key": "gateChangeDirProb", "value": 0.002 },
+          { "key": "time", "value": 85 }
+        ]
+      },
+      {
+        "level": 42,
+        "insert": [
+          { "id": "mine", "count": 18 },
+          { "id": "crystal", "count": 40 }
+        ],
+        "formulas": [
+          { "key": "gateMove", "value": 100 },
+          { "key": "gateChangeDirProb", "value": 0.004 }
+        ]
+      },
+      {
+        "level": 43,
+        "insert": [
+          { "id": "mine", "count": 18 },
+          { "id": "crystal", "count": 40 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 19 },
+          { "key": "enemyRelease", "value": 0.014 },
+          { "key": "gateChangeDirProb", "value": 0.006 }
+        ]
+      },
+      {
+        "level": 44,
+        "insert": [
+          { "id": "mine", "count": 18 },
+          { "id": "crystal", "count": 40 }
+        ],
+        "formulas": [
+          { "key": "gateChangeDirProb", "value": 0.008 }
+        ]
+      },
+      {
+        "level": 45,
+        "insert": [
+          { "id": "mine", "count": 18 },
+          { "id": "crystal", "count": 40 }
+        ],
+        "formulas": [
+          { "key": "maxEnemies", "value": 20 },
+          { "key": "enemyRelease", "value": 0.015 },
+          { "key": "gateChangeDirProb", "value": 0.01 },
+          { "key": "time", "value": 90 }
+        ]
+      },
+      {
+        "level": 46,
+        "insert": [
+          { "id": "mine", "count": 19 },
+          { "id": "crystal", "count": 40 }
+        ],
+        "formulas": [
+          { "key": "enemyRelease", "value": 0.016 },
+          { "key": "gateChangeDirProb", "value": 0.012 }
+        ]
+      },
+      {
+        "level": 47,
+        "insert": [
+          { "id": "mine", "count": 19 },
+          { "id": "crystal", "count": 40 }
+        ],
+        "formulas": [
+          { "key": "gateChangeDirProb", "value": 0.014 }
+        ]
+      },
+      {
+        "level": 48,
+        "insert": [
+          { "id": "mine", "count": 19 },
+          { "id": "crystal", "count": 40 }
+        ],
+        "formulas": [
+          { "key": "enemyRelease", "value": 0.017 },
+          { "key": "gateChangeDirProb", "value": 0.016 }
+        ]
+      },
+      {
+        "level": 49,
+        "insert": [
+          { "id": "mine", "count": 19 },
+          { "id": "crystal", "count": 40 }
+        ],
+        "formulas": [
+          { "key": "gateChangeDirProb", "value": 0.018 }
+        ]
+      },
+      {
+        "level": 50,
+        "insert": [
+          { "id": "mine", "count": 20 },
+          { "id": "crystal", "count": 40 }
+        ],
+        "formulas": [
+          { "key": "enemyRelease", "value": 0.018 },
+          { "key": "gateChangeDirProb", "value": 0.02 }
         ]
       }
     ]

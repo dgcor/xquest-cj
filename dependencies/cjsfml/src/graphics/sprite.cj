@@ -56,10 +56,59 @@ foreign {
     func sfSprite_getGlobalBounds(handle: CPointer<Unit>): FloatRect
 }
 
+/**
+ * Drawable representation of a texture, with its own transformations, color, etc.
+ *
+ * `Sprite` is a drawable class that allows to easily display
+ * a texture (or a part of it) on a render target.
+ *
+ * It inherits all the functions from `Transformable`:
+ * position, rotation, scale, origin. It also adds sprite-specific
+ * properties such as the texture to use, the part of it to display,
+ * and some convenience functions to change the overall color of the
+ * sprite, or to get its bounding rectangle.
+ *
+ * `Sprite` works in combination with the `Texture` class, which
+ * loads and provides the pixel data of a given texture.
+ *
+ * The separation of `Sprite` and `Texture` allows more flexibility
+ * and better performances: indeed a `Texture` is a heavy resource,
+ * and any operation on it is slow (often too slow for real-time
+ * applications). On the other side, a `Sprite` is a lightweight
+ * object which can use the pixel data of a `Texture` and draw
+ * it with its own transformation/color/blending attributes.
+ *
+ * It is important to note that the `Sprite` instance doesn't
+ * copy the texture that it uses, it only keeps a reference to it.
+ * Thus, a `Texture` must not be destroyed while it is
+ * used by a `Sprite` (i.e. never write a function that
+ * uses a local `Texture` instance for creating a sprite).
+ *
+ * Usage example:
+ * ```
+ * // Load a texture
+ * let texture = Texture("texture.png");
+ *
+ * // Create a sprite
+ * let sprite = Sprite(texture);
+ * sprite.setTextureRect(IntRect(Vector2i(10, 10), Vector2i(50, 30)));
+ * sprite.setColor(Color(255, 255, 255, 200));
+ * sprite.setPosition(Vector2f(100.0, 25.0));
+ *
+ * // Draw it
+ * window.draw(sprite);
+ * ```
+ *
+ * @see `Texture`, `Transformable`
+ */
 public class Sprite <: ResourceHandle & RenderTargetDrawable & Transformable & Equatable<Sprite> {
     private var m_handle: CPointer<Unit> = CPointer()
 
     /**
+     * Construct the sprite from a source texture.
+     *
+     * @param texture Source texture
+     *
      * @throws SFMLNullHandleException
      */
     public init(texture: Texture) {
@@ -70,6 +119,11 @@ public class Sprite <: ResourceHandle & RenderTargetDrawable & Transformable & E
     }
 
     /**
+     * Construct the sprite from a sub-rectangle of a source texture.
+     *
+     * @param texture   Source texture
+     * @param rect      Sub-rectangle of the texture to assign to the sprite
+     *
      * @throws SFMLNullHandleException
      */
     public init(texture: Texture, rect: IntRect) {
@@ -83,6 +137,10 @@ public class Sprite <: ResourceHandle & RenderTargetDrawable & Transformable & E
     }
 
     /**
+     * Construct the sprite from an existing handle.
+     *
+     * @param handle The handle to use.
+     *
      * @throws SFMLNullHandleException
      */
     private init(handle: CPointer<Unit>) {
@@ -99,6 +157,11 @@ public class Sprite <: ResourceHandle & RenderTargetDrawable & Transformable & E
         }
     }
 
+    /**
+     * Create a copy of the sprite.
+     *
+     * @return A new sprite instance that is a copy of this one.
+     */
     public func clone(): Sprite {
         Sprite(unsafe { sfSprite_copy(m_handle) })
     }
@@ -125,11 +188,11 @@ public class Sprite <: ResourceHandle & RenderTargetDrawable & Transformable & E
 
     // Equatable
 
-    public operator override func ==(right: Sprite): Bool {
+    public override operator func ==(right: Sprite): Bool {
         m_handle.toUIntNative() == right.m_handle.toUIntNative()
     }
 
-    public operator override func !=(right: Sprite): Bool {
+    public override operator func !=(right: Sprite): Bool {
         m_handle.toUIntNative() != right.m_handle.toUIntNative()
     }
 
@@ -213,6 +276,14 @@ public class Sprite <: ResourceHandle & RenderTargetDrawable & Transformable & E
 
     // Sprite
 
+    /**
+     * Get the source texture of the sprite.
+     *
+     * The returned reference is const, which means that you can't
+     * modify the texture when you retrieve it with this function.
+     *
+     * @return Reference to the sprite's texture
+     */
     public mut prop texture: Texture {
         get() {
             Texture(unsafe { sfSprite_getTexture(m_handle) }, isOwner: false)
@@ -222,10 +293,35 @@ public class Sprite <: ResourceHandle & RenderTargetDrawable & Transformable & E
         }
     }
 
+    /**
+     * Change the source texture of the sprite.
+     *
+     * The `texture` argument refers to a texture that must
+     * exist as long as the sprite uses it. Indeed, the sprite
+     * doesn't store its own copy of the texture, but rather keeps
+     * a pointer to the one that you passed to this function.
+     * If the source texture is destroyed and the sprite tries to
+     * use it, the behavior is undefined.
+     * If `resetRect` is `true`, the `TextureRect` property of
+     * the sprite is automatically adjusted to the size of the new
+     * texture. If it is `false`, the texture rect is left unchanged.
+     *
+     * @param texture   New texture
+     * @param resetRect Should the texture rect be reset to the size of the new texture?
+     */
     public func setTexture(texture: Texture, resetRect!: Bool = false): Unit {
         unsafe { sfSprite_setTexture(m_handle, texture.handle, resetRect) }
     }
 
+    /**
+     * Set the sub-rectangle of the texture that the sprite will display.
+     *
+     * The texture rect is useful when you don't want to display
+     * the whole texture, but rather a part of it.
+     * By default, the texture rect covers the entire texture.
+     *
+     * @param value Rectangle defining the region of the texture to display
+     */
     public mut prop textureRect: IntRect {
         get() {
             unsafe { sfSprite_getTextureRect(m_handle) }
@@ -235,6 +331,16 @@ public class Sprite <: ResourceHandle & RenderTargetDrawable & Transformable & E
         }
     }
 
+    /**
+     * Set the global color of the sprite.
+     *
+     * This color is modulated (multiplied) with the sprite's
+     * texture. It can be used to colorize the sprite, or change
+     * its global opacity.
+     * By default, the sprite's color is opaque white.
+     *
+     * @param value New color of the sprite
+     */
     public mut prop color: Color {
         get() {
             unsafe { sfSprite_getColor(m_handle) }
@@ -244,12 +350,34 @@ public class Sprite <: ResourceHandle & RenderTargetDrawable & Transformable & E
         }
     }
 
+    /**
+     * Get the local bounding rectangle of the entity.
+     *
+     * The returned rectangle is in local coordinates, which means
+     * that it ignores the transformations (translation, rotation,
+     * scale, ...) that are applied to the entity.
+     * In other words, this function returns the bounds of the
+     * entity in the entity's coordinate system.
+     *
+     * @return Local bounding rectangle of the entity
+     */
     public prop localBounds: FloatRect {
         get() {
             unsafe { sfSprite_getLocalBounds(m_handle) }
         }
     }
 
+    /**
+     * Get the global bounding rectangle of the entity.
+     *
+     * The returned rectangle is in global coordinates, which means
+     * that it takes into account the transformations (translation,
+     * rotation, scale, ...) that are applied to the entity.
+     * In other words, this function returns the bounds of the
+     * sprite in the global 2D world's coordinate system.
+     *
+     * @return Global bounding rectangle of the entity
+     */
     public prop globalBounds: FloatRect {
         get() {
             unsafe { sfSprite_getGlobalBounds(m_handle) }

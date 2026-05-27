@@ -15,16 +15,38 @@ class TestBigEndianReader {
     func test_BigEndianReader() {
         let reader = BigEndianReader(ByteBuffer(DATA))
 
+        @Expect(reader.position, 0)
         var value = reader.read<Int32>()
         @Expect(value.isSome(), true)
         @Expect(value.getOrThrow(), 33554432)
 
+        @Expect(reader.position, 4)
+        value = reader.peek()
+        @Expect(value.isSome(), true)
+        @Expect(value.getOrThrow(), 2)
+
+        @Expect(reader.position, 4)
         value = reader.read()
         @Expect(value.isSome(), true)
         @Expect(value.getOrThrow(), 2)
 
+        @Expect(reader.position, 8)
+        value = reader.peek()
+        @Expect(value.isNone(), true)
+
+        @Expect(reader.position, 8)
         value = reader.read()
         @Expect(value.isNone(), true)
+        @Expect(reader.position, DATA.size)
+
+        @Expect(reader.position, DATA.size)
+        value = reader.peek()
+        @Expect(value.isNone(), true)
+
+        @Expect(reader.position, DATA.size)
+        value = reader.read()
+        @Expect(value.isNone(), true)
+        @Expect(reader.position, DATA.size)
     }
 }
 
@@ -34,16 +56,37 @@ class TestLittleEndianReader {
     func test_LittleEndianReader() {
         let reader = LittleEndianReader(ByteBuffer(DATA))
 
+        @Expect(reader.position, 0)
         var value = reader.read<Int32>()
         @Expect(value.isSome(), true)
         @Expect(value.getOrThrow(), 2)
 
+        @Expect(reader.position, 4)
+        value = reader.peek()
+        @Expect(value.isSome(), true)
+        @Expect(value.getOrThrow(), 33554432)
+
+        @Expect(reader.position, 4)
         value = reader.read()
         @Expect(value.isSome(), true)
         @Expect(value.getOrThrow(), 33554432)
 
+        @Expect(reader.position, 8)
+        value = reader.peek()
+        @Expect(value.isNone(), true)
+
+        @Expect(reader.position, 8)
         value = reader.read()
         @Expect(value.isNone(), true)
+
+        @Expect(reader.position, DATA.size)
+        value = reader.peek()
+        @Expect(value.isNone(), true)
+
+        @Expect(reader.position, DATA.size)
+        value = reader.read()
+        @Expect(value.isNone(), true)
+        @Expect(reader.position, DATA.size)
     }
 }
 
@@ -53,6 +96,7 @@ class TestEndianReader {
     func test_EndianReader() {
         let reader = EndianReader(ByteBuffer(DATA))
 
+        @Expect(reader.position, 0)
         var value = reader.read<Int32>()
         @Expect(value.isSome(), true)
         match (Endian.Platform) {
@@ -61,6 +105,15 @@ class TestEndianReader {
         }
         @Expect(value.getOrThrow(), 2)
 
+        @Expect(reader.position, 4)
+        value = reader.peek()
+        @Expect(value.isSome(), true)
+        match (Endian.Platform) {
+            case Big => @Expect(value.getOrThrow(), 2)
+            case Little => @Expect(value.getOrThrow(), 33554432)
+        }
+
+        @Expect(reader.position, 4)
         value = reader.read()
         @Expect(value.isSome(), true)
         match (Endian.Platform) {
@@ -68,8 +121,18 @@ class TestEndianReader {
             case Little => @Expect(value.getOrThrow(), 33554432)
         }
 
+        @Expect(reader.position, 8)
         value = reader.read()
         @Expect(value.isNone(), true)
+
+        @Expect(reader.position, DATA.size)
+        value = reader.peek()
+        @Expect(value.isNone(), true)
+
+        @Expect(reader.position, DATA.size)
+        value = reader.read()
+        @Expect(value.isNone(), true)
+        @Expect(reader.position, DATA.size)
     }
 }
 

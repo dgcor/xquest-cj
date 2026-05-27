@@ -1,7 +1,7 @@
 package dgengine
 
 import cjsfml.audio.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func openMusicFromFile(game: Game, music: Music, audioSource: AudioSource, id: String, resource: String): Bool {
     if (game.resources.hasSong(id, checkTopOnly: true) == false) {
@@ -23,7 +23,7 @@ public func parseAudioObjFromFile(game: Game, elem: JsonValue, id: String, file:
         music.close()
         stream.close()
     } catch (ex: Exception) {
-        logger.error(ex.toString())
+        LOGGER.error(ex.toString())
     }
     return None
 }

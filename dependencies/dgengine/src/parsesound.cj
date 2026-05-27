@@ -1,7 +1,7 @@
 package dgengine
 
 import cjsfml.audio.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseSoundObj(game: Game, id: String, file: String, resource: String): ?SoundBuffer {
     try {
@@ -13,7 +13,7 @@ public func parseSoundObj(game: Game, id: String, file: String, resource: String
         sndBuffer.close()
         stream.close()
     } catch (ex: Exception) {
-        logger.error(ex.toString())
+        LOGGER.error(ex.toString())
     }
     return None
 }

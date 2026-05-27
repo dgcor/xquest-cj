@@ -3,19 +3,21 @@ package dgengine
 import cjsfml.graphics.*
 import cjsfml.graphics.Image as SFMLImage
 import cjsfml.system.*
-import stdx.encoding.json.*
+import stdjson2.*
 
-public func parseTextureImg(game: Game, elem: JsonObject): ?SFMLImage {
+public func parseTextureImg(game: Game, elem: JsonValue): ?SFMLImage {
     var img: ?SFMLImage = None
 
     if (let Some(colorElem) <- elem.get("color")) {
         let size = getVector2uKey(elem, "size", default: game.drawRegionSize)
-        if (let Some(colorElem) <- getValidArray(colorElem)) {
-            if (colorElem.size() == (Int64(size.x) * Int64(size.y))) {
+        if (colorElem.isArray()) {
+            if (colorElem.size == Int64(size.x * size.y)) {
                 let img2 = SFMLImage(size)
                 for (j in 0..size.y) {
                     for (i in 0..size.x) {
-                        img2.setPixel(Vector2u(i, j), getColorVal(colorElem[Int64(i + j * size.x)]))
+                        if (let Some(elem) <- colorElem.get(Int64(i + j * size.x))) {
+                            img2.setPixel(Vector2u(i, j), getColorVal(elem))
+                        }
                     }
                 }
                 img = img2
@@ -70,20 +72,18 @@ public func parseTextureImg(game: Game, elem: JsonObject): ?SFMLImage {
 }
 
 public func getTextureObj(game: Game, elem: JsonValue): ?Texture {
-    if (let JsObject <- elem.kind()) {
-        if (let Some(obj) <- parseTextureImg(game, elem.asObject())) {
-            try (img = obj) {
-                let imgSize = img.size
-                if (imgSize.x == 0 || imgSize.y == 0) {
-                    return None
-                }
-                let texture = Texture(img)
-                texture.repeated = getBoolKey(elem, "repeat", default: true)
-                texture.smooth = getBoolKey(elem, "smooth", default: true)
-                return texture
-            } catch (ex: Exception) {
-                logger.error(ex.toString())
+    if (let Some(obj) <- parseTextureImg(game, elem)) {
+        try (img = obj) {
+            let imgSize = img.size
+            if (imgSize.x == 0 || imgSize.y == 0) {
+                return None
             }
+            let texture = Texture(img)
+            texture.repeated = getBoolKey(elem, "repeat", default: true)
+            texture.smooth = getBoolKey(elem, "smooth", default: true)
+            return texture
+        } catch (ex: Exception) {
+            LOGGER.error(ex.toString())
         }
     }
     return None

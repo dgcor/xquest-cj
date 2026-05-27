@@ -1,7 +1,7 @@
 package xquest
 
 import dgengine.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 private enum ImageContainerType {
     | ImageContainerUnknown

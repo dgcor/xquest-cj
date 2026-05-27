@@ -12,18 +12,18 @@ jobs:
           - os: ubuntu-latest
             cangjie_version: 1.0.0
           - os: ubuntu-latest
-            cangjie_version: 1.0.1
+            cangjie_version: 1.0.5
           - os: windows-latest
-            cangjie_version: 1.0.1
+            cangjie_version: 1.0.5
           - os: macos-latest
-            cangjie_version: 1.0.1
+            cangjie_version: 1.0.5
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Cangjie
-        uses: Zxilly/setup-cangjie@v2.0.0
+        uses: Zxilly/setup-cangjie@v2
         with:
           channel: lts
           version: ${{ matrix.cangjie_version }}

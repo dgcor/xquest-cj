@@ -2,14 +2,14 @@ package xquest
 
 enum LevelState {
     | GameOver
-    | AddUnits
+    | AddLevelObjects
     | Detonate
     | Exploding
     | CheckStatus
 
-    public static func create(num: Int64): LevelState {
+    static func create(num: Int64): LevelState {
         match (num) {
-            case 1 => AddUnits
+            case 1 => AddLevelObjects
             case 2 => Detonate
             case 3 => Exploding
             case 4 => CheckStatus
@@ -17,17 +17,17 @@ enum LevelState {
         }
     }
 
-    public func toInt(): Int64 {
+    func toInt(): Int64 {
         match (this) {
             case GameOver => 0
-            case AddUnits => 1
+            case AddLevelObjects => 1
             case Detonate => 2
             case Exploding => 3
             case CheckStatus => 4
         }
     }
 
-    public prop isGameOver: Bool {
+    prop isGameOver: Bool {
         get() {
             match (this) {
                 case GameOver => true

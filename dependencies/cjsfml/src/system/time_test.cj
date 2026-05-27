@@ -118,6 +118,33 @@ class TestTime {
         @Expect((Time(seconds: 2.0) % Time(seconds: 2.0)) == Time())
         @Expect((Time(seconds: 2.4) % Time(seconds: 2.0)) == Time(seconds: 0.4))
     }
+
+    @TestCase
+    func init_seconds_precision() {
+        // Test values smaller than a microsecond
+        @Expect(Time(seconds: 0.0000009f32).microseconds, 0)
+        @Expect(Time(seconds: 0.0000001f32).microseconds, 0)
+        @Expect(Time(seconds: 0.00000001f32).microseconds, 0)
+        @Expect(Time(seconds: 0.000000001f32).microseconds, 0)
+
+        // Negative values smaller than a microsecond
+        @Expect(Time(seconds: -0.0000009f32).microseconds, 0)
+        @Expect(Time(seconds: -0.0000001f32).microseconds, 0)
+
+        // Large values
+        @Expect(Time(seconds: 1000.0f32).microseconds, 1000000000)
+        @Expect(Time(seconds: -1000.0f32).microseconds, -1000000000)
+    }
+
+    @TestCase
+    func division_ratio() {
+        @Expect((Time(seconds: 1.0) / Time(seconds: 1.0)) == Time(seconds: 1.0))
+
+        let t1 = Time(milliseconds: 10)
+        let t2 = Time(microseconds: 1)
+        let result = t1 / t2
+        @Expect(result.seconds, 10000.0)
+    }
 }
 
 // cjlint-ignore -end function names should be lower camel case

@@ -227,4 +227,19 @@ public open class Text <: ActionQueryable & UIObject {
             }
         }
     }
+
+    public mut prop style: TextStyle {
+        get() {
+            match (m_text as FreeTypeText) {
+                case Some(text) => text.style
+                case None => TextStyle.Regular
+            }
+        }
+        set(value) {
+            match (m_text as FreeTypeText) {
+                case Some(text) => text.style = value
+                case None => ()
+            }
+        }
+    }
 }

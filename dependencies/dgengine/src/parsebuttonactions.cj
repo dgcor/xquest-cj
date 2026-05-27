@@ -1,7 +1,7 @@
 package dgengine
 
 import cjsfml.graphics.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseButtonClick(elem: JsonValue): ?Action {
     ActButtonClick(

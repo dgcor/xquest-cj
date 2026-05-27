@@ -4,16 +4,16 @@ import dgengine.*
 
 func registerHooks(): Unit {
     Hooks.getImageContainerObj = getImageContainerObj
-    // Hooks.parseActionElem = parseActionElem
+    Hooks.parseActionElem = parseActionElem
     Hooks.parseDocumentElem = parseDocumentElem
     Hooks.parseTextureImg = parseTextureImg
 
-    Game.DefaultSizeX = 320
-    Game.DefaultSizeY = 240
+    Defaults.GAME_SIZE_X = 320
+    Defaults.GAME_SIZE_Y = 240
 
-    Game.MinSizeX = 320
-    Game.MinSizeY = 240
+    Defaults.GAME_MIN_SIZE_X = 320
+    Defaults.GAME_MIN_SIZE_Y = 240
 
-    Game.RefSizeX = 320
-    Game.RefSizeY = 240
+    Defaults.GAME_REF_SIZE_X = 320
+    Defaults.GAME_REF_SIZE_Y = 240
 }

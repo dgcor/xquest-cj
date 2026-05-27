@@ -10,10 +10,10 @@ public class GameUtils {
     public static const DOUBLE_CLICK_DELAY: Int32 = 500
 
     public static func fpsToTime(fps: Int32): Time {
-        var fps2: Float32 = match (Float32(fps)) {
-            case value where value < 1.0 => 1.0
-            case value where value > 1000.0 => 1000.0
-            case value => value
+        var fps2: Float32 = match {
+            case fps < 1 => 1.0
+            case fps > 1000 => 1000.0
+            case _ => Float32(fps)
         }
         return Time(seconds: 1.0 / fps2)
     }
@@ -56,27 +56,24 @@ public class GameUtils {
     public static func getKeyCode(str: String, default!: KeyCode = KeyCode.Unknown): KeyCode {
         match (str.size) {
             case 0 => default
-            case 1 => match (str.runes().next()) {
-                case Some(ch) where ch >= r'A' && ch <= r'Z' => KeyCode(
-                    KeyCode.A.value + Int32(UInt32(ch)) - Int32(UInt32(r'A')))
-                case Some(ch) where ch >= r'a' && ch <= r'z' => KeyCode(
-                    KeyCode.A.value + Int32(UInt32(ch)) - Int32(UInt32(r'a')))
-                case Some(ch) where ch >= r'0' && ch <= r'9' => KeyCode(
-                    KeyCode.Num0.value + Int32(UInt32(ch)) - Int32(UInt32(r'0')))
-                case Some(r'[') => KeyCode.LBracket
-                case Some(r']') => KeyCode.RBracket
-                case Some(r';') => KeyCode.Semicolon
-                case Some(r',') => KeyCode.Comma
-                case Some(r'.') => KeyCode.Period
-                case Some(r"'") => KeyCode.Apostrophe
-                case Some(r'\\') => KeyCode.Backslash
-                case Some(r'~') => KeyCode.Grave
-                case Some(r'=') => KeyCode.Equal
-                case Some(r' ') => KeyCode.Space
-                case Some(r'+') => KeyCode.Add
-                case Some(r'-') => KeyCode.Subtract
-                case Some(r'*') => KeyCode.Multiply
-                case Some(r'/') => KeyCode.Divide
+            case 1 => match (str[0]) {
+                case ch where ch >= b'A' && ch <= b'Z' => KeyCode(KeyCode.A.value + Int32(ch) - Int32(b'A'))
+                case ch where ch >= b'a' && ch <= b'z' => KeyCode(KeyCode.A.value + Int32(ch) - Int32(b'a'))
+                case ch where ch >= b'0' && ch <= b'9' => KeyCode(KeyCode.Num0.value + Int32(ch) - Int32(b'0'))
+                case b'[' => KeyCode.LBracket
+                case b']' => KeyCode.RBracket
+                case b';' => KeyCode.Semicolon
+                case b',' => KeyCode.Comma
+                case b'.' => KeyCode.Period
+                case b'\'' => KeyCode.Apostrophe
+                case b'\\' => KeyCode.Backslash
+                case b'~' => KeyCode.Grave
+                case b'=' => KeyCode.Equal
+                case b' ' => KeyCode.Space
+                case b'+' => KeyCode.Add
+                case b'-' => KeyCode.Subtract
+                case b'*' => KeyCode.Multiply
+                case b'/' => KeyCode.Divide
                 case _ => default
             }
             case _ => match (str.toAsciiLower()) {
@@ -164,27 +161,24 @@ public class GameUtils {
     public static func getScanCode(str: String, default!: Scancode = Scancode.Unknown): Scancode {
         match (str.size) {
             case 0 => default
-            case 1 => match (str.runes().next()) {
-                case Some(ch) where ch >= r'A' && ch <= r'Z' => Scancode(
-                    Scancode.A.value + Int32(UInt32(ch)) - Int32(UInt32(r'A')))
-                case Some(ch) where ch >= r'a' && ch <= r'z' => Scancode(
-                    Scancode.A.value + Int32(UInt32(ch)) - Int32(UInt32(r'a')))
-                case Some(ch) where ch >= r'1' && ch <= r'9' => Scancode(
-                    Scancode.Num1.value + Int32(UInt32(ch)) - Int32(UInt32(r'1')))
-                case Some(r'0') => Scancode.Num0
-                case Some(r'[') => Scancode.LBracket
-                case Some(r']') => Scancode.RBracket
-                case Some(r';') => Scancode.Semicolon
-                case Some(r',') => Scancode.Comma
-                case Some(r'.') => Scancode.Period
-                case Some(r"'") => Scancode.Apostrophe
-                case Some(r'\\') => Scancode.Backslash
-                case Some(r'`') | Some(r'~') => Scancode.Grave
-                case Some(r'=') => Scancode.Equal
-                case Some(r' ') => Scancode.Space
-                case Some(r'+') => Scancode.Equal
-                case Some(r'-') => Scancode.Hyphen
-                case Some(r'/') => Scancode.Slash
+            case 1 => match (str[0]) {
+                case ch where ch >= b'A' && ch <= b'Z' => Scancode(Scancode.A.value + Int32(ch) - Int32(b'A'))
+                case ch where ch >= b'a' && ch <= b'z' => Scancode(Scancode.A.value + Int32(ch) - Int32(b'a'))
+                case ch where ch >= b'1' && ch <= b'9' => Scancode(Scancode.Num1.value + Int32(ch) - Int32(b'1'))
+                case b'0' => Scancode.Num0
+                case b'[' => Scancode.LBracket
+                case b']' => Scancode.RBracket
+                case b';' => Scancode.Semicolon
+                case b',' => Scancode.Comma
+                case b'.' => Scancode.Period
+                case b'\'' => Scancode.Apostrophe
+                case b'\\' => Scancode.Backslash
+                case b'`' | b'~' => Scancode.Grave
+                case b'=' => Scancode.Equal
+                case b' ' => Scancode.Space
+                case b'+' => Scancode.Equal
+                case b'-' => Scancode.Hyphen
+                case b'/' => Scancode.Slash
                 case _ => default
             }
             case _ => match (str.toAsciiLower()) {
@@ -261,6 +255,18 @@ public class GameUtils {
     public static func getScanCodeDescription(str: String): String {
         let scancode = getScanCode(str, default: Scancode.Unknown)
         return Keyboard.getDescription(scancode)
+    }
+
+    // doesn't get custom text align flags
+    public static func getTextStyle(str: String, default!: TextStyle = TextStyle.Regular): TextStyle {
+        match (str.toAsciiLower()) {
+            case "regular" => TextStyle.Regular
+            case "bold" => TextStyle.Bold
+            case "italic" => TextStyle.Italic
+            case "underlined" => TextStyle.Underlined
+            case "strikethrough" => TextStyle.StrikeThrough
+            case _ => default
+        }
     }
 
     // total time to seconds
@@ -420,8 +426,8 @@ public class GameUtils {
                 str = "${s}"
             }
         }
-        if (let Some(ch) <- str.runes().next()) {
-            if (ch == r'-' && zeroes == 2) {
+        if (let Some(ch) <- str.get(0)) {
+            if (ch == b'-' && zeroes == 2) {
                 str = "-0" + str[1..str.size]
             }
         }

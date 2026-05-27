@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseBitmapButton(game: Game, elem: JsonValue): ?BitmapButton {
     var button = Option<BitmapButton>.None
@@ -41,15 +41,13 @@ public func parseTextButton(game: Game, elem: JsonValue): ?TextButton {
 }
 
 public func parseButtonObj(game: Game, elem: JsonValue): ?Button {
-    if (let Some(elem) <- getValidObject(elem)) {
-        if (elem.containsKey("font") == false) {
-            if (let Some(btn) <- parseBitmapButton(game, elem)) {
-                return btn
-            }
-        } else {
-            if (let Some(btn) <- parseTextButton(game, elem)) {
-                return btn
-            }
+    if (elem.hasMember("font") == false) {
+        if (let Some(btn) <- parseBitmapButton(game, elem)) {
+            return btn
+        }
+    } else {
+        if (let Some(btn) <- parseTextButton(game, elem)) {
+            return btn
         }
     }
     return None
@@ -73,32 +71,32 @@ public func parseButtonProperties(game: Game, elem: JsonValue, button: Button): 
 
 public func parseButtonActions(game: Game, elem: JsonValue, button: Button): Unit {
     if (let Some(elem) <- getValidObject(elem)) {
-        if (elem.containsKey("onClick")) {
-            button.setAction("click", getActionVal(game, elem["onClick"]))
+        if (let Some(elem) <- elem.get("onClick")) {
+            button.setAction("click", getActionVal(game, elem))
         }
-        if (elem.containsKey("onRightClick")) {
-            button.setAction("rightClick", getActionVal(game, elem["onRightClick"]))
+        if (let Some(elem) <- elem.get("onRightClick")) {
+            button.setAction("rightClick", getActionVal(game, elem))
         }
-        if (elem.containsKey("onDoubleClick")) {
-            button.setAction("doubleClick", getActionVal(game, elem["onDoubleClick"]))
+        if (let Some(elem) <- elem.get("onDoubleClick")) {
+            button.setAction("doubleClick", getActionVal(game, elem))
         }
-        if (elem.containsKey("onClickDrag")) {
-            button.setAction("clickDrag", getActionVal(game, elem["onClickDrag"]))
+        if (let Some(elem) <- elem.get("onClickDrag")) {
+            button.setAction("clickDrag", getActionVal(game, elem))
         }
-        if (elem.containsKey("onClickIn")) {
-            button.setAction("clickIn", getActionVal(game, elem["onClickIn"]))
+        if (let Some(elem) <- elem.get("onClickIn")) {
+            button.setAction("clickIn", getActionVal(game, elem))
         }
-        if (elem.containsKey("onClickOut")) {
-            button.setAction("clickOut", getActionVal(game, elem["onClickOut"]))
+        if (let Some(elem) <- elem.get("onClickOut")) {
+            button.setAction("clickOut", getActionVal(game, elem))
         }
-        if (elem.containsKey("onFocus")) {
-            button.setAction("focus", getActionVal(game, elem["onFocus"]))
+        if (let Some(elem) <- elem.get("onFocus")) {
+            button.setAction("focus", getActionVal(game, elem))
         }
-        if (elem.containsKey("onHoverEnter")) {
-            button.setAction("hoverEnter", getActionVal(game, elem["onHoverEnter"]))
+        if (let Some(elem) <- elem.get("onHoverEnter")) {
+            button.setAction("hoverEnter", getActionVal(game, elem))
         }
-        if (elem.containsKey("onHoverLeave")) {
-            button.setAction("hoverLeave", getActionVal(game, elem["onHoverLeave"]))
+        if (let Some(elem) <- elem.get("onHoverLeave")) {
+            button.setAction("hoverLeave", getActionVal(game, elem))
         }
     }
 }

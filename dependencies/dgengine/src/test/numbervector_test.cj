@@ -37,7 +37,7 @@ class TestNumberVector {
         @Expect(vec.isEmpty(), false)
         @Expect(vec.size, 5)
         for ((index, value) in vec |> enumerate) {
-            @Expect(vec.get(index), "1"[0] + UInt8(index))
+            @Expect(vec.get(index), b'1' + UInt8(index))
         }
         @Expect(vec.get(5), 0)
     }
@@ -57,8 +57,8 @@ class TestNumberVector {
 
         @Expect(vec.isEmpty(), false)
         @Expect(vec.size, 2)
-        @Expect(vec.get(0), "1"[0])
-        @Expect(vec.get(1), "2"[0])
+        @Expect(vec.get(0), b'1')
+        @Expect(vec.get(1), b'2')
         @Expect(vec.get(2), 0)
     }
 

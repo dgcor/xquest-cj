@@ -44,7 +44,7 @@ public class ImageUtils {
                 applyMask(image, mask: mask)
             }
         } catch (ex: Exception) {
-            logger.debug("loadImage error: ${ex}")
+            LOGGER.debug("loadImage error: ${ex}")
         }
         return image
     }
@@ -53,7 +53,7 @@ public class ImageUtils {
         try (file = PhysFSStream(fileName)) {
             return loadImage(file, mask: mask)
         } catch (ex: Exception) {
-            logger.debug("loadImage error: ${fileName} -> ${ex}")
+            LOGGER.debug("loadImage error: ${fileName} -> ${ex}")
         }
         return None
     }
@@ -90,7 +90,7 @@ public class ImageUtils {
                 return img
             }
         } catch (ex: Exception) {
-            logger.debug("loadImage error (ImageContainer): ${ex}")
+            LOGGER.debug("loadImage error (ImageContainer): ${ex}")
         }
         return None
     }
@@ -101,7 +101,7 @@ public class ImageUtils {
                 return imgContainer.get(frameIdx, pal?.palette)?[0].clone()
             }
         } catch (ex: Exception) {
-            logger.debug("loadImageFrame error: ${ex}")
+            LOGGER.debug("loadImageFrame error: ${ex}")
         }
         return None
     }
@@ -140,7 +140,7 @@ public class ImageUtils {
             }
             return img
         } catch (ex: Exception) {
-            logger.debug("loadBitmapFontImage error: ${ex}")
+            LOGGER.debug("loadBitmapFontImage error: ${ex}")
         }
         return None
     }
@@ -166,7 +166,7 @@ public class ImageUtils {
             }
             return (img, rects)
         } catch (ex: Exception) {
-            logger.debug("packImages error: ${ex}")
+            LOGGER.debug("packImages error: ${ex}")
         }
         return (None, ArrayList<IntRect>())
     }
@@ -197,7 +197,7 @@ public class ImageUtils {
             }
             return newImg
         } catch (ex: Exception) {
-            logger.debug("splitImageHorizontal error: ${ex}")
+            LOGGER.debug("splitImageHorizontal error: ${ex}")
         }
         return None
     }
@@ -228,7 +228,7 @@ public class ImageUtils {
             }
             return newImg
         } catch (ex: Exception) {
-            logger.debug("splitImageVertical error: ${ex}")
+            LOGGER.debug("splitImageVertical error: ${ex}")
         }
         return None
     }

@@ -2,16 +2,17 @@ package xquest
 
 import cjsfml.system.*
 import dgengine.*
-import std.collection.*
 
 class LevelObject <: Animation & TextureQueryable {
     let cls: LevelObjectClass
+    var mapPosition: (Int64, Int64)
     var movement: (Float32, Float32)
     var points: Int64
     private var m_deleted = false
 
-    init(cls: LevelObjectClass, movement!: (Float32, Float32) = (-1.0, -1.0)) {
+    init(cls: LevelObjectClass, mapPosition!: (Int64, Int64) = (0, 0), movement!: (Float32, Float32) = (-1.0, -1.0)) {
         this.cls = cls
+        this.mapPosition = mapPosition
         this.movement = movement
         this.points = cls.points
         updateAnimation()
@@ -35,19 +36,24 @@ class LevelObject <: Animation & TextureQueryable {
         setAnimation(texturePack, animInfo)
     }
 
-    prop isDeleted: Bool {
-        get() {
-            m_deleted
-        }
-    }
+    // prop isDeleted: Bool {
+    //     get() {
+    //         m_deleted
+    //     }
+    // }
 
-    func delete(): Bool {
-        if (m_deleted == false) {
-            m_deleted = true
-            updateAnimation()
-            return true
-        }
-        return false
+    // func delete(): Bool {
+    //     if (m_deleted == false) {
+    //         m_deleted = true
+    //         updateAnimation()
+    //         return true
+    //     }
+    //     return false
+    // }
+
+    func move(pos: (Float32, Float32)) {
+        movement = pos
+        this.position = Vector2f(pos[0], pos[1])
     }
 
     public override func getProperty(propName: String): ?Variable {
@@ -56,7 +62,7 @@ class LevelObject <: Animation & TextureQueryable {
         }
         let props = splitStringIn2(propName, ".")
         return match (props[0]) {
-            // case "movement" => Variable.getTuple2iProp(movement, props[1])
+            case "movement" => Variable.getTuple2fProp(movement, props[1])
             case "points" => VaInteger(points)
             case "type" => VaString(cls.clsType)
             case _ => super.getProperty(propName)

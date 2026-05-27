@@ -76,14 +76,53 @@ foreign {
     func sfCircleShape_getGlobalBounds(handle: CPointer<Unit>): FloatRect
 }
 
+/**
+ * Specialized shape representing a circle.
+ *
+ * This class inherits all the functions of `Transformable`
+ * (position, rotation, scale, bounds, ...) as well as the
+ * functions of `Shape` (outline, color, texture, ...).
+ *
+ * Usage example:
+ * ```
+ * let circle = CircleShape();
+ * circle.radius = 150.0;
+ * circle.outlineColor = Color.RED;
+ * circle.outlineThickness = 5.0;
+ * circle.position = Vector2f(10.0, 20.0);
+ * ...
+ * window.draw(circle);
+ * ```
+ *
+ * Since the graphics card can't draw perfect circles, we have to
+ * fake them with multiple triangles connected to each other. The
+ * "points count" property of `CircleShape` defines how many of these
+ * triangles to use, and therefore defines the quality of the circle.
+ *
+ * The number of points can also be used for another purpose; with
+ * small numbers you can create any regular polygon shape:
+ * equilateral triangle, square, pentagon, hexagon, ...
+ *
+ * @see `Shape`, `RectangleShape`, `ConvexShape`
+ */
 public class CircleShape <: ResourceHandle & RenderTargetDrawable & Transformable & Equatable<CircleShape> {
     private var m_handle: CPointer<Unit> = CPointer()
 
+    /**
+     * Default constructor.
+     *
+     * @throws SFMLNullHandleException
+     */
     public init() {
         this(0.0)
     }
 
     /**
+     * Construct the circle shape with a radius.
+     *
+     * @param radius     Radius of the circle
+     * @param pointCount Number of points composing the circle
+     *
      * @throws SFMLNullHandleException
      */
     public init(radius: Float32, pointCount!: UInt32 = 30) {
@@ -100,6 +139,10 @@ public class CircleShape <: ResourceHandle & RenderTargetDrawable & Transformabl
     }
 
     /**
+     * Construct the circle shape from an existing handle.
+     *
+     * @param handle The handle to use.
+     *
      * @throws SFMLNullHandleException
      */
     private init(handle: CPointer<Unit>) {
@@ -116,6 +159,11 @@ public class CircleShape <: ResourceHandle & RenderTargetDrawable & Transformabl
         }
     }
 
+    /**
+     * Create a copy of the shape.
+     *
+     * @return A new shape instance that is a copy of this one.
+     */
     public func clone(): CircleShape {
         CircleShape(unsafe { sfCircleShape_copy(m_handle) })
     }
@@ -142,11 +190,11 @@ public class CircleShape <: ResourceHandle & RenderTargetDrawable & Transformabl
 
     // Equatable
 
-    public operator override func ==(right: CircleShape): Bool {
+    public override operator func ==(right: CircleShape): Bool {
         m_handle.toUIntNative() == right.m_handle.toUIntNative()
     }
 
-    public operator override func !=(right: CircleShape): Bool {
+    public override operator func !=(right: CircleShape): Bool {
         m_handle.toUIntNative() != right.m_handle.toUIntNative()
     }
 
@@ -230,6 +278,15 @@ public class CircleShape <: ResourceHandle & RenderTargetDrawable & Transformabl
 
     // Shape
 
+    /**
+     * Get the source texture of the shape.
+     *
+     * If the shape has no source texture, a `None` is returned.
+     * The returned reference is const, which means that you can't
+     * modify the texture when you retrieve it with this function.
+     *
+     * @return Reference to the shape's texture
+     */
     public mut prop texture: ?Texture {
         get() {
             let texturePtr = unsafe { sfCircleShape_getTexture(m_handle) }
@@ -243,10 +300,32 @@ public class CircleShape <: ResourceHandle & RenderTargetDrawable & Transformabl
         }
     }
 
+    /**
+     * Change the source texture of the shape.
+     *
+     * The `texture` argument refers to a texture that must
+     * exist as long as the shape uses it. Indeed, the shape
+     * doesn't store its own copy of the texture, but rather keeps
+     * a pointer to the one that you passed to this function.
+     * If the source texture is destroyed and the shape tries to
+     * use it, the behavior is undefined.
+     * `resetRect` automatically adjusts the texture rectangle
+     * to the size of the new texture.
+     *
+     * @param texture   New texture
+     * @param resetRect Should the texture rect be reset to the size of the new texture?
+     */
     public func setTexture(texture: ?Texture, resetRect!: Bool = false): Unit {
         unsafe { sfCircleShape_setTexture(m_handle, texture?.handle ?? CPointer(), resetRect) }
     }
 
+    /**
+     * Set the sub-rectangle of the texture that the shape will display.
+     *
+     * By default, the texture rect covers the entire texture.
+     *
+     * @param value Rectangle defining the region of the texture to display
+     */
     public mut prop textureRect: IntRect {
         get() {
             unsafe { sfCircleShape_getTextureRect(m_handle) }
@@ -256,6 +335,16 @@ public class CircleShape <: ResourceHandle & RenderTargetDrawable & Transformabl
         }
     }
 
+    /**
+     * Set the fill color of the shape.
+     *
+     * This color is modulated (multiplied) with the shape's
+     * texture if any. It can be used to colorize the shape,
+     * or change its global opacity.
+     * By default, the shape's fill color is opaque white.
+     *
+     * @param value New fill color of the shape
+     */
     public mut prop fillColor: Color {
         get() {
             unsafe { sfCircleShape_getFillColor(m_handle) }
@@ -265,6 +354,13 @@ public class CircleShape <: ResourceHandle & RenderTargetDrawable & Transformabl
         }
     }
 
+    /**
+     * Set the outline color of the shape.
+     *
+     * By default, the shape's outline color is opaque white.
+     *
+     * @param value New outline color of the shape
+     */
     public mut prop outlineColor: Color {
         get() {
             unsafe { sfCircleShape_getOutlineColor(m_handle) }
@@ -274,6 +370,16 @@ public class CircleShape <: ResourceHandle & RenderTargetDrawable & Transformabl
         }
     }
 
+    /**
+     * Set the thickness of the shape's outline.
+     *
+     * By default, the outline thickness is 0.
+     *
+     * Be aware that using a negative value for the outline
+     * thickness will cause distorted rendering.
+     *
+     * @param value New outline thickness, in pixels
+     */
     public mut prop outlineThickness: Float32 {
         get() {
             unsafe { sfCircleShape_getOutlineThickness(m_handle) }
@@ -283,6 +389,11 @@ public class CircleShape <: ResourceHandle & RenderTargetDrawable & Transformabl
         }
     }
 
+    /**
+     * Get the number of points of the circle.
+     *
+     * @return Number of points of the circle
+     */
     public mut prop pointCount: UInt32 {
         get() {
             unsafe { UInt32(sfCircleShape_getPointCount(m_handle)) }
@@ -292,16 +403,42 @@ public class CircleShape <: ResourceHandle & RenderTargetDrawable & Transformabl
         }
     }
 
+    /**
+     * Get a point of the circle.
+     *
+     * The returned point is in local coordinates, that is,
+     * the shape's transforms (position, rotation, scale) are
+     * not taken into account.
+     * The result is undefined if `index` is out of the valid range.
+     *
+     * @param index Index of the point to get, in range [0 .. `pointCount` - 1]
+     *
+     * @return `index`-th point of the shape
+     */
     public func getPoint(index: UInt32): Vector2f {
         unsafe { sfCircleShape_getPoint(m_handle, UIntNative(index)) }
     }
 
+    /**
+     * Get the geometric center of the circle.
+     *
+     * The returned point is in local coordinates, that is,
+     * the shape's transforms (position, rotation, scale) are
+     * not taken into account.
+     *
+     * @return The geometric center of the shape
+     */
     public prop geometricCenter: Vector2f {
         get() {
             unsafe { sfCircleShape_getGeometricCenter(m_handle) }
         }
     }
 
+    /**
+     * Set the radius of the circle.
+     *
+     * @param value New radius of the circle
+     */
     public mut prop radius: Float32 {
         get() {
             unsafe { sfCircleShape_getRadius(m_handle) }
@@ -311,12 +448,34 @@ public class CircleShape <: ResourceHandle & RenderTargetDrawable & Transformabl
         }
     }
 
+    /**
+     * Get the local bounding rectangle of the entity.
+     *
+     * The returned rectangle is in local coordinates, which means
+     * that it ignores the transformations (translation, rotation,
+     * scale, ...) that are applied to the entity.
+     * In other words, this function returns the bounds of the
+     * entity in the entity's coordinate system.
+     *
+     * @return Local bounding rectangle of the entity
+     */
     public prop localBounds: FloatRect {
         get() {
             unsafe { sfCircleShape_getLocalBounds(m_handle) }
         }
     }
 
+    /**
+     * Get the global bounding rectangle of the entity.
+     *
+     * The returned rectangle is in global coordinates, which means
+     * that it takes into account the transformations (translation,
+     * rotation, scale, ...) that are applied to the entity.
+     * In other words, this function returns the bounds of the
+     * shape in the global 2D world's coordinate system.
+     *
+     * @return Global bounding rectangle of the entity
+     */
     public prop globalBounds: FloatRect {
         get() {
             unsafe { sfCircleShape_getGlobalBounds(m_handle) }

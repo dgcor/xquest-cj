@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func getMovieObj(game: Game, elem: JsonValue): ?Movie {
     let action = getActionKey(game, elem, "onComplete")

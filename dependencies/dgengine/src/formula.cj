@@ -111,13 +111,13 @@ public class FormulaElementIterator <: Iterator<FormulaElement> {
                     m_bufferSize = 0
                     return element
                 }
-                if (Rune(c) == r':') {
+                if (c == b':') {
                     m_bufferStart = m_index
                     m_bufferSize = 1
                 } else {
                     m_bufferStart = m_index + 1
                     m_bufferSize = 0
-                    if (Rune(c) != r' ') {
+                    if (c != b' ') {
                         let element = FormulaElement.get(m_formula[m_index..m_index + 1])
                         m_index++
                         return element

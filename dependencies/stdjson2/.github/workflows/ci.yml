@@ -1,0 +1,53 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }} with Cangjie ${{ matrix.cangjie_version }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            cangjie_version: 1.0.0
+          - os: ubuntu-latest
+            cangjie_version: 1.0.5
+          - os: windows-latest
+            cangjie_version: 1.0.5
+          - os: macos-latest
+            cangjie_version: 1.0.5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup llvm-mingw (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          $env:LLVM_VERSION = "20260311"
+          $env:ARCHIVE_NAME = "llvm-mingw-$env:LLVM_VERSION-msvcrt-x86_64"
+          Invoke-WebRequest -Uri "https://github.com/mstorsjo/llvm-mingw/releases/download/$env:LLVM_VERSION/$env:ARCHIVE_NAME.zip" -OutFile "llvm-mingw.zip"
+          7z x "llvm-mingw.zip" -o"C:\llvm-mingw" -y
+          echo "C:\llvm-mingw\$env:ARCHIVE_NAME\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - name: Verify llvm-mingw installation (Windows)
+        if: runner.os == 'Windows'
+        run: clang --version
+
+      - name: Set macOS Deployment Target (macOS)
+        if: runner.os == 'macOS'
+        run: echo "MACOSX_DEPLOYMENT_TARGET=12.0" >> $GITHUB_ENV
+
+      - name: Setup Cangjie
+        uses: Zxilly/setup-cangjie@v2
+        with:
+          channel: lts
+          version: ${{ matrix.cangjie_version }}
+          archive-path: ./cangjie-archive
+
+      - name: Build
+        run: cjpm build
+
+      - name: Test
+        run: cjpm test

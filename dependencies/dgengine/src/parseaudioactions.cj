@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseAudioDelete(elem: JsonValue): ?Action {
     ActAudioDelete(getStringCharKey(elem, "id"))
@@ -21,10 +21,8 @@ public func parseAudioPlay(elem: JsonValue): ?Action {
         getBoolKey(elem, "clear")
     )
 
-    if (let Some(elem) <- getValidObject(elem)) {
-        if (elem.containsKey("loop") == true) {
-            action.setLoop(getBoolVal(elem["loop"]))
-        }
+    if (let Some(elem) <- elem.get("loop")) {
+        action.setLoop(getBoolVal(elem))
     }
     return action
 }

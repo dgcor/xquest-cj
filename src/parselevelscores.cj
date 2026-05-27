@@ -1,13 +1,13 @@
 package xquest
 
 import dgengine.*
-import stdx.encoding.json.*
 import std.collection.*
+import stdjson2.*
 
-func parseLevelScores(scoreManager: LevelScoreManager, elem: JsonArray): Unit {
+func parseLevelScores(scoreManager: LevelScoreManager, elem: JsonValue): Unit {
     var score = LevelScore()
     let scores = ArrayList<LevelScore>()
-    for (val in elem.getItems()) {
+    for (val in elem) {
         score.name = getStringKey(val, "name")
         score.level = getInt64Key(val, "level")
         score.score = getInt64Key(val, "score")

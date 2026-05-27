@@ -8,11 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       APP_NAME: DGEngine
-      CANGJIE_STD_VERSION: 1.0.4.1
-      CANGJIE_VERSION: 1.0.4
+      CANGJIE_VERSION: 1.0.5
     steps:
       - name: Checkout ${{ env.APP_NAME }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Ubuntu dependencies
         uses: awalsh128/cache-apt-pkgs-action@latest
@@ -20,9 +19,6 @@ jobs:
           packages: libx11-dev libxrandr-dev libxcursor-dev libxi-dev libudev-dev libgl1-mesa-dev
           version: 1.0
           execute_install_scripts: true
-
-      - name: Setup Ninja Build
-        uses: turtlesec-no/get-ninja@main
 
       - name: Build and install SFML
         uses: johnwason/vcpkg-action@v7
@@ -43,23 +39,8 @@ jobs:
           cmake --preset linux-release -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
           cmake --build --preset linux-release --target install
 
-      - name: Build and install physfs
-        run: |
-          git clone --branch release-3.2.0 https://github.com/icculus/physfs.git dependencies/physfs
-          cp -f dependencies/CMakePresets.json dependencies/physfs/CMakePresets.json
-          cd dependencies/physfs
-          cmake --preset linux-release
-          cmake --build --preset linux-release --target install
-
-      - name: Download Cangjie stdx
-        run: |
-          cd dependencies
-          wget https://gitcode.com/Cangjie/cangjie_stdx/releases/download/v${{ env.CANGJIE_STD_VERSION }}/cangjie-stdx-linux-x64-${{ env.CANGJIE_STD_VERSION }}.zip -O stdx.zip
-          mkdir stdx
-          unzip stdx.zip -d stdx
-
       - name: Setup Cangjie
-        uses: Zxilly/setup-cangjie@v2.1.0
+        uses: Zxilly/setup-cangjie@v2
         with:
           channel: lts
           version: ${{ env.CANGJIE_VERSION }}

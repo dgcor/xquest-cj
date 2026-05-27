@@ -114,7 +114,7 @@ extend Game <: ActionQueryable & Queryable {
             case "path" => VaString(m_path)
             case "position" => Variable.getTuple2iProp(m_position ?? Vector2i(), prop2)
             case "refSize" => Variable.getTuple2iProp(m_refSize, prop2)
-            case "saveDir" => VaString(FileUtils.getSaveDir())
+            case "saveDir" => VaString(FileUtils.getSaveDir() ?? String.empty)
             case "scancodeKey" => VaString(GameUtils.getScanCodeDescription(prop2))
             case "size" => Variable.getTuple2iProp(m_size, prop2)
             case "smoothScreen" => VaBoolean(m_smoothScreen)

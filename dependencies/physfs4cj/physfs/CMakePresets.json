@@ -1,0 +1,58 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_ARCHIVE_OUTPUT_DIRECTORY": "${sourceDir}/build/lib",
+        "CMAKE_BUILD_TYPE": "Release",
+        "PHYSFS_ARCHIVE_ZIP": true,
+        "PHYSFS_ARCHIVE_7Z": true,
+        "PHYSFS_ARCHIVE_GRP": false,
+        "PHYSFS_ARCHIVE_WAD": false,
+        "PHYSFS_ARCHIVE_CSM": false,
+        "PHYSFS_ARCHIVE_HOG": false,
+        "PHYSFS_ARCHIVE_MVL": false,
+        "PHYSFS_ARCHIVE_QPAK": false,
+        "PHYSFS_ARCHIVE_ROFS": false,
+        "PHYSFS_ARCHIVE_SLB": false,
+        "PHYSFS_ARCHIVE_VDF": false,
+        "PHYSFS_ARCHIVE_ISO9660": false,
+        "PHYSFS_ARCHIVE_LECARCHIVES": false,
+        "PHYSFS_ARCHIVE_POD": false,
+        "PHYSFS_BUILD_DOCS": false,
+        "PHYSFS_BUILD_SHARED": false,
+        "PHYSFS_BUILD_STATIC": true,
+        "PHYSFS_BUILD_TEST": false
+      }
+    },
+    {
+      "name": "clang",
+      "displayName": "Clang",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang"
+      }
+    },
+    {
+      "name": "gcc",
+      "displayName": "GCC",
+      "inherits": "base",
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "clang",
+      "configurePreset": "clang"
+    },
+    {
+      "name": "gcc",
+      "configurePreset": "gcc"
+    }
+  ]
+}

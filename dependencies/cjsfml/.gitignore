@@ -1,10 +1,16 @@
 *.a
 *.dll
+*.dylib
 *.exe
+*.lib
 *.macrocall
+*.so
 .cache
 .svn
 .vs
 .vscode
+build
+build-script-cache
 csfml
+install
 target

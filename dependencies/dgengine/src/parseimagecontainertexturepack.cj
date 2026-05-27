@@ -1,18 +1,17 @@
 package dgengine
 
-import stdx.encoding.json.*
 import std.collection.*
+import stdjson2.*
 
 private func getImageContainers(game: Game, elem: JsonValue): ArrayList<ImageContainer> {
     let imgContainers = ArrayList<ImageContainer>()
     if (let Some(elem) <- getValidObject(elem)) {
         if (let Some(elem) <- elem.get("imageContainer")) {
-            match (elem.kind()) {
-                case JsString =>
-                    if (let Some(imgCont) <- game.resources.getImageContainer(getStringChar(elem))) {
-                        imgContainers.add(imgCont)
-                    }
-                case JsArray => for (val in elem.asArray().getItems()) {
+            match {
+                case elem.isString() => if (let Some(imgCont) <- game.resources.getImageContainer(getStringChar(elem))) {
+                    imgContainers.add(imgCont)
+                }
+                case elem.isArray() => for (val in elem) {
                     if (let Some(imgCont) <- game.resources.getImageContainer(getStringChar(val))) {
                         imgContainers.add(imgCont)
                     }

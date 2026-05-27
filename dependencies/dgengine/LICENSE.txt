@@ -16,13 +16,18 @@ https://github.com/causerp/ctemplate
 https://github.com/causerp/customiterators
 https://github.com/causerp/endian
 
-PhysFS uses the zlib license.
+physfs4cj uses the zlib license.
 
-https://github.com/icculus/physfs
+https://github.com/causerp/physfs4cj
 
 SFML uses the zlib/png license.
 
 https://github.com/SFML/SFML
+
+stdjson2 and stdlog use the Apache 2.0 license.
+
+https://github.com/causerp/stdjson2
+https://github.com/causerp/stdlog
 
 Other SFML code snippets were taken from the wiki
 and should have a permissive license.

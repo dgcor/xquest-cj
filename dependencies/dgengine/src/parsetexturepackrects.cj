@@ -1,7 +1,7 @@
 package dgengine
 
 import cjsfml.system.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 /**
  * @throws NoneValueException
@@ -25,14 +25,14 @@ public func parseTexturePackRects(texturePack: Box<?TexturePack>, elem: JsonValu
             let globalOffset = getVector2fKey(elem, "offset")
             let invertOffsets = getBoolKey(elem, "invertOffsets")
 
-            for (elem in rectsElem.getItems()) {
-                match (elem.kind()) {
-                    case JsArray =>
+            for (elem in rectsElem) {
+                match {
+                    case elem.isArray() =>
                         let rect = getIntRectVal(elem)
                         if (rect.size.x > 0 && rect.size.y > 0) {
                             texturePack.addRect(0, rect, Vector2f())
                         }
-                    case JsObject =>
+                    case elem.isObject() =>
                         let rect = getIntRectKey(elem, "rect")
                         if (rect.size.x > 0 && rect.size.y > 0) {
                             let index = getUIntKey(elem, "index")

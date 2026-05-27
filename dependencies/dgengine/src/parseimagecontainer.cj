@@ -1,7 +1,7 @@
 package dgengine
 
 import cjsfml.system.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func getImageContainerObj(game: Game, elem: JsonValue): ?ImageContainer {
     var fileBytes: ?Array<Byte> = None
@@ -34,7 +34,7 @@ public func getImageContainerObj(game: Game, elem: JsonValue): ?ImageContainer {
                     verticalDirection: isVertical
                 )
             } catch (ex: Exception) {
-                logger.error(ex.toString())
+                LOGGER.error(ex.toString())
             }
         }
         if (let Some(imgContainer) <- imgContainer) {

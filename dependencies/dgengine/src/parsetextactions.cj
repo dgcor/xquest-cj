@@ -2,35 +2,33 @@ package dgengine
 
 import ctemplate.*
 import cjsfml.graphics.*
-import stdx.encoding.json.*
+import stdjson2.*
 
 @Template[functionName, actionName: parseTextAppendText, ActTextAppendText ; parseTextSetText, ActTextSetText](
 public func functionName(elem: JsonValue): ?Action {
     var action: ?ActTextAppendOrSetText = None
-    if (let Some(elem) <- getValidObject(elem)) {
-        if (elem.containsKey("binding") == true) {
-            action = actionName(
-                getStringCharKey(elem, "id"),
-                getStringCharKey(elem, "format"),
-                getStringVectorVal(elem["binding"]).toArray()
-            )
-        } else if (let Some(query) <- getValidString(elem, "query")) {
-            action = actionName(
-                getStringCharKey(elem, "id"),
-                getStringCharKey(elem, "text"),
-                query
-            )
-        } else {
-            var textOp = TextOp.Replace
-            if (getBoolKey(elem, "set") == true) {
-                textOp = TextOp.Set
-            }
-            action = actionName(
-                getStringCharKey(elem, "id"),
-                getStringCharKey(elem, "text"),
-                textOp
-            )
+    if (let Some(elemBinding) <- elem.get("binding")) {
+        action = actionName(
+            getStringCharKey(elem, "id"),
+            getStringCharKey(elem, "format"),
+            getStringVectorVal(elemBinding).toArray()
+        )
+    } else if (let Some(query) <- getValidString(elem, "query")) {
+        action = actionName(
+            getStringCharKey(elem, "id"),
+            getStringCharKey(elem, "text"),
+            query
+        )
+    } else {
+        var textOp = TextOp.Replace
+        if (getBoolKey(elem, "set") == true) {
+            textOp = TextOp.Set
         }
+        action = actionName(
+            getStringCharKey(elem, "id"),
+            getStringCharKey(elem, "text"),
+            textOp
+        )
     }
     if (let Some(action) <- action) {
         if (getBoolKey(elem, "replaceAll") == true) {
@@ -41,6 +39,12 @@ public func functionName(elem: JsonValue): ?Action {
         }
         if (getBoolKey(elem, "trim") == true) {
             action.trim()
+        }
+        if (getBoolKey(elem, "lowercase") == true) {
+            action.lowercase()
+        }
+        if (getBoolKey(elem, "uppercase") == true) {
+            action.uppercase()
         }
         return action
     }
@@ -63,13 +67,11 @@ public func parseTextSetFont(elem: JsonValue): ?Action {
 
 public func parseTextSetSpacing(elem: JsonValue): ?Action {
     let action = ActTextSetSpacing(getStringCharKey(elem, "id"))
-    if (let Some(elem) <- getValidObject(elem)) {
-        if (let Some(elem) <- elem.get("horizontal")) {
-            action.setHorizontalSpaceOffset(getIntVal(elem))
-        }
-        if (let Some(elem) <- elem.get("vertical")) {
-            action.setVerticalSpaceOffset(getIntVal(elem))
-        }
+    if (let Some(elem) <- elem.get("horizontal")) {
+        action.setHorizontalSpaceOffset(getIntVal(elem))
+    }
+    if (let Some(elem) <- elem.get("vertical")) {
+        action.setVerticalSpaceOffset(getIntVal(elem))
     }
     return action
 }

@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func getInputTextObj(game: Game, elem: JsonValue): ?InputText {
     if (let Some(font) <- game.resources.getFont(getStringKey(elem, "font"))) {
@@ -9,31 +9,30 @@ public func getInputTextObj(game: Game, elem: JsonValue): ?InputText {
 
         parseTextObj(game, elem, text)
 
-        let elem = elem.asObject()
-        if (elem.containsKey("minLength") == true) {
-            text.minLength = getUIntVal(elem["minLength"])
+        if (let Some(elem) <- elem.get("minLength")) {
+            text.minLength = getUIntVal(elem)
         }
-        if (elem.containsKey("maxLength") == true) {
-            text.maxLength = getUIntVal(elem["maxLength"])
+        if (let Some(elem) <- elem.get("maxLength")) {
+            text.maxLength = getUIntVal(elem)
         }
-        if (elem.containsKey("minValue") == true) {
-            text.minValue = getVariableVal(elem["minValue"])
+        if (let Some(elem) <- elem.get("minValue")) {
+            text.minValue = getVariableVal(elem)
         }
-        if (elem.containsKey("maxValue") == true) {
-            text.maxValue = getVariableVal(elem["maxValue"])
+        if (let Some(elem) <- elem.get("maxValue")) {
+            text.maxValue = getVariableVal(elem)
         }
         if (let Some(regex) <- getValidString(elem, "regex")) {
             text.setRegex(regex)
         }
 
-        if (elem.containsKey("onClick")) {
-            text.setAction("click", getActionVal(game, elem["onClick"]))
+        if (let Some(elem) <- elem.get("onClick")) {
+            text.setAction("click", getActionVal(game, elem))
         }
-        if (elem.containsKey("onChange")) {
-            text.setAction("change", getActionVal(game, elem["onChange"]))
+        if (let Some(elem) <- elem.get("onChange")) {
+            text.setAction("change", getActionVal(game, elem))
         }
-        if (elem.containsKey("onMinLength")) {
-            text.setAction("minLength", getActionVal(game, elem["onMinLength"]))
+        if (let Some(elem) <- elem.get("onMinLength")) {
+            text.setAction("minLength", getActionVal(game, elem))
         }
         return text
     }

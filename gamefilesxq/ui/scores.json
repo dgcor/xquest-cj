@@ -4,16 +4,16 @@
     "id": "scores",
     "ignorePrevious": true
   },
-  "inputEvent": {
-    "gameInputEvent": ["enter", "help", "space"],
-    "action": "#back.click"
-  },
   "button": {
     "id": "back",
     "texture": "empty",
     "textureRect": [320, 240],
     "anchor": "all",
     "onClick": { "name": "resource.pop" }
+  },
+  "inputEvent": {
+    "gameInputEvent": ["esc", "enter", "help", "space"],
+    "action": "#back.click"
   },
   "text": [
     {

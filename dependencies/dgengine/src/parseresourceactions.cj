@@ -1,6 +1,6 @@
 package dgengine
 
-import stdx.encoding.json.*
+import stdjson2.*
 
 public func parseResourceAdd(elem: JsonValue): ?Action {
     let id = getStringCharKey(elem, "id")

@@ -13,7 +13,7 @@ public abstract class LazyImageContainer <: ImageContainer {
         m_fileData = fileData
     }
 
-    public mut open prop blendMode: BlendModeType {
+    public open mut prop blendMode: BlendModeType {
         get() {
             m_blendMode
         }

@@ -8,9 +8,13 @@ public class ActMount <: Action {
         private let useSaveDir: Bool
     ) {}
 
+    /**
+     * @throws Exception
+     */
     public operator func ()(game: Game): Bool {
+        let saveDir = FileUtils.getSaveDir() ?? throw Exception("ActMount: saveDir is None")
         let file2 = match (useSaveDir) {
-            case true => FileUtils.getSaveDir() + file
+            case true => saveDir + file
             case false => game.path + file
         }
         FileUtils.mount(file2, mountPoint, appendToSearchPath)
@@ -24,9 +28,13 @@ public class ActUnmount <: Action {
         private let useSaveDir: Bool
     ) {}
 
+    /**
+     * @throws Exception
+     */
     public operator func ()(game: Game): Bool {
+        let saveDir = FileUtils.getSaveDir() ?? throw Exception("ActUnmount: saveDir is None")
         let file2 = match (useSaveDir) {
-            case true => FileUtils.getSaveDir() + file
+            case true => saveDir + file
             case false => game.path + file
         }
         FileUtils.unmount(file2)

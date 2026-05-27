@@ -82,13 +82,47 @@ private struct MemoryStruct {
     }
 }
 
+/**
+ * Implementation of input stream based on a memory chunk.
+ *
+ * This class is a specialization of `InputStream` that
+ * reads from data in memory.
+ *
+ * It wraps a memory chunk in the common `InputStream` interface
+ * and therefore allows to use generic classes or functions
+ * that accept such a stream, with content already loaded in memory.
+ *
+ * In addition to the virtual functions inherited from
+ * `InputStream`, `MemoryInputStream` adds a function to
+ * specify the pointer and size of the data in memory.
+ *
+ * SFML resource classes can usually be loaded directly from
+ * memory, so this class shouldn't be useful to you unless
+ * you create your own algorithms that operate on an InputStream.
+ *
+ * Usage example:
+ * ```
+ * func process(stream: InputStream) {
+ *     // ...
+ * }
+ *
+ * let stream = MemoryInputStream(theBuffer)
+ * process(stream)
+ * ```
+ *
+ * @see `InputStream`, `FileInputStream`
+ */
 public class MemoryInputStream <: InputStream {
     private var m_buffer: Array<Byte>
     private var m_rawData: CPointerHandle<Byte>
     private var m_memoryInputStream: CPointer<MemoryStruct>
 
     /**
-     * @throws SFMLException
+     * Construct the stream from its data.
+     *
+     * @param buffer Buffer containing the data in memory
+     *
+     * @throws SFMLException if the buffer is empty
      */
     public init(buffer: Array<Byte>) {
         super(
